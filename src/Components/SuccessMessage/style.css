@@ -1,0 +1,36 @@
+.success-container {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 15px 16.83px 0.17px rgba(73, 73, 73, 0.05);
+    -webkit-box-shadow: 0 15px 16.83px 0.17px rgba(0, 0, 0, .05);
+    padding: 20px;
+    margin: 100px;
+    justify-content: center;
+    text-align: center;
+  }
+  
+.success-content {
+    font-family: 'Poppins', sans-serif;
+    color: #222;
+}
+
+.success-image {
+    display: inline-block;
+}
+  
+h2 {
+    font-size: 30px;
+    font-weight: 700;
+    margin: 0 0 30px;
+}
+  
+p {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+  
+@media screen and (max-width: 960px) {
+    .success-container {
+      width: auto;
+    }
+}
