@@ -6,6 +6,8 @@ import "react-calendar/dist/Calendar.css";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "animate.css";
+import { CreateListing } from "./create-listing/CreateListing";
+import { SuccessMessage } from "./components/SuccessMessage";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Routes>
           <Route path='/spot/:id' Component={SpotDetails}></Route>
           <Route path='/' Component={Home}></Route>
+          <Route path='/create-listing' Component={CreateListing}></Route>
+          <Route path='/success' Component={SuccessMessage}></Route>
         </Routes>
       </Router>
       <ToastContainer position='top-right' />

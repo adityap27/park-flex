@@ -19,6 +19,8 @@ body {
 #root {
   height: 100%;
   width: 100%;
+  --input-success-color: #00ff6a;
+  --input-error-color: #fa1f07;
 }
 
 code {
