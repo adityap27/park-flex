@@ -11,6 +11,7 @@ export const Footer = () => {
           <p className='text-textSecondary cursor-pointer'>Terms</p>
           <p className='text-textSecondary cursor-pointer'>Support</p>
           <p className='text-textSecondary cursor-pointer'>About</p>
+          <p className='text-textSecondary cursor-pointer'>Contact</p>
         </div>
       </div>
     </footer>
