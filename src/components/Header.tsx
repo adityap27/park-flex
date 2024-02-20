@@ -19,6 +19,10 @@ export const Header = () => {
             <Nav.Link className='!text-textSecondary'>Login</Nav.Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
             <Nav.Link className='!text-textSecondary'>Register</Nav.Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Nav.Link className='!text-textSecondary'>Wallet</Nav.Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Nav.Link className='!text-textSecondary'>Ratings</Nav.Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
