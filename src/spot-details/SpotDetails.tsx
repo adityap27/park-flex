@@ -1,6 +1,4 @@
 import { LatLng } from "leaflet";
-import { Footer } from "../components/Footer";
-import { Header } from "../components/Header";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { FaShare } from "react-icons/fa";

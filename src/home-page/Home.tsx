@@ -2,8 +2,6 @@ import Form from "react-bootstrap/Form";
 import { TbFilter } from "react-icons/tb";
 import { useEffect, useState } from "react";
 import { HomeFilter } from "./HomeFilter";
-import { Header } from "../components/Header";
-import { Footer } from "../components/Footer";
 import { Link } from "react-router-dom";
 import { getRequest } from "../utils/network-manager/axios";
 import { calculateDistanceFromLatLon } from "../utils/map-utils";

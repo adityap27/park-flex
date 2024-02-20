@@ -1,6 +1,7 @@
 import { Navbar } from "react-bootstrap";
 import { FaCar } from "react-icons/fa";
 import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   return (
@@ -16,13 +17,25 @@ export const Header = () => {
         <Navbar.Toggle className='bg-white' />
         <Navbar.Collapse className='justify-content-end'>
           <Nav>
-            <Nav.Link className='!text-textSecondary'>Login</Nav.Link>
+            <Link className='!text-textSecondary nav-link' to='/login'>
+              Login
+            </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Nav.Link className='!text-textSecondary'>Register</Nav.Link>
+            <Link className='!text-textSecondary nav-link' to='/register'>
+              Register
+            </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Nav.Link className='!text-textSecondary'>Wallet</Nav.Link>
+            <Link className='!text-textSecondary nav-link' to='/wallet'>
+              Wallet
+            </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Nav.Link className='!text-textSecondary'>Ratings</Nav.Link>
+            <Link className='!text-textSecondary nav-link' to='/create-listing'>
+              Create listing
+            </Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link className='!text-textSecondary nav-link' to='/rating'>
+              Ratings
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
