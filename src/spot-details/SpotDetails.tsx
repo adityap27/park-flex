@@ -2,7 +2,7 @@ import { LatLng } from "leaflet";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { FaShare } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRequest } from "../utils/network-manager/axios";
 import StarRatings from "react-star-ratings";
@@ -164,9 +164,9 @@ export const SpotDetails = () => {
                       />
                     </div>
                   </div>
-                  <p className='underline cursor-pointer text-textPrimary'>
+                  <Link className='underline cursor-pointer text-textPrimary' to='/reviews'>
                     {parkingSpotDetails.reviews} Reviews
-                  </p>
+                  </Link>
                 </div>
                 <hr className='bg-borderColor m-0 opacity-100' />
                 <div className='flex flex-col p-4'>

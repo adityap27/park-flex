@@ -33,8 +33,8 @@ export const Header = () => {
               Create listing
             </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link className='!text-textSecondary nav-link' to='/rating'>
-              Ratings
+            <Link className='!text-textSecondary nav-link' to='/reviews'>
+              Reviews
             </Link>
           </Nav>
         </Navbar.Collapse>
