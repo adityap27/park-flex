@@ -18,12 +18,12 @@ export const ContactUs = () => {
       <div className='text-center mt-8 mb-4'>
         <h1 className='text-4xl font-bold'>Contact Us</h1>
       </div>
-      <div className='flex justify-between p-8'>
+      <div className='flex flex-col lg:flex-row justify-between p-8'>
         <div className='flex-1 p-8 bg-gray-200 rounded'>
           <h2 className='text-2xl font-bold'>Park Help</h2>
           <br />
-          <div className='p-4'>
-            <p className=''>
+          <div>
+            <p>
               <span className='font-bold'>Phone Number</span> : +1 (123)456-7890
             </p>
             <p>
@@ -36,7 +36,7 @@ export const ContactUs = () => {
             <p>Halifax, Nova Scotia, B3H 3Z3</p>
           </div>
         </div>
-        <div className='flex-1 p-8 bg-gray-200 rounded ml-4'>
+        <div className='flex-1 p-8 bg-gray-200 rounded mt-4 lg:mt-0 lg:ml-4'>
           <h2 className='text-2xl font-bold'>Send Us a Message</h2>
           <form className='mt-4'>
             <input
