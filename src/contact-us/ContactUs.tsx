@@ -1,50 +1,80 @@
+import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 export const ContactUs = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
   const showNotification = () => {
-      toast.success('Email sent Successfully');
+    if (name === "" || email === "" || message === "") {
+      toast.error("Please fill all details");
+    } else {
+      toast.success("Email sent Successfully");
+    }
   };
   return (
     <div>
-      <div className="text-center mt-8 mb-4">
-        <h1 className="text-4xl font-bold">Contact Us</h1>
+      <div className='text-center mt-8 mb-4'>
+        <h1 className='text-4xl font-bold'>Contact Us</h1>
       </div>
-      <div className="flex justify-between p-8">
-        <div className="flex-1 p-8 bg-gray-200 rounded">
-          <h2 className="text-2xl font-bold">Park Help</h2><br />
-          <div className="p-4">
-          <p className=""><span className="font-bold">Phone Number</span> : +1 (123)456-7890</p>
-          <p><span className="font-bold">Email Address</span>: info@parkhelp.com</p>
-          <p className="font-bold mt-4">Address</p>
-          <p>Goldberg Building,</p>
-          <p>Dalhousie University,</p>
-          <p>Halifax, Nova Scotia, B3H 3Z3</p>
+      <div className='flex justify-between p-8'>
+        <div className='flex-1 p-8 bg-gray-200 rounded'>
+          <h2 className='text-2xl font-bold'>Park Help</h2>
+          <br />
+          <div className='p-4'>
+            <p className=''>
+              <span className='font-bold'>Phone Number</span> : +1 (123)456-7890
+            </p>
+            <p>
+              <span className='font-bold'>Email Address</span>:
+              info@parkhelp.com
+            </p>
+            <p className='font-bold mt-4'>Address</p>
+            <p>Goldberg Building,</p>
+            <p>Dalhousie University,</p>
+            <p>Halifax, Nova Scotia, B3H 3Z3</p>
           </div>
         </div>
-        <div className="flex-1 p-8 bg-gray-200 rounded ml-4">
-          <h2 className="text-2xl font-bold">Send Us a Message</h2>
-          <form className="mt-4">
+        <div className='flex-1 p-8 bg-gray-200 rounded ml-4'>
+          <h2 className='text-2xl font-bold'>Send Us a Message</h2>
+          <form className='mt-4'>
             <input
-              type="text"
-              name="name"
-              placeholder="Your Name"
-              className="w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+              type='text'
+              name='name'
+              value={name}
+              onChange={(e) => {
+                setName(e.target.value);
+              }}
+              placeholder='Your Name'
+              className='w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300'
             />
             <input
-              type="email"
-              name="email"
-              placeholder="Your Email"
-              className="w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+              type='email'
+              name='email'
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              placeholder='Your Email'
+              className='w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300'
             />
             <textarea
-              name="message"
-              placeholder="Your Message"
-              className="w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300"
+              name='message'
+              placeholder='Your Message'
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+              className='w-full px-4 py-2 mb-4 rounded border-gray-300 focus:outline-none focus:ring focus:border-blue-300'
             ></textarea>
             <button
-              type="submit"
-              onClick={showNotification}
-              className="bg-buttonPrimary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300"
+              type='submit'
+              onClick={(e) => {
+                e.preventDefault();
+                showNotification();
+              }}
+              className='bg-buttonPrimary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300'
             >
               Submit
             </button>
