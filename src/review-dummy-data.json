@@ -1,0 +1,48 @@
+{
+  "reviews": [
+    {
+      "id": 1,
+      "user": {
+        "name": "Carla Jones",
+        "profilePic": "female-profile.png"
+      },
+      "date": "January 31, 2024",
+      "bookingPeriod": "45 days",
+      "stars": 4,
+      "text": "Great experience! Highly recommended."
+    },
+    {
+      "id": 2,
+      "user": {
+        "name": "John Doe",
+        "profilePic": "men-profile.jpg"
+      },
+      "date": "April 10, 2023",
+      "bookingPeriod": "15 days",
+      "stars": 5,
+      "text": "Good parking spot."
+    },
+    {
+      "id": 3,
+      "user": {
+        "name": "Jane Smith",
+        "profilePic": "men-profile2.jpg"
+      },
+      "date": "March 11, 2023",
+      "bookingPeriod": "19 days",
+      "stars": 2,
+      "text": "Not satisfied with the parking spot."
+    },
+    {
+      "id": 4,
+      "user": {
+        "name": "David Miller",
+        "profilePic": "men-profile.jpg"
+      },
+      "date": "June 11, 2023",
+      "bookingPeriod": "24 days",
+      "stars": 3,
+      "text": "Average parking spot."
+    }
+  ]
+}
