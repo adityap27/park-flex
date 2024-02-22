@@ -12,7 +12,7 @@ export const Header = () => {
           className='flex-row flex items-center text-textSecondary'
         >
           <FaCar className='mr-2 text-3xl text-textSecondary' />
-          <p className='text-textSecondary'>Park Help</p>
+          <p className='text-textSecondary'>ParkFlex</p>
         </Navbar.Brand>
         <Navbar.Toggle className='bg-white' />
         <Navbar.Collapse className='justify-content-end'>
