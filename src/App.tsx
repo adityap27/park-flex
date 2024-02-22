@@ -13,6 +13,7 @@ import { SuccessMessage } from "./components/SuccessMessage";
 import { Wallet } from "./wallet/Wallet";
 import { Reviews } from "./ratings-and-reviews/Reviews";
 import { ContactUs } from "./contact-us/ContactUs";
+import { FAQPage } from "./frequently-asked-questions/Faq";
 function App() {
   return (
     <>
@@ -26,7 +27,8 @@ function App() {
               <Route path='/wallet' Component={Wallet}></Route>
               <Route path='/success' Component={SuccessMessage}></Route>
               <Route path='/reviews' Component={Reviews}></Route>
-              <Route path='/contactus' Component={ContactUs}></Route>
+              <Route path='/faq' Component={FAQPage}></Route>
+              <Route path='/contact-us' Component={ContactUs}></Route>
               <Route path='/' Component={Home}></Route>
               <Route
                 path='*'

@@ -12,8 +12,9 @@ export const Footer = () => {
           <p className='text-textSecondary cursor-pointer'>Privacy</p>
           <p className='text-textSecondary cursor-pointer'>Terms</p>
           <p className='text-textSecondary cursor-pointer'>Support</p>
+          <Link to="/faq"> <p className='text-textSecondary cursor-pointer'>FAQ</p></Link>
           <p className='text-textSecondary cursor-pointer'>About</p>
-         <Link to="/contactus"> <p className='text-textSecondary cursor-pointer'>Contact</p></Link>
+         <Link to="/contact-us"> <p className='text-textSecondary cursor-pointer'>Contact</p></Link>
         </div>
       </div>
     </footer>
