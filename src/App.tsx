@@ -9,6 +9,7 @@ import { Header } from "./components/Header";
 import { Footer } from "./components/Footer";
 import { ContactUs } from "./contact-us/ContactUs";
 import { FAQPage } from "./frequently-asked-questions/Faq";
+import LandingPage from "./landing-page/LandingPage";
 function App() {
   return (
     <>
@@ -19,7 +20,8 @@ function App() {
             <Routes>
               <Route path='/faq' Component={FAQPage}></Route>
               <Route path='/contact-us' Component={ContactUs}></Route>
-              <Route path='/' Component={Home}></Route>
+              <Route path='/' Component={LandingPage}></Route>
+              <Route path='/home' Component={Home}></Route>
               <Route
                 path='*'
                 Component={() => (
