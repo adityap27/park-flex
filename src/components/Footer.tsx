@@ -9,18 +9,12 @@ export const Footer = () => {
           <p className='text-textSecondary'>&copy;2024</p>
         </div>
         <div className='flex flex-col lg:flex-row justify-between flex-1 mx-6'>
-          <Link to='/privacy'>
-            <p className='text-textSecondary cursor-pointer'>Privacy & Terms</p>
-          </Link>
-          <Link to='/support'>
-            <p className='text-textSecondary cursor-pointer'>Support</p>
-          </Link>
+          <p className='text-textSecondary cursor-pointer'>Privacy & Terms</p>
+          <p className='text-textSecondary cursor-pointer'>Support</p>
           <Link to='/faq'>
             <p className='text-textSecondary cursor-pointer'>FAQ</p>
           </Link>
-          <Link to='/about'>
-            <p className='text-textSecondary cursor-pointer'>About</p>
-          </Link>
+          <p className='text-textSecondary cursor-pointer'>About</p>
           <Link to='/contact-us'>
             <p className='text-textSecondary cursor-pointer'>Contact</p>
           </Link>

@@ -114,8 +114,8 @@ export const HomeFilter = ({
           <div className='modal-body'>
             <div className='flex flex-col h-full'>
               <div>
-                <h6 className='text-textPrimary'>Type of parking</h6>
-                <div className='flex flex-row'>
+                <h6 className='text-textPrimary my-2'>Type of parking</h6>
+                <div className='flex flex-row my-2'>
                   <button
                     className={`py-2 border-2 border-borderColor text-textPrimary rounded-l-md text-center w-[25%] ${
                       filterState.parkingType === "indoor"
@@ -150,10 +150,10 @@ export const HomeFilter = ({
               </div>
               <hr />
               <div>
-                <h6 className='text-textPrimary'>
+                <h6 className='text-textPrimary my-2'>
                   Price Range: $ {filterState.priceRange}
                 </h6>
-                <div className='flex flex-col w-full'>
+                <div className='flex flex-col w-full my-2'>
                   <input
                     type='range'
                     className='flex-1 accent-textPrimary'
@@ -175,7 +175,7 @@ export const HomeFilter = ({
               </div>
               <hr />
               <div className='h-auto'>
-                <h6 className='text-textPrimary'>Choose location</h6>
+                <h6 className='text-textPrimary my-2'>Choose location</h6>
                 <div className='m-0 h-[200px] w-full'>
                   {filterState.currentLocation.lat !== 0 &&
                   filterState.currentLocation.lng !== 0 ? (

@@ -17,25 +17,13 @@ export const Header = () => {
         <Navbar.Toggle className='bg-white' />
         <Navbar.Collapse className='justify-content-end'>
           <Nav>
-            <Link className='!text-textSecondary nav-link' to='/login'>
+            <div className='!text-textSecondary nav-link cursor-pointer'>
               Login
-            </Link>
+            </div>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link className='!text-textSecondary nav-link' to='/register'>
+            <div className='!text-textSecondary nav-link cursor-pointer'>
               Register
-            </Link>
-            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link className='!text-textSecondary nav-link' to='/wallet'>
-              Wallet
-            </Link>
-            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link className='!text-textSecondary nav-link' to='/create-listing'>
-              Create listing
-            </Link>
-            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link className='!text-textSecondary nav-link' to='/reviews'>
-              Reviews
-            </Link>
+            </div>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
