@@ -4,13 +4,13 @@ import ParkingSpotImage from '../assets/images/landing-page-sparking-spot.jpg';
 function LandingPage() {
     return (
         <>
-            <section className="text-center flex flex-col xl:px-24 xxl:px-40 py-12 px-4 lg:px-16 md:px-8">
+            <div className="text-center flex flex-col xl:px-24 xxl:px-40 py-12 px-4 lg:px-16 md:px-8">
                 <div>
                     <h2 className="text-black text-xl font-bold lg:text-3xl">Looking for a perfect place to park?</h2>
                 </div>
                 <div className="sm:flex items-center">
                     <div className="w-full mt-8 sm:w-1/2 sm:pr-12">
-                        <img src={ParkingSpotImage} alt="parking spot image" className="mx-auto" />
+                        <img src={ParkingSpotImage} alt="parking spot" className="mx-auto" />
                     </div>
                     <div className="mt-8 sm:w-1/2 sm:text-left">
                         <h4 className="text-xl font-bold text-black">Stop Looking</h4>
@@ -53,14 +53,14 @@ function LandingPage() {
                         </Link>
                     </div>
                 </div>
-            </section>
-            <section className="text-center xl:px-24 xxl:px-40 bg-gray-100 lg:px-16 flex flex-col py-16 px-4 md:px-8">
+            </div>
+            <div className="text-center xl:px-24 xxl:px-40 bg-gray-100 lg:px-16 flex flex-col py-16 px-4 md:px-8">
                 <div className="sm:max-w-2xl w-full sm:mx-auto mt-16">
                     <p className="text-gray-900 font-bold lg:text-xl text-md">“ParkFlex saves me a lot of time as I can book parking spot from the comfort of my home. Thank you very much for this amazing platform!”</p>
                     <p className="mt-4 text-blue-500 font-bold">Carla Jones</p>
                     <p className="text-gray-600">User of ParkFlex</p>
                 </div>
-            </section>
+            </div>
         </>
     );
 }
