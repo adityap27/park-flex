@@ -5,6 +5,14 @@
 * *Assignment URL*: https://park-flex.netlify.app/
 * *Git URL*: https://git.cs.dal.ca/ketulp/csci-5709-grp-09
 
+## Authors
+
+- [Aditya Purohit](aditya.purohit@dal.ca)
+- [Ketul Patel](kt390621@dal.ca)
+- [Mann Patel](mn906219@dal.ca)
+- [Shubham Patel](shubham.v.patel@dal.ca)
+- [Jay Rana](jy834177@dal.ca)
+- [Neel Patel](nl914739@dal.ca)
 
 ## Built With
 
@@ -371,20 +379,16 @@ module.exports = {
 
 6. [axios.ts](src/utils/network-manager/axios.ts)
 
-line 9
+line 5-22
 
 ```
 import axios from "axios";
 
-axios.defaults.baseURL = "https://express-t4.onrender.com/api";
+axios.defaults.baseURL = "";
 
-export const postRequest = <T>(endpoint: string, data: any) => {
-  return axios.post<T>(endpoint, data);
-};
-
-export const getRequest = <T>(endpoint: string) => {
-  return axios.get<T>(endpoint);
-};
+export const getRequest = <T>(endPoint: string) => {
+  return axios.get<T>(endPoint);
+}  
 
 ```
 
@@ -454,14 +458,6 @@ We mirrored project code from Gitlab to Github, and setup a Netlify to deploy fr
 - [Github](https://github.com/) - platform where source code resides
 
 
-## Authors
-
-- [Aditya Purohit](aditya.purohit@dal.ca)
-- [Ketul Patel](kt390621@dal.ca)
-- [Mann Patel](mn906219@dal.ca)
-- [Shubham Patel](shubham.v.patel@dal.ca)
-- [Jay Rana](jy834177@dal.ca)
-- [Neel Patel](nl914739@dal.ca)
 
 ## Acknowledgments
 
