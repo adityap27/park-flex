@@ -1,7 +1,6 @@
 import { Navbar } from "react-bootstrap";
 import { FaCar } from "react-icons/fa";
 import Nav from "react-bootstrap/Nav";
-import { Link } from "react-router-dom";
 
 export const Header = () => {
   return (
