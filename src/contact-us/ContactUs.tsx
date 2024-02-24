@@ -5,13 +5,22 @@ export const ContactUs = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const showNotification = () => {
-    if (name === "" || email === "" || message === "") {
-      toast.error("Please fill all details");
-    } else {
-      toast.success("Email sent Successfully");
+    if (name === "" || !emailRegex.test(email) || message === "") {
+      toast.error("Please fill the name");
+      return;
     }
+    if (message === "") {
+      toast.error("Please fill the message");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      toast.error("Email address required in proper format");
+      return;
+    }
+    toast.success("Email sent Successfully");
   };
   return (
     <div>
@@ -20,7 +29,7 @@ export const ContactUs = () => {
       </div>
       <div className='flex flex-col lg:flex-row justify-between p-8'>
         <div className='flex-1 p-8 bg-gray-200 rounded'>
-          <h2 className='text-2xl font-bold'>Park Help</h2>
+          <h2 className='text-2xl font-bold'>ParkFlex</h2>
           <br />
           <div>
             <p>
