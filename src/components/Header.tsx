@@ -24,6 +24,18 @@ export const Header = () => {
             <div className='!text-textSecondary nav-link cursor-pointer'>
               Register
             </div>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link to='/create-listing'>
+              <p className='text-textSecondary cursor-pointer'>Create Listing</p>
+            </Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link to='/manage-listings'>
+              <p className='text-textSecondary cursor-pointer'>Manage Listings</p>
+            </Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link to='/edit-listing'>
+              <p className='text-textSecondary cursor-pointer'>Edit Listing</p>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

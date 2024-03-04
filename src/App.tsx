@@ -10,6 +10,9 @@ import { Footer } from "./components/Footer";
 import { ContactUs } from "./contact-us/ContactUs";
 import { FAQPage } from "./frequently-asked-questions/Faq";
 import LandingPage from "./landing-page/LandingPage";
+import CreateListing from "./create-listing/CreateListing";
+import ManageListings from "./manage-listings/ManageListings";
+import EditListing from "./edit-listing/EditListing";
 function App() {
   return (
     <>
@@ -22,6 +25,9 @@ function App() {
               <Route path='/contact-us' Component={ContactUs}></Route>
               <Route path='/' Component={LandingPage}></Route>
               <Route path='/home' Component={Home}></Route>
+              <Route path='/create-listing' Component={CreateListing}></Route>
+              <Route path='/manage-listings' Component={ManageListings}></Route>
+              <Route path='/edit-listing' Component={EditListing}></Route>
               <Route
                 path='*'
                 Component={() => (

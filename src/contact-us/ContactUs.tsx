@@ -8,7 +8,7 @@ export const ContactUs = () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const showNotification = () => {
-    if (name === "" || !emailRegex.test(email) || message === "") {
+    if (name === "") {
       toast.error("Please fill the name");
       return;
     }
@@ -37,7 +37,7 @@ export const ContactUs = () => {
             </p>
             <p>
               <span className='font-bold'>Email Address</span>:
-              info@parkhelp.com
+              info@parkflex.com
             </p>
             <p className='font-bold mt-4'>Address</p>
             <p>Goldberg Building,</p>

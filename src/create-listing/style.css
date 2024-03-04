@@ -4,6 +4,14 @@
     padding: 20px;
     display: flex;
     margin: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.map {
+    width: 100%;
+    padding: 0 10px;
+    margin-top: 15px;
 }
 
 .left-column,
@@ -18,8 +26,8 @@
 }
 
 .horizontal-container {
-    position: relative;
-    max-width: 920px;
+    width: 960px;
+    max-width: 960px;
     text-align: center;
     margin: auto;
 }
@@ -27,16 +35,19 @@
 h2 {
     color: #222;
     margin: 0 0 30px;
-    font-size: 36px;
+    font-size: 10px;
     font-weight: 700;
 }
 
 .form {
     padding: 30px 0px;
+    max-width: 960px;
+    margin: auto;
 }
 
 .form-control label {
     margin-bottom: 5px;
+    margin-top: 5px;
     display: block;
     color: #333;
 }
@@ -65,14 +76,20 @@ h2 {
     border-color: var(--input-error-color);
 }
 
+.form-control.success,
+.form-control.error {
+    border-color: white;
+    margin-top: 12px;
+}
+
 .form-control.success:after {
     opacity: 0;
     transform: translateY(-50%);
 }
 
 .form-control small {
-    bottom: 0;
-    left: 0;
+    bottom: -5;
+    left: 10;
     color: var(--input-error-color);
     position: absolute;
     visibility: hidden;
@@ -82,31 +99,19 @@ h2 {
     visibility: visible;
 }
 
-.submit-button {
-    margin: 80px auto;
-    background: #111212;
-    color: #fff;
-    font-size: 16px;
-    border-radius: 5px;
-    display: inline-block;
-    padding: 15px 30px;
-    margin-top: 20px;
-    transition: all ease .20s;
-}
-
-.submit-button:hover {
-    background: #292626;
-}
-
 @media screen and (min-width: 960px) {
+    .container {
+        justify-content: center;
+    }
+
     .form {
         bottom: 0;
         padding-bottom: 0px;
     }
 
     .right-column {
-        margin-left: 200px;
-        padding-top: 85px;
+        margin-left: 0px;
+        padding-top: 0px;
     }
 }
 
@@ -118,17 +123,12 @@ h2 {
 
     .left-column,
     .right-column {
-        width: auto;
+        width: 100%;
     }
 
     .form {
         bottom: 0;
         padding-bottom: 0px;
-    }
-
-    .horizontal-container {
-        margin: auto;
-        width: 95%;
     }
 }
 
@@ -137,31 +137,17 @@ h2 {
         width: 100%;
     }
 
-    h2 {
-        font-size: 25px;
-    }
-
     .form-control input {
         font-size: 12px;
         padding: 5px;
     }
 
-    button {
-        padding: 10px 25px;
-        font-size: 14px;
-    }
-
     .form {
-        padding: 30px 20px 280px;
+        padding: 30px 20px 10px;
     }
 
     .form-control {
         margin-bottom: 5px;
         padding-bottom: 15px;
-    }
-
-    .horizontal-container {
-        margin: auto;
-        width: 93%;
     }
 }

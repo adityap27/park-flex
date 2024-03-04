@@ -1,28 +1,56 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:400,700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Raleway:wght@300;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
-
-* {
-  box-sizing: border-box;
+html {
+  overflow-y: scroll;
 }
 
+html,
 body {
-  font-family: 'Poppins', sans-serif;
-  justify-content: center;
-  align-items: center;
-  min-height: 80vh;
   margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  height: 100%;
+  width: 100%;
 }
 
-:root {
+#root {
+  height: 100%;
+  width: 100%;
   --input-success-color: #00ff6a;
   --input-error-color: #fa1f07;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.modal {
+  z-index: 99999 !important;
+  color: #000;
+  background-color: rgba(0, 0, 0, 0.638);
+  height: 100% !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+.filter-modal-footer {
+  display: flex;
+  justify-content: space-evenly !important;
+}
+
+p {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.modal-open {
+  overflow: hidden;
 }
