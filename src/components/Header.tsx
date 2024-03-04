@@ -25,16 +25,8 @@ export const Header = () => {
               Register
             </div>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link to='/create-listing'>
-              <p className='text-textSecondary cursor-pointer'>Create Listing</p>
-            </Link>
-            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
             <Link to='/manage-listings'>
-              <p className='text-textSecondary cursor-pointer'>Manage Listings</p>
-            </Link>
-            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
-            <Link to='/edit-listing'>
-              <p className='text-textSecondary cursor-pointer'>Edit Listing</p>
+              <p className='text-textSecondary cursor-pointer pt-2'>My Listings</p>
             </Link>
           </Nav>
         </Navbar.Collapse>

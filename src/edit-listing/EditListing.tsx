@@ -62,12 +62,12 @@ const EditListing = () => {
     }, [error]);
 
     useEffect(() => {
-        setName("1600 LOWER WATER STREET");
+        setName("My Parking Lot 1");
         setDescription("Hourly and Daily Parking is also available using the pay & display meter located near the lot entrance.");
         setAddress("1600 Lower Water Street");
         setRate("17");
         setCountry("Canada");
-        setPostalCode("B3J 1V4");
+        setPostalCode("B3H 1B9");
         setCity("Halifax");
         setLocation(new LatLng(44.666668, -63.566666));
         // eslint-disable-next-line

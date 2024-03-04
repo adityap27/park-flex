@@ -1,119 +1,109 @@
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 
-const people = [
+const listings = [
     {
-        name: 'Leslie Alexander',
-        email: 'leslie.alexander1@example.com',
-        role: 'Co-Founder / CEO',
-        imageUrl:
-            'https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: '3h ago',
-        lastSeenDateTime: '2023-01-23T13:23Z',
+        name: 'My Parking Lot 1',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Michael Foster',
-        email: 'michael.foster2@example.com',
-        role: 'Co-Founder / CTO',
-        imageUrl:
-            'https://images.unsplash.com/photo-1519244703995-f4e0f30006d5?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: '3h ago',
-        lastSeenDateTime: '2023-01-23T13:23Z',
+        name: 'My Parking Lot 2',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Dries Vincent',
-        email: 'dries.vincent3@example.com',
-        role: 'Business Relations',
-        imageUrl:
-            'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 3',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Lindsay Walton',
-        email: 'lindsay.walton4@example.com',
-        role: 'Front-end Developer',
-        imageUrl:
-            'https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: '3h ago',
-        lastSeenDateTime: '2023-01-23T13:23Z',
+        name: 'My Parking Lot 4',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Courtney Henry',
-        email: 'courtney.henry5@example.com',
-        role: 'Designer',
-        imageUrl:
-            'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: '3h ago',
-        lastSeenDateTime: '2023-01-23T13:23Z',
+        name: 'My Parking Lot 5',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Tom Cook',
-        email: 'tom.cook6@example.com',
-        role: 'Director of Product',
-        imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 6',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Tom Cook',
-        email: 'tom.cook7@example.com',
-        role: 'Director of Product',
-        imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 7',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Tom Cook',
-        email: 'tom.cook8@example.com',
-        role: 'Director of Product',
-        imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 8',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Tom Cook',
-        email: 'tom.cook9@example.com',
-        role: 'Director of Product',
-        imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 9',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
     {
-        name: 'Tom Cook',
-        email: 'tom.cook10@example.com',
-        role: 'Director of Product',
-        imageUrl:
-            'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80',
-        lastSeen: null,
+        name: 'My Parking Lot 10',
+        streetAddress: '1600 Lower Water Street',
+        city: 'Halifax',
+        country: 'Canada',
+        postalCode: 'B3H 1B9'
     },
 ]
 
 const ManageListing = () => {
-    const naigate = useNavigate();
+    const navigate = useNavigate();
     return (
         <>
-            <h1 className="text-4xl font-bold text-center mb-8 mt-8">Manage Listings</h1>
-            <ul role="list" className="divide-y divide-gray-100 px-20">
-                {people.map((person) => (
-                    <li key={person.email} className="flex justify-between gap-x-6 py-2">
+            <div className="flex items-center justify-center flex-col md:flex-row">
+                <h1 className="text-4xl font-bold text-center mb-8 mt-8 ml-20 md:text-left md:mr-auto">Manage Listings</h1>
+                <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 mr-20 md:mt-10 mb-10 px-2 py-2 rounded md:ml-auto" onClick={() => navigate('/create-listing')}>Create New Listing</button>
+            </div>
+
+            <ul className="divide-y divide-gray-100 px-20">
+                {listings.map((listing, index) => (
+                    <li key={index} className="flex justify-between gap-x-6 py-2">
                         <div className="flex min-w-0 gap-x-4">
-                            {/* <img className="h-12 w-12 flex-none rounded-full bg-gray-50" src={person.imageUrl} alt="" /> */}
                             <div className="min-w-0 flex-auto">
-                                <p className="text-sm font-semibold leading-6 text-gray-900">{person.name}</p>
-                                {/* <p className="mt-1 truncate text-xs leading-5 text-gray-500">{person.email}</p> */}
+                                <p className="text-sm font-semibold leading-6 text-gray-900">{listing.name}</p>
                             </div>
                         </div>
                         <div className="flex min-w-0 gap-x-4">
                             <div className="min-w-0 flex-auto">
-                                {/* <p className="text-sm font-semibold leading-6 text-gray-900">{person.name}</p> */}
-                                <p className="text-sm leading-6 text-gray-900">{person.email}</p>
+                                <p className="text-sm leading-6 text-gray-900">{`${listing.streetAddress}, ${listing.city}, ${listing.country}`}</p>
+                            </div>
+                        </div>
+                        <div className="flex min-w-0 gap-x-4">
+                            <div className="min-w-0 flex-auto">
+                                <p className="text-sm leading-6 text-gray-900">{listing.postalCode}</p>
                             </div>
                         </div>
                         <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
-                            {/* <p className="text-sm leading-6 text-gray-900">Edit</p>
-                        <p className="text-sm leading-6 text-gray-900">Delete</p> */}
                             <div className="flex">
-                                <button className="inline-block px-6 py-2.5 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium mx-2" onClick={() => naigate('/edit-listing')}>Edit</button>
+                                <button className="inline-block px-6 py-2.5 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium mx-2" onClick={() => navigate('/edit-listing')}>Edit Listing</button>
                                 <button className="inline-block px-6 py-2.5 rounded-md border-primary text-white bg-red-500 hover:bg-red-600 font-medium" onClick={() => {
                                     Swal.fire({
                                         title: "Are you sure?",
@@ -133,20 +123,8 @@ const ManageListing = () => {
                                             console.log("hello");
                                         }
                                     });
-                                }}>Delete</button>
+                                }}>Delete Listing</button>
                             </div>
-                            {/* {person.lastSeen ? (
-                            <p className="mt-1 text-xs leading-5 text-gray-500">
-                                Last seen <time dateTime={person.lastSeenDateTime}>{person.lastSeen}</time>
-                            </p>
-                        ) : (
-                            <div className="mt-1 flex items-center gap-x-1.5">
-                                <div className="flex-none rounded-full bg-emerald-500/20 p-1">
-                                    <div className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                                </div>
-                                <p className="text-xs leading-5 text-gray-500">Online</p>
-                            </div>
-                        )} */}
                         </div>
                     </li>
                 ))}
