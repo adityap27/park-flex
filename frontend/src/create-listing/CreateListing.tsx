@@ -4,6 +4,7 @@ import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
+import axios from "axios";
 
 export const CreateListing = () => {
 	const navigate = useNavigate();
@@ -14,7 +15,7 @@ export const CreateListing = () => {
 	const [city, setCity] = useState<string>("");
 	const [postalCode, setPostalCode] = useState<string>("");
 	const [rate, setRate] = useState<string>("");
-	const [image, setImage] = useState<string>("");
+	const [image, setImage] = useState<File | null>(null);
 	const [error, setError] = useState({
 		name: "",
 		description: "",
@@ -55,8 +56,29 @@ export const CreateListing = () => {
 	};
 
 	useEffect(() => {
+		if (!image) return;
+
 		if (Object.values(error).every((error) => error === "") && submitting) {
-			navigate("/success");
+			const formData = new FormData();
+			formData.append('name', name);
+			formData.append('description', description);
+			formData.append('streetAddress', address)
+			formData.append('country', country);
+			formData.append('city', city);
+			formData.append('postalCode', postalCode);
+			formData.append('rate', rate);
+			formData.append('location', location.lat + ':' + location.lng);
+			formData.append('image', image);
+
+			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
+				headers: {
+					'Content-Type': 'multipart/form-data'
+				}
+			}).then(response => {
+				console.log('Listing created:', response.data);
+			}).catch(error => {
+				console.error('Error creating listing:', error);
+			});
 		}
 		// eslint-disable-next-line
 	}, [error]);
@@ -79,6 +101,14 @@ export const CreateListing = () => {
 		}
 	};
 
+	const checkFile = (inputField: string, value: any) => {
+		if (value == null) {
+			showError(inputField, `${getFieldName(inputField)} is required`);
+		} else {
+			showSuccess(inputField);
+		}
+	};
+
 	const getFieldName = (inputField: string) => {
 		return inputField.charAt(0).toUpperCase() + inputField.slice(1);
 	};
@@ -93,13 +123,21 @@ export const CreateListing = () => {
 		checkRequired("city", city);
 		checkRequired("postalCode", postalCode);
 		checkRequired("rate", rate);
-		checkRequired("image", image);
+		checkFile("image", image);
 		setSubmitting(true);
 	};
 
 	const onImageChange = (event: any) => {
-		if (event.target.files && event.target.files[0]) {
-			setImage(URL.createObjectURL(event.target.files[0]));
+		if (event.target.files && event.target.files.length > 0) {
+			setImage(event.target.files[0]);
+			//setImage(URL.createObjectURL(event.target.files[0]));
+			// const reader = new FileReader();
+			// reader.readAsDataURL(event.target.files[0]);
+			// reader.onload = () => {
+			// 	if (typeof reader.result === "string") {
+			// 	setImage(reader.result);
+			// 	}
+			// };
 		}
 	}
 
@@ -201,11 +239,11 @@ export const CreateListing = () => {
 							<small>{error.description}</small>
 						</div>
 						<div className={`form-control ${error.rate ? "error" : "success"}`}>
-							<label htmlFor="address">Monthly Rate</label>
+							<label htmlFor="address">Daily Rate</label>
 							<input
 								type="number"
 								id="rate"
-								placeholder="Enter Monthly Rate"
+								placeholder="Enter Daily Rate"
 								value={rate}
 								onChange={(e) => setRate(e.target.value)}
 							/>
@@ -239,7 +277,7 @@ export const CreateListing = () => {
 							<MapContainer className="map-box"
 								center={location}
 								zoom={DEFAULT_MAP_ZOOM}
-								style={{ height: "400px"}}
+								style={{ height: "400px" }}
 								ref={map}
 							>
 								<TileLayer
@@ -251,9 +289,9 @@ export const CreateListing = () => {
 						) : null}
 					</div>
 					<div className="flex items-center justify-center flex-col md:flex-row">
-                        <button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Submit</button>
-                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/')}>Close</button>
-                    </div>
+						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Submit</button>
+						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/')}>Close</button>
+					</div>
 				</div>
 			</form>
 		</>

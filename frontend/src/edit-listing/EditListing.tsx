@@ -213,11 +213,11 @@ const EditListing = () => {
                             <small>{error.description}</small>
                         </div>
                         <div className={`form-control ${error.rate ? "error" : "success"}`}>
-                            <label htmlFor="address">Monthly Rate</label>
+                            <label htmlFor="address">Daily Rate</label>
                             <input
                                 type="number"
                                 id="rate"
-                                placeholder="Enter Monthly Rate"
+                                placeholder="Enter Daily Rate"
                                 value={rate}
                                 onChange={(e) => setRate(e.target.value)}
                             />
