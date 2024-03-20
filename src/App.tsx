@@ -13,6 +13,7 @@ import LandingPage from "./landing-page/LandingPage";
 import CreateListing from "./create-listing/CreateListing";
 import ManageListings from "./manage-listings/ManageListings";
 import EditListing from "./edit-listing/EditListing";
+import ViewListing from "./view-listing/ViewListing";
 function App() {
   return (
     <>
@@ -28,6 +29,7 @@ function App() {
               <Route path='/create-listing' Component={CreateListing}></Route>
               <Route path='/manage-listings' Component={ManageListings}></Route>
               <Route path='/edit-listing' Component={EditListing}></Route>
+              <Route path='/view-listing' Component={ViewListing}></Route>
               <Route
                 path='*'
                 Component={() => (

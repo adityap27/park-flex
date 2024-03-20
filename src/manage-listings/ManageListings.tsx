@@ -79,14 +79,14 @@ const ManageListing = () => {
     return (
         <>
             <div className="flex items-center justify-center flex-col md:flex-row">
-                <h1 className="text-4xl font-bold text-center mb-8 mt-8 ml-20 md:text-left md:mr-auto">Manage Listings</h1>
-                <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 mr-20 md:mt-10 mb-10 px-2 py-2 rounded md:ml-auto" onClick={() => navigate('/create-listing')}>Create New Listing</button>
+                <h1 className="text-4xl font-bold text-center mb-8 mt-8 md:ml-5 md:text-left md:mr-auto">Manage Listings</h1>
+                <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 mr-5 md:mt-10 mb-10 px-2 py-2 rounded md:ml-auto" onClick={() => navigate('/create-listing')}>Create New Listing</button>
             </div>
 
-            <ul className="divide-y divide-gray-100 px-20">
+            <ul className="divide-y divide-gray-100 px-5">
                 {listings.map((listing, index) => (
-                    <li key={index} className="flex justify-between gap-x-6 py-2">
-                        <div className="flex min-w-0 gap-x-4">
+                    <li key={index} className="flex justify-between gap-x-2 py-2">
+                        <div className="flex min-w-0 gap-x-4 cursor-pointer" onClick={() => {navigate('/view-listing')}}>
                             <div className="min-w-0 flex-auto">
                                 <p className="text-sm font-semibold leading-6 text-gray-900">{listing.name}</p>
                             </div>
@@ -101,10 +101,10 @@ const ManageListing = () => {
                                 <p className="text-sm leading-6 text-gray-900">{listing.postalCode}</p>
                             </div>
                         </div>
-                        <div className="hidden shrink-0 sm:flex sm:flex-col sm:items-end">
+                        <div className="flex min-w-0 gap-x-4">
                             <div className="flex">
-                                <button className="inline-block px-6 py-2.5 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium mx-2" onClick={() => navigate('/edit-listing')}>Edit Listing</button>
-                                <button className="inline-block px-6 py-2.5 rounded-md border-primary text-white bg-red-500 hover:bg-red-600 font-medium" onClick={() => {
+                                <button className="inline-block px-3 py-1 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium mx-2" onClick={() => navigate('/edit-listing')}>Edit Listing</button>
+                                <button className="inline-block px-3 py-1 rounded-md border-primary text-white bg-red-500 hover:bg-red-600 font-medium" onClick={() => {
                                     Swal.fire({
                                         title: "Are you sure?",
                                         text: "You won't be able to revert this!",
