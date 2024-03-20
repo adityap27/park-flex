@@ -1,6 +1,7 @@
 import { Navbar } from "react-bootstrap";
 import { FaCar } from "react-icons/fa";
 import Nav from "react-bootstrap/Nav";
+import { Link } from "react-router-dom";
 
 export const Header = () => {
   return (
@@ -23,6 +24,10 @@ export const Header = () => {
             <div className='!text-textSecondary nav-link cursor-pointer'>
               Register
             </div>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link to='/manage-listings'>
+              <p className='text-textSecondary cursor-pointer pt-2'>My Listings</p>
+            </Link>
           </Nav>
         </Navbar.Collapse>
       </Navbar>

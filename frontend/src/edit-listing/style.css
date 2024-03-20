@@ -1,0 +1,153 @@
+.container {
+    width: 960px;
+    max-width: 960px;
+    padding: 20px;
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.map {
+    width: 100%;
+    padding: 0 10px;
+    margin-top: 15px;
+}
+
+.left-column,
+.right-column {
+    width: 50%;
+}
+
+.right-column {
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+}
+
+.horizontal-container {
+    width: 960px;
+    max-width: 960px;
+    text-align: center;
+    margin: auto;
+}
+
+h2 {
+    color: #222;
+    margin: 0 0 30px;
+    font-size: 10px;
+    font-weight: 700;
+}
+
+.form {
+    padding: 30px 0px;
+    max-width: 960px;
+    margin: auto;
+}
+
+.form-control label {
+    margin-bottom: 5px;
+    margin-top: 5px;
+    display: block;
+    color: #333;
+}
+
+.form-control input {
+    width: 100%;
+    padding: 10px;
+    display: block;
+    font-size: 14px;
+    border: 1px solid #e6e6e6;
+    border-radius: 4px;
+}
+
+.form-control {
+    position: relative;
+    margin-bottom: 10px;
+    padding-bottom: 25px;
+}
+
+.form-control input:focus {
+    border-color: #777;
+    outline: none;
+}
+
+.form-control.error input {
+    border-color: var(--input-error-color);
+}
+
+.form-control.success,
+.form-control.error {
+    border-color: white;
+    margin-top: 12px;
+}
+
+.form-control.success:after {
+    opacity: 0;
+    transform: translateY(-50%);
+}
+
+.form-control small {
+    bottom: -5;
+    left: 10;
+    color: var(--input-error-color);
+    position: absolute;
+    visibility: hidden;
+}
+
+.form-control.error small {
+    visibility: visible;
+}
+
+@media screen and (min-width: 960px) {
+    .container {
+        justify-content: center;
+    }
+
+    .form {
+        bottom: 0;
+        padding-bottom: 0px;
+    }
+
+    .right-column {
+        margin-left: 0px;
+        padding-top: 0px;
+    }
+}
+
+@media screen and (max-width: 960px) {
+    .container {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .left-column,
+    .right-column {
+        width: 100%;
+    }
+
+    .form {
+        bottom: 0;
+        padding-bottom: 0px;
+    }
+}
+
+@media screen and (max-width: 600px) {
+    .container {
+        width: 100%;
+    }
+
+    .form-control input {
+        font-size: 12px;
+        padding: 5px;
+    }
+
+    .form {
+        padding: 30px 20px 10px;
+    }
+
+    .form-control {
+        margin-bottom: 5px;
+        padding-bottom: 15px;
+    }
+}
