@@ -5,7 +5,7 @@ import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 
-const CreateListing = () => {
+export const CreateListing = () => {
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
