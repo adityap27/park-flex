@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { HomeFilter } from "./HomeFilter";
 import { getRequest } from "../utils/network-manager/axios";
 import { calculateDistanceFromLatLon } from "../utils/map-utils";
+import { Link } from "react-router-dom";
 
 export interface ParkingSpotsResponse {
   parkingSpots: ParkingSpot[];
@@ -55,27 +56,29 @@ function Home() {
 
   const _renderSpotCard = (parkingSpot: ParkingSpot, index: number) => {
     return (
-      <div
-        className='aspect-square relative rounded-md shadow-lg h-[280px] md:h-[240px] xl:h-[280px] cursor-pointer hover:scale-[1.05] transition'
-        key={index}
-      >
-        <img
-          src={`https://picsum.photos/id/${parkingSpot.id}/200`}
-          alt={parkingSpot.id.toString()}
-          className='h-full w-full rounded-md'
-          loading='lazy'
-        ></img>
-        <div className='w-full absolute bottom-0 flex flex-row p-2 items-center justify-between rounded-b-md bg-backgroundColor'>
-          <div>
-            <p className='m-0 p-0'>Parking Type: {parkingSpot.parkingType}</p>
-            <p className='m-0 p-0'>
-              Owner:{" "}
-              {parkingSpot.owner.firstName + " " + parkingSpot.owner.lastName}
-            </p>
+      <Link className='text-textPrimary' to={"/spot/" + parkingSpot.id}>
+        <div
+          className='aspect-square relative rounded-md shadow-lg h-[280px] md:h-[240px] xl:h-[280px] cursor-pointer hover:scale-[1.05] transition'
+          key={index}
+        >
+          <img
+            src={`https://picsum.photos/id/${parkingSpot.id}/200`}
+            alt={parkingSpot.id.toString()}
+            className='h-full w-full rounded-md'
+            loading='lazy'
+          ></img>
+          <div className='w-full absolute bottom-0 flex flex-row p-2 items-center justify-between rounded-b-md bg-backgroundColor'>
+            <div>
+              <p className='m-0 p-0'>Parking Type: {parkingSpot.parkingType}</p>
+              <p className='m-0 p-0'>
+                Owner:{" "}
+                {parkingSpot.owner.firstName + " " + parkingSpot.owner.lastName}
+              </p>
+            </div>
+            <p className='m-0 p-0'>$ {parkingSpot.pricePerMonth}</p>
           </div>
-          <p className='m-0 p-0'>$ {parkingSpot.pricePerMonth}</p>
         </div>
-      </div>
+      </Link>
     );
   };
 

@@ -50,6 +50,9 @@ dependencies:
   react-toastify:
     specifier: ^10.0.4
     version: 10.0.4(react-dom@18.2.0)(react@18.2.0)
+  sweetalert2:
+    specifier: ^11.10.6
+    version: 11.10.6
   typescript:
     specifier: ^4.9.5
     version: 4.9.5
@@ -10006,6 +10009,10 @@ packages:
       csso: 4.2.0
       picocolors: 1.0.0
       stable: 0.1.8
+    dev: false
+
+  /sweetalert2@11.10.6:
+    resolution: {integrity: sha512-CINZPLZXZRSZqSOE7H7j1F7X8e8O1kLOiXPmtJn1DYxvXsKBr3d16d90+IcwTTs7dJww20h8r8QIxIwsLGX+6A==}
     dev: false
 
   /symbol-tree@3.2.4:
