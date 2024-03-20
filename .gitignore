@@ -24,3 +24,5 @@ yarn-error.log*
 
 
 api/node_modules
+frontend/node_modules
+frontend/build
