@@ -14,6 +14,7 @@ import CreateListing from "./create-listing/CreateListing";
 import EditListing from "./edit-listing/EditListing";
 import ViewListing from "./view-listing/ViewListing";
 import ManageListings from "./manage-listings/ManageListings";
+import { SpotDetails } from "./spot-details/SpotDetails";
 function App() {
   return (
     <>
@@ -30,6 +31,7 @@ function App() {
               <Route path='/manage-listings' Component={ManageListings}></Route>
               <Route path='/edit-listing' Component={EditListing}></Route>
               <Route path='/view-listing' Component={ViewListing}></Route>
+              <Route path='/spot/:id' Component={SpotDetails}></Route>
               <Route
                 path='*'
                 Component={() => (
