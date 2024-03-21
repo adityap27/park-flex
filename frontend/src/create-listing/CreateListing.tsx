@@ -77,7 +77,6 @@ export const CreateListing = () => {
 				}
 			}).then(response => {
 				if (response.data.success){
-					console.log('Listing created:', response.data);
 					navigate('/manage-listings');
 				}
 			}).catch(error => {
