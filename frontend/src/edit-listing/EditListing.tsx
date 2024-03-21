@@ -4,6 +4,7 @@ import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
+import axios from "axios";
 
 const EditListing = () => {
     const navigate = useNavigate();
@@ -56,7 +57,31 @@ const EditListing = () => {
 
     useEffect(() => {
         if (Object.values(error).every((error) => error === "") && submitting) {
-            navigate("/success");
+
+            let json_data = {
+                listingId: "65fb99171a1dcb5361ee7cf3",
+                name: name,
+                streetAddress: address,
+                country: country,
+                city: city,
+                description: description,
+                rate: rate,
+                postalCode: postalCode,
+                location: (location.lat + ':' + location.lng).toString()
+            }
+
+            axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			}).then(response => {
+				if (response.data.success){
+					console.log('Listing updated:', response.data);
+					navigate('/manage-listings');
+				}
+			}).catch(error => {
+				console.error('Error updating listing: ', error);
+			});
         }
         // eslint-disable-next-line
     }, [error]);

@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 interface IListing extends mongoose.Document {
-    // owner: mongoose.Types.ObjectId,
+    owner: mongoose.Types.ObjectId,
     name: string,
     streetAddress: string,
     country: string,
@@ -17,10 +17,10 @@ interface IListing extends mongoose.Document {
 }
 
 const ListingSchema = new mongoose.Schema({
-    // owner: {
-    //     type: mongoose.Schema.Types.ObjectId,
-    //     ref: 'Users'
-    // },
+    owner: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
+    },
     name: {
         type: String,
         required: true

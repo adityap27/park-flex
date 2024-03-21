@@ -1,81 +1,101 @@
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
+import axios from "axios";
 
-const listings = [
-    {
-        name: 'My Parking Lot 1',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 2',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 3',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 4',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 5',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 6',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 7',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 8',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 9',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-    {
-        name: 'My Parking Lot 10',
-        streetAddress: '1600 Lower Water Street',
-        city: 'Halifax',
-        country: 'Canada',
-        postalCode: 'B3H 1B9'
-    },
-]
+// const listings = [
+//     {
+//         name: 'My Parking Lot 1',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 2',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 3',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 4',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 5',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 6',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 7',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 8',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 9',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+//     {
+//         name: 'My Parking Lot 10',
+//         streetAddress: '1600 Lower Water Street',
+//         city: 'Halifax',
+//         country: 'Canada',
+//         postalCode: 'B3H 1B9'
+//     },
+// ]
+
+let listings: Array<any> = [];
 
 const ManageListings = () => {
     const navigate = useNavigate();
+
+    useEffect(() => {
+        axios.post('http://localhost:3001/api/manage-listings/get-all', {userId: '65fb948e17a0912641e6b9d4'}, {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(response => {
+			if (response.data.success){
+				console.log('Listing fetched successfully: ', response.data);
+                listings = response.data.data
+			}
+			}).catch(error => {
+				console.error('Error fetching listings: ', error);
+			});
+    }, [])
+
     return (
         <>
             <div className="flex items-center justify-center flex-col md:flex-row">

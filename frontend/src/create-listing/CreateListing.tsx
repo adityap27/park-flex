@@ -60,6 +60,7 @@ export const CreateListing = () => {
 
 		if (Object.values(error).every((error) => error === "") && submitting) {
 			const formData = new FormData();
+			formData.append('userId', '65fb948e17a0912641e6b9d4');
 			formData.append('name', name);
 			formData.append('description', description);
 			formData.append('streetAddress', address)
@@ -75,9 +76,12 @@ export const CreateListing = () => {
 					'Content-Type': 'multipart/form-data'
 				}
 			}).then(response => {
-				console.log('Listing created:', response.data);
+				if (response.data.success){
+					console.log('Listing created:', response.data);
+					navigate('/manage-listings');
+				}
 			}).catch(error => {
-				console.error('Error creating listing:', error);
+				console.error('Error creating listing: ', error);
 			});
 		}
 		// eslint-disable-next-line
