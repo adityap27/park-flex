@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map } from "leaflet";
 import "./style.css";
@@ -27,6 +27,7 @@ const EditListing = () => {
         image: "",
         location: ""
     });
+    const { state } = useLocation();
 
     const [submitting, setSubmitting] = useState(false);
 
@@ -59,7 +60,7 @@ const EditListing = () => {
         if (Object.values(error).every((error) => error === "") && submitting) {
 
             let json_data = {
-                listingId: "65fb99171a1dcb5361ee7cf3",
+                listingId: state.listingId,
                 name: name,
                 streetAddress: address,
                 country: country,
@@ -76,7 +77,6 @@ const EditListing = () => {
 				}
 			}).then(response => {
 				if (response.data.success){
-					console.log('Listing updated:', response.data);
 					navigate('/manage-listings');
 				}
 			}).catch(error => {
@@ -87,14 +87,32 @@ const EditListing = () => {
     }, [error]);
 
     useEffect(() => {
-        setName("My Parking Lot 1");
-        setDescription("Hourly and Daily Parking is also available using the pay & display meter located near the lot entrance.");
-        setAddress("1600 Lower Water Street");
-        setRate("17");
-        setCountry("Canada");
-        setPostalCode("B3H 1B9");
-        setCity("Halifax");
-        setLocation(new LatLng(44.666668, -63.566666));
+        axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }}).then(response => {
+            if (response.data.success) {
+                setName(response.data.data.name);
+                setDescription(response.data.data.description);
+                setAddress(response.data.data.streetAddress);
+                setRate(response.data.data.dailyRate);
+                setCountry(response.data.data.country);
+                setPostalCode(response.data.data.postalCode);
+                setCity(response.data.data.city);
+                setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
+            }
+        }).catch(error => {
+            console.error('Error fetching listings: ', error);
+        });
+
+        // setName("My Parking Lot 1");
+        // setDescription("Hourly and Daily Parking is also available using the pay & display meter located near the lot entrance.");
+        // setAddress("1600 Lower Water Street");
+        // setRate("17");
+        // setCountry("Canada");
+        // setPostalCode("B3H 1B9");
+        // setCity("Halifax");
+        // setLocation(new LatLng(44.666668, -63.566666));
         // eslint-disable-next-line
     }, []);
 

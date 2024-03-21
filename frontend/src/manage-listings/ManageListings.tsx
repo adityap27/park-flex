@@ -162,7 +162,7 @@ const ManageListings = () => {
                             </div>
                         </div>
                         <div className="flex gap-x-4">
-                            <button className="inline-block px-3 py-1 h-10 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium" onClick={() => navigate('/edit-listing')}>Edit Listing</button>
+                            <button className="inline-block px-3 py-1 h-10 rounded-md border-primary text-white bg-green-500 hover:bg-green-600 font-medium" onClick={() => navigate('/edit-listing', { state: { listingId: listing._id } })}>Edit Listing</button>
                             <button className="inline-block px-3 py-1 h-10 rounded-md border-primary text-white bg-red-500 hover:bg-red-600 font-medium" onClick={() => {
                                 Swal.fire({
                                     title: "Are you sure?",
