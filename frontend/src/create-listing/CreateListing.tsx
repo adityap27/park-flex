@@ -280,7 +280,7 @@ export const CreateListing = () => {
 							<MapContainer className="map-box"
 								center={location}
 								zoom={DEFAULT_MAP_ZOOM}
-								style={{ height: "400px" }}
+								style={{ height: "400px" , width: "100%"}}
 								ref={map}
 							>
 								<TileLayer

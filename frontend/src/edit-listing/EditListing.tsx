@@ -15,7 +15,6 @@ const EditListing = () => {
     const [city, setCity] = useState<string>("");
     const [postalCode, setPostalCode] = useState<string>("");
     const [rate, setRate] = useState<string>("");
-    // const [image, setImage] = useState<string>("");
     const [error, setError] = useState({
         name: "",
         description: "",
@@ -104,15 +103,6 @@ const EditListing = () => {
         }).catch(error => {
             console.error('Error fetching listings: ', error);
         });
-
-        // setName("My Parking Lot 1");
-        // setDescription("Hourly and Daily Parking is also available using the pay & display meter located near the lot entrance.");
-        // setAddress("1600 Lower Water Street");
-        // setRate("17");
-        // setCountry("Canada");
-        // setPostalCode("B3H 1B9");
-        // setCity("Halifax");
-        // setLocation(new LatLng(44.666668, -63.566666));
         // eslint-disable-next-line
     }, []);
 
@@ -148,28 +138,8 @@ const EditListing = () => {
         checkRequired("city", city);
         checkRequired("postalCode", postalCode);
         checkRequired("rate", rate);
-        //checkRequired("image", image);
         setSubmitting(true);
     };
-
-    // const onImageChange = (event) => {
-    // 	if (event.target.files && event.target.files[0]) {
-    // 		setImage(URL.createObjectURL(event.target.files[0]));
-    // 	}
-    // }
-
-    // const getCurrentLocation = useCallback(() => {
-    // 	if ("geolocation" in navigator) {
-    // 		navigator.geolocation.getCurrentPosition((position) => {
-    // 			setLocation(new LatLng(position.coords.latitude, position.coords.longitude));
-    // 		});
-    // 	}
-    // 	// eslint-disable-next-line
-    // }, []);
-
-    // useEffect(() => {
-    // 	getCurrentLocation();
-    // }, [getCurrentLocation]);
 
     useEffect(() => {
         if (map?.current) {
@@ -277,15 +247,6 @@ const EditListing = () => {
                             />
                             <small>{error.postalCode}</small>
                         </div>
-                        {/* <div className={`form-control ${error.image ? "error" : "success"}`}>
-						<label htmlFor="address">Image</label>
-						<input
-							type="file"
-							id="image"
-							onChange={onImageChange}
-						/>
-						<small>{error.image}</small>
-					</div> */}
                     </div>
                     <div className="map">
                         <p style={{ textAlign: "left" }}>Select Location</p>
@@ -301,7 +262,7 @@ const EditListing = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                                 />
-                                <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
+                                <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })}/>
                             </MapContainer>
                         ) : null}
                     </div>
