@@ -27,6 +27,7 @@ export const CreateListing = () => {
 		image: "",
 		location: ""
 	});
+	const [isLocationSelected, setIsLocationSelected] = useState<boolean>(false);
 
 	const [submitting, setSubmitting] = useState(false);
 
@@ -112,6 +113,18 @@ export const CreateListing = () => {
 		}
 	};
 
+	const checkLocation = (inputField: string, value: boolean) => {
+		if(value === false) {
+			showError(inputField, `${getFieldName(inputField)} is required`);
+			document.getElementById("location")?.classList.remove("border-gray-300");
+			document.getElementById("location")?.classList.add("border-red-500");
+		} else {
+			showSuccess(inputField);
+			document.getElementById("location")?.classList.remove("border-red-500");
+			document.getElementById("location")?.classList.add("border-gray-300");
+		}
+	}
+
 	const getFieldName = (inputField: string) => {
 		return inputField.charAt(0).toUpperCase() + inputField.slice(1);
 	};
@@ -127,6 +140,7 @@ export const CreateListing = () => {
 		checkRequired("postalCode", postalCode);
 		checkRequired("rate", rate);
 		checkFile("image", image);
+		checkLocation("location", isLocationSelected);
 		setSubmitting(true);
 	};
 
@@ -148,6 +162,7 @@ export const CreateListing = () => {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
 				setLocation(new LatLng(position.coords.latitude, position.coords.longitude));
+				setIsLocationSelected(true);
 			});
 		}
 		// eslint-disable-next-line
@@ -167,6 +182,7 @@ export const CreateListing = () => {
 						? DEFAULT_MAP_ZOOM
 						: map.current.getZoom()
 				);
+				setIsLocationSelected(true);
 			});
 			map.current?.flyTo(
 				location,
@@ -277,6 +293,8 @@ export const CreateListing = () => {
 						<p style={{ textAlign: "left" }}>Select Location</p>
 						{location.lat !== 0 &&
 							location.lng !== 0 ? (
+							<>
+							<div id="location" className="border-1 border-gray-300">
 							<MapContainer className="map-box"
 								center={location}
 								zoom={DEFAULT_MAP_ZOOM}
@@ -289,11 +307,14 @@ export const CreateListing = () => {
 								/>
 								<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
 							</MapContainer>
+							</div>
+							<small className="text-red-500">{error.location}</small>
+							</>
 						) : null}
 					</div>
 					<div className="flex items-center justify-center flex-col md:flex-row">
 						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Submit</button>
-						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/')}>Close</button>
+						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
 					</div>
 				</div>
 			</form>

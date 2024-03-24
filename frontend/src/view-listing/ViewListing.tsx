@@ -72,47 +72,45 @@ const ViewListing = () => {
 
     return (
         <div className="mx-auto px-4 sm:py-24">
-            <h1 className="text-4xl font-bold text-center mb-8 md:-mt-2 lg:-mt-12 md:text-left md:mr-auto">View Listing</h1>
-
+            <h1 className="text-4xl font-bold text-center mb-12 -mt-16 md:-mt-12 lg:-mt-12 md:text-left">View Listing</h1>
             {listing ?
                 <>
-                    <div className="h-auto lg:w-1/4 md:w-1/3 sm:w-1/2 overflow-hidden flex-shrink-0 m-auto sm:m-0 flex justify-center items-center">
+                    <div className="h-auto lg:w-1/2 md:w-1/2 overflow-hidden flex-shrink-0 m-auto sm:m-0 flex justify-center items-center">
                         {imageString ? <img src={contentType + imageString} alt="parking lot" className="h-auto w-full object-center lg:h-auto lg:w-fulll" />
                             : <img src={ParkingLotImg} alt="parking lot" className="h-full w-full object-center lg:h-full lg:w-full" />}
-
                     </div>
-                    <div className="mt-6 border-t border-gray-100">
-                        <dl className="divide-y divide-gray-100">
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Name</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.name}</dd>
+                    <div className="mt-6">
+                        <dl className="divide-gray-200 divide-y">
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Name</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.name}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Description</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.description}</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Description</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.description}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Street Address</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.streetAddress}</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Street Address</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.streetAddress}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">City</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.city}</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">City</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.city}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Country</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.country}</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Country</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.country}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Postal Code</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.postalCode}</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Postal Code</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.postalCode}</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Daily Rate</dt>
-                                <dd className="mt-1 text-sm leading-6 textPrimary sm:col-span-2 sm:mt-0">{listing.dailyRate} CAD</dd>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Daily Rate</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.dailyRate} CAD</dd>
                             </div>
-                            <div className="px-4 py-6 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
-                                <dt className="text-sm leading-6 font-bold">Location</dt>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Location</dt>
                                 {location.lat !== 0 &&
                                     location.lng !== 0 ? (
                                     <MapContainer className="mapBox"
@@ -130,8 +128,8 @@ const ViewListing = () => {
                             </div>
                         </dl>
                     </div>
-                    <div className="flex items-center justify-center flex-col mb-8 md:mb-0">
-                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+                    <div className="flex items-center justify-center flex-col mb-8">
+                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
                     </div>
                 </> : <></>}
         </div>
