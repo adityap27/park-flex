@@ -17,6 +17,7 @@ interface IListing extends mongoose.Document {
     type: string;
     coordinates: [number, number];
   };
+  parkingType: string;
 }
 
 enum ParkingTypes {

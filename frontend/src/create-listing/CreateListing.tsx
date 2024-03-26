@@ -16,6 +16,7 @@ export const CreateListing = () => {
 	const [postalCode, setPostalCode] = useState<string>("");
 	const [rate, setRate] = useState<string>("");
 	const [image, setImage] = useState<File | null>(null);
+	const [type, setType] = useState<string>("outdoor");
 	const [error, setError] = useState({
 		name: "",
 		description: "",
@@ -71,6 +72,7 @@ export const CreateListing = () => {
 			formData.append('rate', rate);
 			formData.append('location', location.lat + ':' + location.lng);
 			formData.append('image', image);
+			formData.append('type', type);
 
 			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
 				headers: {
@@ -244,6 +246,29 @@ export const CreateListing = () => {
 								onChange={(e) => setCity(e.target.value)}
 							/>
 							<small>{error.city}</small>
+						</div>
+						<div className="ml-3">
+							<label htmlFor="parking-type">Type:</label>
+							<label className="ml-5">
+								<input
+									type="radio"
+									value="indoor"
+									checked={type === "indoor"}
+									className="mr-2"
+									onChange={() => {setType("indoor")}}
+								/>
+								Indoor
+							</label>
+							<label className="ml-3">
+								<input
+									type="radio"
+									value="outdoor"
+									checked={type === "outdoor"}
+									className="mr-2"
+									onChange={() => {setType("outdoor")}}
+								/>
+								Outdoor
+							</label>
 						</div>
 					</div>
 					<div className="right-column">

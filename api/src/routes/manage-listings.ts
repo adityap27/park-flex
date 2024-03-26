@@ -22,7 +22,7 @@ router.post('/create', upload.single('image'), async (req: Request, res: Respons
 
         if(!listingData.name || !listingData.streetAddress || !listingData.country ||
           !listingData.city || !listingData.description || !listingData.rate || !listingData.postalCode ||
-          !listingData.location) {
+          !listingData.location || !listingData.type) {
             res.status(400).json({ success: false, message: "Listing data missing" });
             return;
         }
@@ -40,7 +40,8 @@ router.post('/create', upload.single('image'), async (req: Request, res: Respons
             "data": req.file.buffer.toString('base64'),
             "contentType": req.file.mimetype
           },
-          location: {"coordinates": listingData.location.split(':').map(Number)}
+          location: {"coordinates": listingData.location.split(':').map(Number)},
+          parkingType: listingData.type
         });
     
         await newListing.save();
@@ -63,7 +64,7 @@ router.put('/edit', async (req: Request, res: Response) => {
 
       if(!listingData.name || !listingData.streetAddress || !listingData.country ||
         !listingData.city || !listingData.description || !listingData.rate || !listingData.postalCode ||
-        !listingData.location) {
+        !listingData.location || !listingData.type) {
           res.status(400).json({ success: false, message: "Listing data missing" });
           return;
       }
@@ -76,7 +77,8 @@ router.put('/edit', async (req: Request, res: Response) => {
         "description": listingData.description,
         "dailyRate": listingData.rate,
         "postalCode": listingData.postalCode,
-        "location": {"coordinates": listingData.location.split(':').map(Number), type: "Point"}
+        "location": {"coordinates": listingData.location.split(':').map(Number), type: "Point"},
+        "parkingType": listingData.type
       }});
 
       res.status(201).json({ success: true, message: "Listing updated successfully"});

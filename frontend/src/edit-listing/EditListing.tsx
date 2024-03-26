@@ -15,6 +15,7 @@ const EditListing = () => {
     const [city, setCity] = useState<string>("");
     const [postalCode, setPostalCode] = useState<string>("");
     const [rate, setRate] = useState<string>("");
+    const [type, setType] = useState<string>("outdoor");
     const [error, setError] = useState({
         name: "",
         description: "",
@@ -67,7 +68,8 @@ const EditListing = () => {
                 description: description,
                 rate: rate,
                 postalCode: postalCode,
-                location: (location.lat + ':' + location.lng).toString()
+                location: (location.lat + ':' + location.lng).toString(),
+                type: type
             }
 
             axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
@@ -99,6 +101,7 @@ const EditListing = () => {
                 setPostalCode(response.data.data.postalCode);
                 setCity(response.data.data.city);
                 setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
+                setType(response.data.data?.parkingType);
             }
         }).catch(error => {
             console.error('Error fetching listings: ', error);
@@ -213,6 +216,29 @@ const EditListing = () => {
                             />
                             <small>{error.city}</small>
                         </div>
+                        <div className="ml-3">
+							<label htmlFor="parking-type">Type:</label>
+							<label className="ml-5">
+								<input
+									type="radio"
+									value="indoor"
+									checked={type === "indoor"}
+									className="mr-2"
+									onChange={() => {setType("indoor")}}
+								/>
+								Indoor
+							</label>
+							<label className="ml-3">
+								<input
+									type="radio"
+									value="outdoor"
+									checked={type === "outdoor"}
+									className="mr-2"
+									onChange={() => {setType("outdoor")}}
+								/>
+								Outdoor
+							</label>
+						</div>
                     </div>
                     <div className="right-column">
                         <div className={`form-control ${error.description ? "error" : "success"}`}>

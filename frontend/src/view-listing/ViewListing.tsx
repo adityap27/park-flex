@@ -4,7 +4,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import ParkingLotImg from "../assets/images/parking-spot.jpg";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import axios from "axios";
-import { Buffer } from 'buffer';
 import "./style.css";
 
 const ViewListing = () => {
@@ -109,6 +108,10 @@ const ViewListing = () => {
                             <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
                                 <dt className="font-bold text-sm">Daily Rate</dt>
                                 <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing.dailyRate} CAD</dd>
+                            </div>
+                            <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
+                                <dt className="font-bold text-sm">Type</dt>
+                                <dd className="textPrimary sm:col-span-2 mt-1 sm:mt-0 text-sm">{listing?.parkingType.charAt(0).toUpperCase() + listing?.parkingType.slice(1)}</dd>
                             </div>
                             <div className="sm:grid-cols-3 sm:grid px-4 sm:px-0 py-6 sm:gap-4">
                                 <dt className="font-bold text-sm">Location</dt>
