@@ -10,7 +10,7 @@ interface IListing extends mongoose.Document {
     dailyRate: number,
     postalCode: string,
     image: {
-        data: Buffer;
+        data: String;
         contentType: string;
     }
     location: {
@@ -54,7 +54,7 @@ const ListingSchema = new mongoose.Schema({
     },
     image: {
         data: {
-            type: Buffer,
+            type: String,
             required: true
         },
         contentType: {

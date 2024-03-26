@@ -37,7 +37,7 @@ router.post('/create', upload.single('image'), async (req: Request, res: Respons
           dailyRate: listingData.rate,
           postalCode: listingData.postalCode,
           image: {
-            "data": req.file.buffer,
+            "data": req.file.buffer.toString('base64'),
             "contentType": req.file.mimetype
           },
           location: {"coordinates": listingData.location.split(':').map(Number)}

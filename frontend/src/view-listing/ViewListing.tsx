@@ -36,7 +36,8 @@ const ViewListing = () => {
             if (response.data.success) {
                 setListing(response.data.data);
                 setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-                setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
+                // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
+                setImageString(response.data.data.image.data);
                 setContentType(`data:${response.data.data.image.contentType};base64,`);
             }
         }).catch(error => {

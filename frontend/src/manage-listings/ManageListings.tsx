@@ -28,7 +28,7 @@ const ManageListings = () => {
                 <h1 className="text-4xl font-bold text-center mb-8 mt-8 md:ml-5 md:text-left md:mr-auto">Manage Listings</h1>
                 <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 mr-5 md:mt-10 mb-10 px-2 py-2 rounded md:ml-auto" onClick={() => navigate('/create-listing')}>Create New Listing</button>
             </div>
-            <ul className="px-5 divide-gray-200 divide-y">
+            <ul className="px-5 divide-gray-200 divide-y mb-10">
                 {listings ? listings.map((listing, index) => (
                     <li key={index} className="py-2 justify-between flex items-center flex-wrap">
                         <div className="min-w-0 flex-col flex">
