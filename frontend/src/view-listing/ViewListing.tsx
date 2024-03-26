@@ -28,7 +28,7 @@ const ViewListing = () => {
     const [location, setLocation] = useState<LatLng>(initialLocation);
 
     useEffect(() => {
-        axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId }, {
+        axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
             headers: {
                 'Content-Type': 'application/json'
             }
