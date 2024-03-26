@@ -1,4 +1,4 @@
-import { LatLng } from "leaflet";
+import { Icon, LatLng } from "leaflet";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { FaShare } from "react-icons/fa";
@@ -9,57 +9,31 @@ import StarRatings from "react-star-ratings";
 import dayjs from "dayjs";
 import { formatToTwoPrecisionFloat } from "../utils/number-utils";
 import { toast } from "react-toastify";
-
-export interface ParkingSpotDetails {
-  id: number;
-  name: string;
-  parkingType: string;
-  pricePerMonth: number;
-  imageUrl: string;
-  owner: Owner;
-  location: Location;
-  rating: number;
-  reviews: number;
-  address: Address;
-  bookings: Booking[];
-}
-
-export interface Address {
-  addressLine1: string;
-  addressLine2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-}
-
-export interface Booking {
-  startDate: string;
-  endDate: string;
-}
-
-export interface Location {
-  latitude: number;
-  longitude: number;
-}
-
-export interface Owner {
-  firstName: string;
-  lastName: string;
-}
+import { ParkingSpot } from "../home-page/Home";
 
 export const SpotDetails = () => {
   const params = useParams();
 
   const [parkingSpotDetails, setParkingSpotDetails] = useState<
-    ParkingSpotDetails | undefined
+    ParkingSpot | undefined
   >(undefined);
 
   useEffect(() => {
     if (params.id) {
-      getRequest<ParkingSpotDetails>("parking-listings/" + params.id).then(
-        (data) => {
-          setParkingSpotDetails(data.data);
+      toast.promise(
+        getRequest<{
+          success: boolean;
+          data: ParkingSpot;
+        }>("parking-listings/" + params.id),
+        {
+          pending: "Loading parking spot details",
+          success: {
+            render(data) {
+              setParkingSpotDetails(data.data.data.data);
+              return "Successfully fetched parking spot details";
+            },
+          },
+          error: "Error loading parking spot details",
         }
       );
     }
@@ -121,7 +95,7 @@ export const SpotDetails = () => {
             <div
               className='w-full flex flex-row items-center justify-center'
               style={{
-                background: `url(https://picsum.photos/id/${params.id}/1080/1200)`,
+                background: `url(data:image/png;base64,${parkingSpotDetails.image.data})`,
                 backgroundSize: "contain",
               }}
             >
@@ -130,7 +104,7 @@ export const SpotDetails = () => {
                 style={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}
               >
                 <img
-                  src={`https://picsum.photos/id/${params.id}/1080/1200`}
+                  src={`data:image/png;base64,${parkingSpotDetails.image.data}`}
                   className='h-[400px] object-contain'
                   loading='lazy'
                   alt={parkingSpotDetails.name}
@@ -143,22 +117,26 @@ export const SpotDetails = () => {
                   <div className='flex flex-col p-4'>
                     <h4 className='text-textPrimary'>Spot details</h4>
                     <p className='text-textPrimary'>
+                      Name : {parkingSpotDetails.name}
+                    </p>
+                    <p className='text-textPrimary'>
+                      Description : {parkingSpotDetails.description}
+                    </p>
+                    <p className='text-textPrimary'>
                       Parking Type : {parkingSpotDetails.parkingType}
                     </p>
                     <p className='text-textPrimary'>Timing : Whole day</p>
                     <p className='text-textPrimary'>
                       Owner :{" "}
-                      {parkingSpotDetails.owner.firstName +
+                      {(parkingSpotDetails.owner?.firstName || "") +
                         " " +
-                        parkingSpotDetails.owner.lastName}
+                        (parkingSpotDetails.owner?.lastName || "")}
                     </p>
                     <div className='flex flex-row items-center'>
-                      <p className='text-textPrimary mt-1'>
-                        {parkingSpotDetails.rating}
-                      </p>
+                      <p className='text-textPrimary mt-1'>{5}</p>
                       <div className='ml-2'>
                         <StarRatings
-                          rating={parkingSpotDetails.rating}
+                          rating={5}
                           numberOfStars={5}
                           starDimension='20px'
                           starRatedColor='#0a0944'
@@ -166,40 +144,37 @@ export const SpotDetails = () => {
                       </div>
                     </div>
                     <p className='underline cursor-pointer text-textPrimary'>
-                      {parkingSpotDetails.reviews} Reviews
+                      {50} Reviews
                     </p>
                   </div>
                   <hr className='bg-borderColor m-0 opacity-100' />
                   <div className='flex flex-col p-4'>
                     <h4 className='text-textPrimary'>Spot Address</h4>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.address.addressLine1 +
-                        " " +
-                        parkingSpotDetails.address.addressLine2}
+                      {parkingSpotDetails.streetAddress}
                     </p>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.address.city}
+                      {parkingSpotDetails.city}
                     </p>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.address.state}{" "}
-                      {parkingSpotDetails.address.postalCode}{" "}
-                      {parkingSpotDetails.address.country}
+                      {parkingSpotDetails.postalCode}{" "}
+                      {parkingSpotDetails.country}
                     </p>
                   </div>
                 </div>
               </div>
-              <div className='flex-1 h-full animate__animated  animate__slideInRight'>
-                <div className='flex flex-col h-full md:ml-4 z-10 shadow-lg bg-backgroundColor flex-auto rounded-md'>
-                  <div className='flex flex-col px-4 pt-4 pb-3 w-full'>
-                    <h4 className='text-textPrimary'>
-                      ${parkingSpotDetails.pricePerMonth}/month
+              <div className='flex-1 flex-grow animate__animated  animate__slideInRight'>
+                <div className='flex flex-col h-full md:ml-4 z-10 shadow-lg bg-backgroundColor rounded-md'>
+                  <div className='flex flex-col flex-1 px-4 pt-4 pb-3 w-full'>
+                    <h4 className='text-textPrimary text-lg font-semibold'>
+                      ${parkingSpotDetails.dailyRate}/day
                     </h4>
-                    <div className='flex flex-row w-full'>
+                    <div className='flex flex-row w-full mt-2'>
                       <div className='flex flex-col flex-1 pr-6'>
                         <h6 className='text-textPrimary'>Start</h6>
                         <input
                           type='date'
-                          className='bg-borderColor text-textSecondary px-2 py-2 z-20 shadow-md rounded-md cursor-pointer'
+                          className='bg-borderColor text-textSecondary mt-2 px-2 py-2 z-20 shadow-md rounded-md cursor-pointer'
                           value={dayjs(startDate).format("YYYY-MM-DD")}
                           onChange={(e) => {
                             const diff = dayjs(endDate).diff(
@@ -218,7 +193,7 @@ export const SpotDetails = () => {
                         <h6 className='text-textPrimary'>End</h6>
                         <input
                           type='date'
-                          className='bg-borderColor text-textSecondary px-2 py-2 z-20 shadow-md rounded-md cursor-pointer'
+                          className='bg-borderColor text-textSecondary px-2 py-2 mt-2 z-20 shadow-md rounded-md cursor-pointer'
                           value={dayjs(endDate).format("YYYY-MM-DD")}
                           onChange={(e) => {
                             const diff = dayjs(e.target.valueAsDate).diff(
@@ -248,34 +223,30 @@ export const SpotDetails = () => {
                         }
                       }}
                     >
-                      Reserve
+                      Proceed to booking
                     </button>
-                    <div className='flex flex-row w-full justify-between mt-4'>
-                      <h5 className='text-textPrimary'>
-                        Sub total : ${parkingSpotDetails.pricePerMonth} *{" "}
-                        {formatToTwoPrecisionFloat(numberOfDays / 30)}
-                      </h5>
-                      <h5 className='text-textPrimary'>
-                        ${" "}
-                        {formatToTwoPrecisionFloat(
-                          parkingSpotDetails.pricePerMonth *
-                            parseFloat(
-                              formatToTwoPrecisionFloat(numberOfDays / 30)
-                            )
-                        )}
-                      </h5>
-                    </div>
+                  </div>
+                  <div className='flex flex-row w-full px-4 py-2 justify-between'>
+                    <h5 className='text-textPrimary'>
+                      Sub total : ${parkingSpotDetails.dailyRate} *{" "}
+                      {numberOfDays}
+                    </h5>
+                    <h5 className='text-textPrimary'>
+                      ${" "}
+                      {formatToTwoPrecisionFloat(
+                        parkingSpotDetails.dailyRate * numberOfDays
+                      )}
+                    </h5>
                   </div>
                   <hr className='bg-black opacity-100 m-0' />
                   <div className='flex flex-row w-full px-4 py-2 justify-between'>
-                    <h3 className='text-textPrimary'>Total</h3>
-                    <h3 className='text-textPrimary'>
+                    <h3 className='text-textPrimary text-2xl font-bold'>
+                      Total
+                    </h3>
+                    <h3 className='text-textPrimary text-2xl font-bold'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
-                        parkingSpotDetails.pricePerMonth *
-                          parseFloat(
-                            formatToTwoPrecisionFloat(numberOfDays / 30)
-                          )
+                        parkingSpotDetails.dailyRate * numberOfDays
                       )}
                     </h3>
                   </div>
@@ -311,8 +282,8 @@ export const SpotDetails = () => {
                 <MapContainer
                   center={
                     new LatLng(
-                      parkingSpotDetails?.location.latitude,
-                      parkingSpotDetails?.location.longitude
+                      parkingSpotDetails.location.coordinates[0],
+                      parkingSpotDetails.location.coordinates[1]
                     )
                   }
                   zoom={15}
@@ -325,26 +296,29 @@ export const SpotDetails = () => {
                   <Marker
                     position={
                       new LatLng(
-                        parkingSpotDetails?.location.latitude,
-                        parkingSpotDetails?.location.longitude
+                        parkingSpotDetails.location.coordinates[0],
+                        parkingSpotDetails.location.coordinates[1]
                       )
+                    }
+                    icon={
+                      new Icon({
+                        iconUrl:
+                          "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+                      })
                     }
                   >
                     <Popup className='text-textPrimary'>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.address.addressLine1 +
-                          " " +
-                          parkingSpotDetails.address.addressLine2}
+                        {parkingSpotDetails.streetAddress}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.address.city}
+                        {parkingSpotDetails.city}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.address.state}{" "}
-                        {parkingSpotDetails.address.postalCode}
+                        {parkingSpotDetails.postalCode}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.address.country}
+                        {parkingSpotDetails.country}
                       </p>
                     </Popup>
                   </Marker>
