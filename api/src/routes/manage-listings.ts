@@ -93,7 +93,7 @@ router.post('/get-all', async (req: Request, res: Response) => {
         return;
       }
   
-      const listings = await dataBase.listings.find({owner: req.body.userId});
+      const listings = await dataBase.listings.find({owner: req.body.userId}).select('name streetAddress country city postalCode');
 
       res.status(201).json({ success: true, message: "Listings fetched successfully", data: listings});
     } catch (error) {
@@ -108,8 +108,14 @@ router.post('/get', async (req: Request, res: Response) => {
         res.status(400).json({ success: false, message: "Listing ID missing" });
         return;
       }
-  
-      const listing = await dataBase.listings.findOne({_id: req.body.listingId});
+
+      let listing;
+
+      if (req.body.editListing) {
+        listing = await dataBase.listings.findOne({_id: req.body.listingId}).select('-image');
+      } else {
+        listing = await dataBase.listings.findOne({_id: req.body.listingId}); 
+      }
 
       res.status(201).json({ success: true, message: "Listing fetched successfully", data: listing});
     } catch (error) {

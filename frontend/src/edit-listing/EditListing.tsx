@@ -86,7 +86,7 @@ const EditListing = () => {
     }, [error]);
 
     useEffect(() => {
-        axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId}, {
+        axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
             headers: {
                 'Content-Type': 'application/json'
             }}).then(response => {
