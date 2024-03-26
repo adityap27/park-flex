@@ -78,5 +78,5 @@ const ListingSchema = new mongoose.Schema({
 // index for geospatial queries
 ListingSchema.index({ location: '2dsphere' });
 
-export const Listings = mongoose.model<IListing>("Listings", ListingSchema);
+export const Listings = mongoose.model<IListing>("Listing", ListingSchema);
 export {IListing};
