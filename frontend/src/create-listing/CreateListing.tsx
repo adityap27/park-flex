@@ -285,6 +285,7 @@ export const CreateListing = () => {
 								type="file"
 								id="image"
 								onChange={onImageChange}
+								accept="image/*"
 							/>
 							<small>{error.image}</small>
 						</div>

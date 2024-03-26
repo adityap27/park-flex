@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { Users, IUser } from "../models/Users";
-import { Listings, IListing } from "../models/Listings";
+import { User, IUser } from "../models/User";
+import { Listing, IListing } from "../models/Listing";
 
 // export const getConnection = async () => {
 //   return await mongoose.connect(
@@ -13,8 +13,8 @@ mongoose.connect("mongodb+srv://group_user:Cy3H6QjOnrZ8XGYu@webgroupproject.dhqv
   .catch((error) => console.error('Connection error', error));
 
 const dataBase = {
-  "listings": Listings,
-  "users": Users 
+  "listings": Listing,
+  "users": User 
 };
 
 export {dataBase};
