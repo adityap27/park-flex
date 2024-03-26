@@ -247,7 +247,7 @@ export const CreateListing = () => {
 							/>
 							<small>{error.city}</small>
 						</div>
-						<div className="ml-3">
+						<div className="ml-3 mt-7 mb-5">
 							<label htmlFor="parking-type">Type:</label>
 							<label className="ml-5">
 								<input
