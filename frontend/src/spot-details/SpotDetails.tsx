@@ -57,9 +57,9 @@ export const SpotDetails = () => {
 
   useEffect(() => {
     if (params.id) {
-      getRequest<ParkingSpotDetails>("parking-spot/" + params.id).then(
+      getRequest<ParkingSpotDetails>("parking-listings/" + params.id).then(
         (data) => {
-          setParkingSpotDetails(data);
+          setParkingSpotDetails(data.data);
         }
       );
     }

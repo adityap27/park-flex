@@ -5,19 +5,29 @@ import { HomeFilter } from "./HomeFilter";
 import { getRequest } from "../utils/network-manager/axios";
 import { calculateDistanceFromLatLon } from "../utils/map-utils";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export interface ParkingSpotsResponse {
-  parkingSpots: ParkingSpot[];
+  success: boolean;
+  data: ParkingSpot[];
 }
 
 export interface ParkingSpot {
-  id: number;
-  parkingType: string;
-  pricePerMonth: number;
-  imageUrl: string;
-  owner: Owner;
+  _id: string;
+  parkingType: "indoor" | "outdoor";
+  dailyRate: number;
+  image: {
+    data: string;
+    contentType: string;
+  };
+  owner?: Owner;
   location: Location;
-  address: Address;
+  streetAddress: string;
+  country: string;
+  city: string;
+  postalCode: string;
+  name: string;
+  description: string;
 }
 
 export interface Address {
@@ -30,13 +40,14 @@ export interface Address {
 }
 
 export interface Location {
-  latitude: number;
-  longitude: number;
+  type: string;
+  coordinates: [number, number];
 }
 
 export interface Owner {
   firstName: string;
   lastName: string;
+  email: string;
 }
 
 function Home() {
@@ -48,34 +59,43 @@ function Home() {
   const [searchText, setSearchText] = useState("");
 
   useEffect(() => {
-    getRequest<ParkingSpotsResponse>("parking-spots").then((data) => {
-      setParkingSpots(data.parkingSpots);
-      setFilteredParkingSpots(data.parkingSpots);
+    toast.promise(getRequest<ParkingSpotsResponse>("parking-listings"), {
+      pending: "Loading Parking Spots",
+      success: {
+        render(data) {
+          setParkingSpots(data.data.data.data);
+          setFilteredParkingSpots(data.data.data.data);
+          return "Successfully fetched parking spots";
+        },
+      },
+      error: "System not able to fetch details",
     });
   }, []);
 
   const _renderSpotCard = (parkingSpot: ParkingSpot, index: number) => {
     return (
-      <Link className='text-textPrimary' to={"/spot/" + parkingSpot.id}>
+      <Link className='text-textPrimary' to={"/spot/" + parkingSpot._id}>
         <div
           className='aspect-square relative rounded-md shadow-lg h-[280px] md:h-[240px] xl:h-[280px] cursor-pointer hover:scale-[1.05] transition'
           key={index}
         >
           <img
-            src={`https://picsum.photos/id/${parkingSpot.id}/200`}
-            alt={parkingSpot.id.toString()}
+            src={`data:image/png;base64,${parkingSpot.image.data}`}
+            alt={parkingSpot.name.toString()}
             className='h-full w-full rounded-md'
             loading='lazy'
           ></img>
           <div className='w-full absolute bottom-0 flex flex-row p-2 items-center justify-between rounded-b-md bg-backgroundColor'>
             <div>
-              <p className='m-0 p-0'>Parking Type: {parkingSpot.parkingType}</p>
+              <p className='m-0 p-0'>{parkingSpot.name}</p>
               <p className='m-0 p-0'>
                 Owner:{" "}
-                {parkingSpot.owner.firstName + " " + parkingSpot.owner.lastName}
+                {(parkingSpot.owner?.firstName || "") +
+                  " " +
+                  (parkingSpot.owner?.lastName || "")}
               </p>
             </div>
-            <p className='m-0 p-0'>$ {parkingSpot.pricePerMonth}</p>
+            <p className='m-0 p-0'>Daily: $ {parkingSpot.dailyRate}</p>
           </div>
         </div>
       </Link>
@@ -98,21 +118,13 @@ function Home() {
                   parkingSpots.filter((item) => {
                     return (
                       tempText === "" ||
-                      item.address.addressLine1
+                      item.streetAddress
                         .toLocaleLowerCase()
                         .includes(tempText) ||
-                      item.address.addressLine2
-                        .toLocaleLowerCase()
-                        .includes(tempText) ||
-                      item.address.city
-                        .toLocaleLowerCase()
-                        .includes(tempText) ||
-                      item.address.state
-                        .toLocaleLowerCase()
-                        .includes(tempText) ||
-                      item.address.postalCode
-                        .toLocaleLowerCase()
-                        .includes(tempText)
+                      item.name.toLocaleLowerCase().includes(tempText) ||
+                      item.city.toLocaleLowerCase().includes(tempText) ||
+                      item.country.toLocaleLowerCase().includes(tempText) ||
+                      item.postalCode.toLocaleLowerCase().includes(tempText)
                     );
                   })
                 );
@@ -151,10 +163,10 @@ function Home() {
             parkingSpots.filter((item) => {
               if (
                 item.parkingType === filtersFields.parkingType &&
-                item.pricePerMonth <= filtersFields.priceRange &&
+                item.dailyRate <= filtersFields.priceRange &&
                 calculateDistanceFromLatLon(
-                  item.location.latitude,
-                  item.location.longitude,
+                  item.location.coordinates[0],
+                  item.location.coordinates[1],
                   filtersFields.currentLocation.lat,
                   filtersFields.currentLocation.lng
                 ) <= filtersFields.radius

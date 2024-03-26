@@ -19,6 +19,11 @@ interface IListing extends mongoose.Document {
   };
 }
 
+enum ParkingTypes {
+  INDOOR = "indoor",
+  OUTDOOR = "outdoor",
+}
+
 const ListingSchema = new mongoose.Schema(
   {
     owner: {
@@ -27,6 +32,11 @@ const ListingSchema = new mongoose.Schema(
     },
     name: {
       type: String,
+      required: true,
+    },
+    parkingType: {
+      type: String,
+      enum: Object.values(ParkingTypes),
       required: true,
     },
     streetAddress: {

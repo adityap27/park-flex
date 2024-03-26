@@ -1,6 +1,6 @@
 import { IoClose } from "react-icons/io5";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import { LatLng, Map } from "leaflet";
+import { Icon, LatLng, Map } from "leaflet";
 import { useCallback, useEffect, useRef, useState } from "react";
 
 interface FiltersFields {
@@ -189,7 +189,15 @@ export const HomeFilter = ({
                         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                         url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                       />
-                      <Marker position={filterState.currentLocation} />
+                      <Marker
+                        position={filterState.currentLocation}
+                        icon={
+                          new Icon({
+                            iconUrl:
+                              "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
+                          })
+                        }
+                      />
                     </MapContainer>
                   ) : null}
                 </div>
