@@ -5,6 +5,7 @@ import ParkingLotImg from "../assets/images/parking-spot.jpg";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import axios from "axios";
 import "./style.css";
+import { toast } from "react-toastify";
 
 const ViewListing = () => {
     const navigate = useNavigate();
@@ -27,21 +28,40 @@ const ViewListing = () => {
     const [location, setLocation] = useState<LatLng>(initialLocation);
 
     useEffect(() => {
-        axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.data.success) {
-                setListing(response.data.data);
-                setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
+        toast.promise(
+            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }), {
+            pending: "Loading listing details",
+            success: {
+                render(data) {
+                setListing(data.data.data.data);
+                setLocation(new LatLng(data.data.data.data.location.coordinates[0], data.data.data.data.location.coordinates[1]));
                 // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
-                setImageString(response.data.data.image.data);
-                setContentType(`data:${response.data.data.image.contentType};base64,`);
-            }
-        }).catch(error => {
-            console.error('Error fetching listings: ', error);
+                setImageString(data.data.data.data.image.data);
+                setContentType(`data:${data.data.data.data.image.contentType};base64,`);
+                    return "Listing details fetched successfully";
+                },
+            },
+            error: "Error loading listing details",
         });
+        // axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(response => {
+        //     if (response.data.success) {
+        //         setListing(response.data.data);
+        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
+        //         // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
+        //         setImageString(response.data.data.image.data);
+        //         setContentType(`data:${response.data.data.image.contentType};base64,`);
+        //     }
+        // }).catch(error => {
+        //     console.error('Error fetching listings: ', error);
+        // });
         // eslint-disable-next-line
     }, []);
 
@@ -117,6 +137,7 @@ const ViewListing = () => {
                                 <dt className="font-bold text-sm">Location</dt>
                                 {location.lat !== 0 &&
                                     location.lng !== 0 ? (
+                                    <div>
                                     <MapContainer className="mapBox"
                                         center={location}
                                         zoom={DEFAULT_MAP_ZOOM}
@@ -128,6 +149,7 @@ const ViewListing = () => {
                                         />
                                         <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
                                     </MapContainer>
+                                    </div>
                                 ) : null}
                             </div>
                         </dl>

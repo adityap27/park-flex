@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import { Icon, Map } from "leaflet";
+import { Icon, Map, LatLng } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 export const CreateListing = () => {
 	const navigate = useNavigate();
@@ -33,20 +34,10 @@ export const CreateListing = () => {
 	const [submitting, setSubmitting] = useState(false);
 
 
-	const DEFAULT_MAP_ZOOM = 16;
-
-	class LatLng {
-		lat: number;
-		lng: number;
-
-		constructor(lat: number, lng: number) {
-			this.lat = lat;
-			this.lng = lng;
-		}
-	}
+	const DEFAULT_MAP_ZOOM = 14;
 
 	const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
-	const [location, setLocation] = useState<LatLng>(initialLocation);
+	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
 	const map = useRef<Map | null>(null);
 
 	const showError = (inputField: string, message: string) => {
@@ -56,6 +47,10 @@ export const CreateListing = () => {
 	const showSuccess = (inputField: string) => {
 		setError((prevError) => ({ ...prevError, [inputField]: "" }));
 	};
+
+	useEffect(() => {
+		setLocation(new LatLng(44.6356313, -63.5951737));
+	}, []);
 
 	useEffect(() => {
 		if (!image) return;
@@ -80,6 +75,7 @@ export const CreateListing = () => {
 				}
 			}).then(response => {
 				if (response.data.success){
+					toast.success('Listing created successfully');
 					navigate('/manage-listings');
 				}
 			}).catch(error => {

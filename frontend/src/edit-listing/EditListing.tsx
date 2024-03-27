@@ -5,6 +5,7 @@ import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 import axios from "axios";
+import { toast } from "react-toastify";
 
 const EditListing = () => {
     const navigate = useNavigate();
@@ -73,39 +74,63 @@ const EditListing = () => {
             }
 
             axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
-				headers: {
-					'Content-Type': 'application/json'
-				}
-			}).then(response => {
-				if (response.data.success){
-					navigate('/manage-listings');
-				}
-			}).catch(error => {
-				console.error('Error updating listing: ', error);
-			});
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }).then(response => {
+                if (response.data.success) {
+                    toast.success('Listing edited successfully');
+                    navigate('/manage-listings');
+                }
+            }).catch(error => {
+                console.error('Error updating listing: ', error);
+            });
         }
         // eslint-disable-next-line
     }, [error]);
 
     useEffect(() => {
-        axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
-            headers: {
-                'Content-Type': 'application/json'
-            }}).then(response => {
-            if (response.data.success) {
-                setName(response.data.data.name);
-                setDescription(response.data.data.description);
-                setAddress(response.data.data.streetAddress);
-                setRate(response.data.data.dailyRate);
-                setCountry(response.data.data.country);
-                setPostalCode(response.data.data.postalCode);
-                setCity(response.data.data.city);
-                setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-                setType(response.data.data?.parkingType);
-            }
-        }).catch(error => {
-            console.error('Error fetching listings: ', error);
+        toast.promise(
+            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }), {
+            pending: "Loading listing details",
+            success: {
+                render(data) {
+                    setName(data.data.data.data.name);
+                    setDescription(data.data.data.data.description);
+                    setAddress(data.data.data.data.streetAddress);
+                    setRate(data.data.data.data.dailyRate);
+                    setCountry(data.data.data.data.country);
+                    setPostalCode(data.data.data.data.postalCode);
+                    setCity(data.data.data.data.city);
+                    setLocation(new LatLng(data.data.data.data.location.coordinates[0], data.data.data.data.location.coordinates[1]));
+                    setType(data.data.data.data?.parkingType);
+                    return "Listing details fetched successfully";
+                },
+            },
+            error: "Error loading listing details",
         });
+        // axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }}).then(response => {
+        //     if (response.data.success) {
+        //         setName(response.data.data.name);
+        //         setDescription(response.data.data.description);
+        //         setAddress(response.data.data.streetAddress);
+        //         setRate(response.data.data.dailyRate);
+        //         setCountry(response.data.data.country);
+        //         setPostalCode(response.data.data.postalCode);
+        //         setCity(response.data.data.city);
+        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
+        //         setType(response.data.data?.parkingType);
+        //     }
+        // }).catch(error => {
+        //     console.error('Error fetching listings: ', error);
+        // });
         // eslint-disable-next-line
     }, []);
 
@@ -217,28 +242,28 @@ const EditListing = () => {
                             <small>{error.city}</small>
                         </div>
                         <div className="ml-3 mt-7 mb-5">
-							<label htmlFor="parking-type">Type:</label>
-							<label className="ml-5">
-								<input
-									type="radio"
-									value="indoor"
-									checked={type === "indoor"}
-									className="mr-2"
-									onChange={() => {setType("indoor")}}
-								/>
-								Indoor
-							</label>
-							<label className="ml-3">
-								<input
-									type="radio"
-									value="outdoor"
-									checked={type === "outdoor"}
-									className="mr-2"
-									onChange={() => {setType("outdoor")}}
-								/>
-								Outdoor
-							</label>
-						</div>
+                            <label htmlFor="parking-type">Type:</label>
+                            <label className="ml-5">
+                                <input
+                                    type="radio"
+                                    value="indoor"
+                                    checked={type === "indoor"}
+                                    className="mr-2"
+                                    onChange={() => { setType("indoor") }}
+                                />
+                                Indoor
+                            </label>
+                            <label className="ml-3">
+                                <input
+                                    type="radio"
+                                    value="outdoor"
+                                    checked={type === "outdoor"}
+                                    className="mr-2"
+                                    onChange={() => { setType("outdoor") }}
+                                />
+                                Outdoor
+                            </label>
+                        </div>
                     </div>
                     <div className="right-column">
                         <div className={`form-control ${error.description ? "error" : "success"}`}>
@@ -288,7 +313,7 @@ const EditListing = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                                 />
-                                <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })}/>
+                                <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
                             </MapContainer>
                         ) : null}
                     </div>

@@ -3,23 +3,39 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HiExternalLink } from "react-icons/hi";
+import { toast } from "react-toastify";
 
 const ManageListings = () => {
     const navigate = useNavigate();
     const [listings, setListings] = useState<Array<any>>();
 
     useEffect(() => {
-        axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: '65fb948e17a0912641e6b9d4' }, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then(response => {
-            if (response.data.success) {
-                setListings(response.data.data);
-            }
-        }).catch(error => {
-            console.error('Error fetching listings: ', error);
+        toast.promise(
+            axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: '65fb948e17a0912641e6b9d4' }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            }), {
+            pending: "Loading listings",
+            success: {
+                render(data) {
+                    setListings(data.data.data.data);
+                    return "Listings fetched successfully";
+                },
+            },
+            error: "Error loading listings",
         });
+        // axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: '65fb948e17a0912641e6b9d4' }, {
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     }
+        // }).then(response => {
+        //     if (response.data.success) {
+        //         setListings(response.data.data);
+        //     }
+        // }).catch(error => {
+        //     console.error('Error fetching listings: ', error);
+        // });
     }, [])
 
     return (
