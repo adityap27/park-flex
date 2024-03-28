@@ -8,7 +8,10 @@ import LoginImage from '../assets/images/Login.jpg';
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const setToken = useAuthStore((state) => state.setToken);
+  const { setToken, setUser } = useAuthStore((state) => ({ 
+    setToken: state.setToken,
+    setUser: state.setUser,
+  }));
   const navigate = useNavigate();
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -18,8 +21,9 @@ const LoginPage: React.FC = () => {
         email,
         password,
       });
-      if (response.data.token) {
+      if (response.data.token && response.data.user) {
         setToken(response.data.token);
+        setUser(response.data.user);
         toast.success('Login successful!');
         navigate('/'); 
       } else {

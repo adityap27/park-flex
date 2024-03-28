@@ -23,7 +23,6 @@ export const register = async (req: Request, res: Response) => {
           expiresIn: '24h',
         });
         
-    
         res.status(201).send({ user: user._id, token });
     } catch (error) {
         if (error instanceof Error) {
@@ -35,30 +34,37 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-    try {
-        const user = await Users.findOne({ email: req.body.email });
-        if (!user) {
-            return res.status(400).send({ message: 'Invalid email or password.' });
-        }
-    
-        const validPassword = await bcrypt.compare(req.body.password, user.password);
-        if (!validPassword) {
-            return res.status(400).send({ message: 'Invalid email or password.' });
-        }
-    
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
-          expiresIn: '24h',
-        });
-        
-        res.header('Authorization', token).send({ token });
-    } catch (error) {
-        if (error instanceof Error) {
-            res.status(500).send({ message: error.message });
-        } else {
-            res.status(500).send({ message: 'An unexpected error occurred' });
-        }
-    }
+  try {
+      const user = await Users.findOne({ email: req.body.email });
+      if (!user) {
+          return res.status(400).send({ message: 'Invalid email or password.' });
+      }
+  
+      const validPassword = await bcrypt.compare(req.body.password, user.password);
+      if (!validPassword) {
+          return res.status(400).send({ message: 'Invalid email or password.' });
+      }
+  
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
+        expiresIn: '24h',
+      });
+      
+      
+      const userToSend = {
+        _id: user._id,
+      };
+
+      // Send the token and the user data
+      res.header('Authorization', token).send({ token, user: userToSend });
+  } catch (error) {
+      if (error instanceof Error) {
+          res.status(500).send({ message: error.message });
+      } else {
+          res.status(500).send({ message: 'An unexpected error occurred' });
+      }
+  }
 };
+
 
 export const forgetPassword = async (req: Request, res: Response) => {
   try {

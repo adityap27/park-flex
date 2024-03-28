@@ -130,7 +130,7 @@ const ProfilePage: React.FC = () => {
         const response = await axios.get('http://localhost:3001/api/auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
-        setUser(response.data.profile);
+      setUser(response.data.profile);
       } catch (error) {
         console.error('Error fetching profile', error);
         // Clear the token and user, and redirect to login
