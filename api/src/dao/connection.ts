@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { User } from "../models/User";
+import { Users } from "../models/User";
 import { Listing } from "../models/Listing";
 import { Review } from "../models/Review";
 
@@ -12,7 +12,7 @@ mongoose
 
 const dataBase = {
   listings: Listing,
-  users: User,
+  users: Users,
   reviews: Review,
 };
 

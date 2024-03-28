@@ -1,5 +1,11 @@
 import "./App.css";
 import Home from "./home-page/Home";
+import LoginPage from "./Auth/LoginPage";
+import RegistrationPage from "./Auth/Registration";
+import ForgetPasswordPage from "./Auth/ForgetPasswordPage";
+import ResetPasswordPage from "./Auth/ResetPasswordPage";
+import ProfilePage from "./Auth/ProfilePage";
+//import useAuthStore from "./stores/useAuthStore";
 import { HashRouter as Router, Routes, Route } from "react-router-dom";
 import "react-calendar/dist/Calendar.css";
 import { ToastContainer } from "react-toastify";
@@ -27,6 +33,11 @@ function App() {
               <Route path='/contact-us' Component={ContactUs}></Route>
               <Route path='/' Component={LandingPage}></Route>
               <Route path='/home' Component={Home}></Route>
+              <Route path= '/login' Component={LoginPage}></Route>
+              <Route path="/register" Component={RegistrationPage}></Route>
+              <Route path="/forgetpassword" Component={ForgetPasswordPage}></Route>
+              <Route path="/resetpassword/:token" Component={ResetPasswordPage}></Route>
+              <Route path="/profile" Component={ProfilePage}>   </Route>
               <Route path='/create-listing' Component={CreateListing}></Route>
               <Route path='/manage-listings' Component={ManageListings}></Route>
               <Route path='/edit-listing' Component={EditListing}></Route>
