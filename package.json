@@ -3,11 +3,15 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "concurrently \"npm run start-api\" \"npm run start-frontend\" ",
-        "start-api": "cd api && npm start",
-        "start-frontend": "cd frontend && npm start"
+        "start": "concurrently \"pnpm run start-api\" \"pnpm run start-frontend\"",
+        "install": "concurrently \"pnpm run install-api\" \"pnpm run install-frontend\" ",
+        "install-api": "cd api && pnpm install",
+        "install-frontend": "cd frontend && pnpm install",
+        "start-api": "cd api && nodemon --watch api --exec pnpm start",
+        "start-frontend": "cd frontend &&  nodemon --watch api --exec pnpm start"
     },
     "devDependencies": {
-        "concurrently": "^8.2.2"
+        "concurrently": "^8.2.2",
+        "nodemon": "^3.1.0"
     }
 }

@@ -11,11 +11,17 @@ import { formatToTwoPrecisionFloat } from "../utils/number-utils";
 import { toast } from "react-toastify";
 import { ParkingSpot } from "../home-page/Home";
 
+interface ParkingSpotDetails {
+  parkingSpot: ParkingSpot;
+  totalReviews: number;
+  reviewAverage: number;
+}
+
 export const SpotDetails = () => {
   const params = useParams();
 
   const [parkingSpotDetails, setParkingSpotDetails] = useState<
-    ParkingSpot | undefined
+    ParkingSpotDetails | undefined
   >(undefined);
 
   useEffect(() => {
@@ -23,7 +29,7 @@ export const SpotDetails = () => {
       toast.promise(
         getRequest<{
           success: boolean;
-          data: ParkingSpot;
+          data: ParkingSpotDetails;
         }>("parking-listings/" + params.id),
         {
           pending: "Loading parking spot details",
@@ -50,7 +56,7 @@ export const SpotDetails = () => {
           <div className='flex-1 flex flex-col'>
             <div className='flex flex-col md:flex-row w-full justify-between items-center md:px-4 py-2  bg-footer'>
               <h3 className='flex-1 lg:flex-[2] text-textSecondary'>
-                {parkingSpotDetails.name}
+                {parkingSpotDetails.parkingSpot.name}
               </h3>
               <div className='grid w-full grid-cols-4 md:flex  md:flex-row justify-between flex-1'>
                 <h5
@@ -95,7 +101,7 @@ export const SpotDetails = () => {
             <div
               className='w-full flex flex-row items-center justify-center'
               style={{
-                background: `url(data:image/png;base64,${parkingSpotDetails.image.data})`,
+                background: `url(data:image/png;base64,${parkingSpotDetails.parkingSpot.image.data})`,
                 backgroundSize: "contain",
               }}
             >
@@ -104,10 +110,10 @@ export const SpotDetails = () => {
                 style={{ backgroundColor: "rgba(0, 0, 0, 0.85)" }}
               >
                 <img
-                  src={`data:image/png;base64,${parkingSpotDetails.image.data}`}
+                  src={`data:image/png;base64,${parkingSpotDetails.parkingSpot.image.data}`}
                   className='h-[400px] object-contain'
                   loading='lazy'
-                  alt={parkingSpotDetails.name}
+                  alt={parkingSpotDetails.parkingSpot.name}
                 />
               </div>
             </div>
@@ -117,26 +123,29 @@ export const SpotDetails = () => {
                   <div className='flex flex-col p-4'>
                     <h4 className='text-textPrimary'>Spot details</h4>
                     <p className='text-textPrimary'>
-                      Name : {parkingSpotDetails.name}
+                      Name : {parkingSpotDetails.parkingSpot.name}
                     </p>
                     <p className='text-textPrimary'>
-                      Description : {parkingSpotDetails.description}
+                      Description : {parkingSpotDetails.parkingSpot.description}
                     </p>
                     <p className='text-textPrimary'>
-                      Parking Type : {parkingSpotDetails.parkingType}
+                      Parking Type :{" "}
+                      {parkingSpotDetails.parkingSpot.parkingType}
                     </p>
                     <p className='text-textPrimary'>Timing : Whole day</p>
                     <p className='text-textPrimary'>
                       Owner :{" "}
-                      {(parkingSpotDetails.owner?.firstName || "") +
+                      {(parkingSpotDetails.parkingSpot.owner?.firstName || "") +
                         " " +
-                        (parkingSpotDetails.owner?.lastName || "")}
+                        (parkingSpotDetails.parkingSpot.owner?.lastName || "")}
                     </p>
                     <div className='flex flex-row items-center'>
-                      <p className='text-textPrimary mt-1'>{5}</p>
+                      <p className='text-textPrimary mt-1'>
+                        {parkingSpotDetails.reviewAverage}
+                      </p>
                       <div className='ml-2'>
                         <StarRatings
-                          rating={5}
+                          rating={parkingSpotDetails.reviewAverage}
                           numberOfStars={5}
                           starDimension='20px'
                           starRatedColor='#0a0944'
@@ -144,21 +153,21 @@ export const SpotDetails = () => {
                       </div>
                     </div>
                     <p className='underline cursor-pointer text-textPrimary'>
-                      {50} Reviews
+                      {parkingSpotDetails.totalReviews} Reviews
                     </p>
                   </div>
                   <hr className='bg-borderColor m-0 opacity-100' />
                   <div className='flex flex-col p-4'>
                     <h4 className='text-textPrimary'>Spot Address</h4>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.streetAddress}
+                      {parkingSpotDetails.parkingSpot.streetAddress}
                     </p>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.city}
+                      {parkingSpotDetails.parkingSpot.city}
                     </p>
                     <p className='text-textPrimary'>
-                      {parkingSpotDetails.postalCode}{" "}
-                      {parkingSpotDetails.country}
+                      {parkingSpotDetails.parkingSpot.postalCode}{" "}
+                      {parkingSpotDetails.parkingSpot.country}
                     </p>
                   </div>
                 </div>
@@ -167,7 +176,7 @@ export const SpotDetails = () => {
                 <div className='flex flex-col h-full md:ml-4 z-10 shadow-lg bg-backgroundColor rounded-md'>
                   <div className='flex flex-col flex-1 px-4 pt-4 pb-3 w-full'>
                     <h4 className='text-textPrimary text-lg font-semibold'>
-                      ${parkingSpotDetails.dailyRate}/day
+                      ${parkingSpotDetails.parkingSpot.dailyRate}/day
                     </h4>
                     <div className='flex flex-row w-full mt-2'>
                       <div className='flex flex-col flex-1 pr-6'>
@@ -228,13 +237,13 @@ export const SpotDetails = () => {
                   </div>
                   <div className='flex flex-row w-full px-4 py-2 justify-between'>
                     <h5 className='text-textPrimary'>
-                      Sub total : ${parkingSpotDetails.dailyRate} *{" "}
+                      Sub total : ${parkingSpotDetails.parkingSpot.dailyRate} *{" "}
                       {numberOfDays}
                     </h5>
                     <h5 className='text-textPrimary'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
-                        parkingSpotDetails.dailyRate * numberOfDays
+                        parkingSpotDetails.parkingSpot.dailyRate * numberOfDays
                       )}
                     </h5>
                   </div>
@@ -246,7 +255,7 @@ export const SpotDetails = () => {
                     <h3 className='text-textPrimary text-2xl font-bold'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
-                        parkingSpotDetails.dailyRate * numberOfDays
+                        parkingSpotDetails.parkingSpot.dailyRate * numberOfDays
                       )}
                     </h3>
                   </div>
@@ -282,8 +291,8 @@ export const SpotDetails = () => {
                 <MapContainer
                   center={
                     new LatLng(
-                      parkingSpotDetails.location.coordinates[0],
-                      parkingSpotDetails.location.coordinates[1]
+                      parkingSpotDetails.parkingSpot.location.coordinates[0],
+                      parkingSpotDetails.parkingSpot.location.coordinates[1]
                     )
                   }
                   zoom={15}
@@ -296,8 +305,8 @@ export const SpotDetails = () => {
                   <Marker
                     position={
                       new LatLng(
-                        parkingSpotDetails.location.coordinates[0],
-                        parkingSpotDetails.location.coordinates[1]
+                        parkingSpotDetails.parkingSpot.location.coordinates[0],
+                        parkingSpotDetails.parkingSpot.location.coordinates[1]
                       )
                     }
                     icon={
@@ -309,16 +318,16 @@ export const SpotDetails = () => {
                   >
                     <Popup className='text-textPrimary'>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.streetAddress}
+                        {parkingSpotDetails.parkingSpot.streetAddress}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.city}
+                        {parkingSpotDetails.parkingSpot.city}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.postalCode}
+                        {parkingSpotDetails.parkingSpot.postalCode}
                       </p>
                       <p className='text-textPrimary'>
-                        {parkingSpotDetails.country}
+                        {parkingSpotDetails.parkingSpot.country}
                       </p>
                     </Popup>
                   </Marker>
