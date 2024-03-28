@@ -21,6 +21,7 @@ import EditListing from "./edit-listing/EditListing";
 import ViewListing from "./view-listing/ViewListing";
 import ManageListings from "./manage-listings/ManageListings";
 import { SpotDetails } from "./spot-details/SpotDetails";
+import Wallet from "./wallet/Wallet";
 function App() {
   return (
     <>
@@ -43,6 +44,7 @@ function App() {
               <Route path='/edit-listing' Component={EditListing}></Route>
               <Route path='/view-listing' Component={ViewListing}></Route>
               <Route path='/spot/:id' Component={SpotDetails}></Route>
+              <Route path='/wallet' Component={Wallet}></Route>
               <Route
                 path='*'
                 Component={() => (
