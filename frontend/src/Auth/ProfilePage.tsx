@@ -120,6 +120,13 @@ const ProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+  const storedUser = localStorage.getItem('user');
+  const storedUserId = localStorage.getItem('userId');
+
+  console.log('Token:', storedToken);
+  console.log('User:', storedUser && JSON.parse(storedUser)); // Parsing because user is stored as a string
+  console.log('UserID:', storedUserId);
     const fetchProfile = async () => {
       if (!token) {
         navigate('/login');
