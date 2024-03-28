@@ -1,4 +1,3 @@
-// src/stores/useAuthStore.ts
 import create from 'zustand';
 
 interface AuthState {
@@ -10,11 +9,22 @@ interface AuthState {
 }
 
 const useAuthStore = create<AuthState>((set) => ({
-  token: null,
+  
+  token: localStorage.getItem('token') || null, 
   user: null,
-  setToken: (token) => set({ token }),
+  setToken: (token) => {
+    if (token === null) {
+      localStorage.removeItem('token');
+    } else {
+      localStorage.setItem('token', token);
+    }
+    set({ token });
+  },
   setUser: (user) => set({ user }),
-  logout: () => set({ token: null, user: null }),
+  logout: () => {
+    localStorage.removeItem('token'); 
+    set({ token: null, user: null });
+  },
 }));
 
 export default useAuthStore;
