@@ -36,7 +36,7 @@ export const CreateListing = () => {
 
 	const DEFAULT_MAP_ZOOM = 14;
 
-	const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
+	// const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
 	const map = useRef<Map | null>(null);
 
@@ -97,7 +97,10 @@ export const CreateListing = () => {
 		} else {
 			if (value === "") {
 				showError(inputField, `${getFieldName(inputField)} is required`);
-			} else {
+			} else if (value !== value.trim()) {
+				showError(inputField, "Space not allowed at start and end");
+			}
+			else {
 				showSuccess(inputField);
 			}
 		}
@@ -281,11 +284,11 @@ export const CreateListing = () => {
 						<div className={`form-control ${error.rate ? "error" : "success"}`}>
 							<label htmlFor="address">Daily Rate</label>
 							<input
-								type="number"
+								// type="number"
 								id="rate"
 								placeholder="Enter Daily Rate"
 								value={rate}
-								onChange={(e) => setRate(e.target.value)}
+								onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
 							/>
 							<small>{error.rate}</small>
 						</div>

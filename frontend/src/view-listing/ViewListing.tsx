@@ -92,11 +92,11 @@ const ViewListing = () => {
 
     return (
         <div className="mx-auto px-4 sm:py-24">
-            <h1 className="text-4xl font-bold text-center mb-12 -mt-16 md:-mt-12 lg:-mt-12 md:text-left">View Listing</h1>
+            <h1 className="text-4xl font-bold text-center mb-12 mt-8 sm:-mt-16 md:-mt-12 lg:-mt-12 md:text-left">View Listing</h1>
             {listing ?
                 <>
-                    <div className="h-auto lg:w-1/2 md:w-1/2 overflow-hidden flex-shrink-0 m-auto sm:m-0 flex justify-center items-center">
-                        {imageString ? <img src={contentType + imageString} alt="parking lot" className="h-auto w-full object-center lg:h-auto lg:w-fulll" />
+                    <div className="h-auto max-w-lg lg:w-512 md:w-448 overflow-hidden flex-shrink-0 m-auto md:m-0 flex justify-center items-center">
+                        {imageString ? <img src={contentType + imageString} alt="parking lot" className="h-auto w-full object-center" />
                             : <img src={ParkingLotImg} alt="parking lot" className="h-full w-full object-center lg:h-full lg:w-full" />}
                     </div>
                     <div className="mt-6">

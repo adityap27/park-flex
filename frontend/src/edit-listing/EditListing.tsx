@@ -146,7 +146,9 @@ const EditListing = () => {
         } else {
             if (value === "") {
                 showError(inputField, `${getFieldName(inputField)} is required`);
-            } else {
+            } else if (value !== value.trim()) {
+				showError(inputField, "Space not allowed at start and end");
+			} else {
                 showSuccess(inputField);
             }
         }
@@ -279,11 +281,11 @@ const EditListing = () => {
                         <div className={`form-control ${error.rate ? "error" : "success"}`}>
                             <label htmlFor="address">Daily Rate</label>
                             <input
-                                type="number"
+                                // type="number"
                                 id="rate"
                                 placeholder="Enter Daily Rate"
                                 value={rate}
-                                onChange={(e) => setRate(e.target.value)}
+                                onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                             <small>{error.rate}</small>
                         </div>
