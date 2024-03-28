@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 import axios from "axios";
 import { toast } from "react-toastify";
-import useAuthStore from "../stores/useAuthStore";
 
 const EditListing = () => {
-    const { token, user } = useAuthStore();
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userId');
+
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -60,7 +61,11 @@ const EditListing = () => {
     };
 
     useEffect(() => {
-		if (!token) return;
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
 
         if (Object.values(error).every((error) => error === "") && submitting) {
 
@@ -88,14 +93,24 @@ const EditListing = () => {
                     navigate('/manage-listings');
                 }
             }).catch(error => {
-                console.error('Error updating listing: ', error);
+                if (error.response.status === 403 || error.response.status === 401) {
+                    navigate('/login');
+                    toast.error('Unauthorized');
+                } else {
+                    toast.error('Error updating listing');
+                    console.error('Error updating listing: ', error);
+                }
             });
         }
         // eslint-disable-next-line
     }, [error]);
 
     useEffect(() => {
-		if (!token) return;
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
 
         toast.promise(
             axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
@@ -119,26 +134,16 @@ const EditListing = () => {
                     return "Listing details fetched successfully";
                 },
             },
-            error: "Error loading listing details",
+            error: {
+                render(error: any) {
+                    if (error.data.response.status === 403 || error.data.response.status === 401) {
+                        navigate('/login');
+                        return "Unauthorized"
+                    };
+                    return "Error loading listing details"
+                }
+            }
         });
-        // axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }}).then(response => {
-        //     if (response.data.success) {
-        //         setName(response.data.data.name);
-        //         setDescription(response.data.data.description);
-        //         setAddress(response.data.data.streetAddress);
-        //         setRate(response.data.data.dailyRate);
-        //         setCountry(response.data.data.country);
-        //         setPostalCode(response.data.data.postalCode);
-        //         setCity(response.data.data.city);
-        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-        //         setType(response.data.data?.parkingType);
-        //     }
-        // }).catch(error => {
-        //     console.error('Error fetching listings: ', error);
-        // });
         // eslint-disable-next-line
     }, []);
 
@@ -155,8 +160,8 @@ const EditListing = () => {
             if (value === "") {
                 showError(inputField, `${getFieldName(inputField)} is required`);
             } else if (value !== value.trim()) {
-				showError(inputField, "Space not allowed at start and end");
-			} else {
+                showError(inputField, "Space not allowed at start and end");
+            } else {
                 showSuccess(inputField);
             }
         }
@@ -199,8 +204,6 @@ const EditListing = () => {
         }
         // eslint-disable-next-line
     }, [map?.current]);
-
-    if (!token || !user) return <Navigate to="/login" />;
 
     return (
         <>
