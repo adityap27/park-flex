@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "../models/User";
 import { Listing } from "../models/Listing";
+import { Review } from "../models/Review";
 
 mongoose
   .connect(
@@ -12,6 +13,7 @@ mongoose
 const dataBase = {
   listings: Listing,
   users: User,
+  reviews: Review,
 };
 
 export { dataBase };
