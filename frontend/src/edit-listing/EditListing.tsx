@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 import axios from "axios";
 import { toast } from "react-toastify";
+import useAuthStore from "../stores/useAuthStore";
 
 const EditListing = () => {
+    const { token, user } = useAuthStore();
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -58,6 +60,8 @@ const EditListing = () => {
     };
 
     useEffect(() => {
+		if (!token) return;
+
         if (Object.values(error).every((error) => error === "") && submitting) {
 
             let json_data = {
@@ -75,7 +79,8 @@ const EditListing = () => {
 
             axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 if (response.data.success) {
@@ -90,10 +95,13 @@ const EditListing = () => {
     }, [error]);
 
     useEffect(() => {
+		if (!token) return;
+
         toast.promise(
             axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listing details",
@@ -192,6 +200,7 @@ const EditListing = () => {
         // eslint-disable-next-line
     }, [map?.current]);
 
+    if (!token || !user) return <Navigate to="/login" />;
 
     return (
         <>

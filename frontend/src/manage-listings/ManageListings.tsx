@@ -1,19 +1,24 @@
 import Swal from "sweetalert2";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { HiExternalLink } from "react-icons/hi";
 import { toast } from "react-toastify";
+import useAuthStore from "../stores/useAuthStore";
 
 const ManageListings = () => {
+    const { token, user } = useAuthStore();
     const navigate = useNavigate();
     const [listings, setListings] = useState<Array<any>>();
 
     useEffect(() => {
+        if (!token || !user) return;
+
         toast.promise(
-            axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: '65fb948e17a0912641e6b9d4' }, {
+            axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: user._id }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listings",
@@ -38,12 +43,15 @@ const ManageListings = () => {
         // });
     }, [])
 
+    if (!token || !user) return <Navigate to="/login" />;
+
     return (
         <>
             <div className="flex items-center justify-center flex-col md:flex-row">
                 <h1 className="text-4xl font-bold text-center mb-8 mt-8 md:ml-5 md:text-left md:mr-auto">Manage Listings</h1>
                 <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 mr-5 md:mt-10 mb-10 px-2 py-2 rounded md:ml-auto" onClick={() => navigate('/create-listing')}>Create New Listing</button>
             </div>
+            {listings && listings.length > 0 ?
             <ul className="px-5 divide-gray-200 divide-y mb-10">
                 {listings ? listings.map((listing, index) => (
                     <li key={index} className="py-2 justify-between flex items-center flex-wrap">
@@ -71,7 +79,15 @@ const ManageListings = () => {
                                     confirmButtonText: "Yes, delete it!"
                                 }).then((result: any) => {
                                     if (result.isConfirmed) {
-                                        axios.post(`http://localhost:3001/api/manage-listings/delete?listingId=${listing._id}&userId=65fb948e17a0912641e6b9d4`).then(response => {
+                                        axios.post("http://localhost:3001/api/manage-listings/delete?listingId",{
+                                            "listingId": listing._id,
+                                            "userId": user._id
+                                        }, {
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'Authorization': `Bearer ${token}`
+                                            }
+                                        }).then(response => {
                                             if (response.data.success) {
                                                 setListings(response.data.data);
                                                 Swal.fire({
@@ -95,6 +111,9 @@ const ManageListings = () => {
                     </li>
                 )) : <></>}
             </ul>
+            :     <div className="flex justify-center items-center mt-10">
+            <p className="text-xl md:text-2xl lg:text-3xl">No Listings Found {listings}</p>
+          </div>}
         </>
     )
 }

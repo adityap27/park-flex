@@ -1,13 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, Map, LatLng } from "leaflet";
 import "./style.css";
 import 'leaflet/dist/leaflet.css';
 import axios from "axios";
 import { toast } from "react-toastify";
+import useAuthStore from "../stores/useAuthStore";
 
 export const CreateListing = () => {
+	const { token, user } = useAuthStore();
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
@@ -53,11 +55,13 @@ export const CreateListing = () => {
 	}, []);
 
 	useEffect(() => {
+		if (!token || !user) return;
+
 		if (!image) return;
 
 		if (Object.values(error).every((error) => error === "") && submitting) {
 			const formData = new FormData();
-			formData.append('userId', '65fb948e17a0912641e6b9d4');
+			formData.append('userId', user._id);
 			formData.append('name', name);
 			formData.append('description', description);
 			formData.append('streetAddress', address)
@@ -71,7 +75,8 @@ export const CreateListing = () => {
 
 			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data'
+					'Content-Type': 'multipart/form-data',
+					'Authorization': `Bearer ${token}`
 				}
 			}).then(response => {
 				if (response.data.success){
@@ -195,6 +200,7 @@ export const CreateListing = () => {
 		// eslint-disable-next-line
 	}, [map?.current]);
 
+	if (!token || !user) return <Navigate to="/login" />;
 
 	return (
 		<>

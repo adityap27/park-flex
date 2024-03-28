@@ -1,13 +1,15 @@
 import { Icon, Map } from "leaflet";
 import { useEffect, useRef, useState } from "react"
-import { useLocation, useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import ParkingLotImg from "../assets/images/parking-spot.jpg";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import axios from "axios";
 import "./style.css";
 import { toast } from "react-toastify";
+import useAuthStore from "../stores/useAuthStore";
 
 const ViewListing = () => {
+    const { token, user } = useAuthStore();
     const navigate = useNavigate();
     const [listing, setListing] = useState<any>();
     const [imageString, setImageString] = useState<string>(ParkingLotImg);
@@ -31,7 +33,8 @@ const ViewListing = () => {
         toast.promise(
             axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listing details",
@@ -89,6 +92,8 @@ const ViewListing = () => {
         }
         // eslint-disable-next-line
     }, [map?.current]);
+
+    if (!token || !user) return <Navigate to="/login" />;
 
     return (
         <div className="mx-auto px-4 sm:py-24">
