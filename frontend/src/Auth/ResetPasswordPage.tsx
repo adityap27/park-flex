@@ -5,7 +5,7 @@ import { toast } from 'react-toastify';
 
 const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
-  const { token } = useParams(); // If the token is in the URL path
+  const { token } = useParams(); 
   const [newPassword, setNewPassword] = useState('');
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -20,7 +20,7 @@ const ResetPasswordPage: React.FC = () => {
         newPassword,
       });
       toast.success(response.data.message);
-      navigate('/login'); // Redirect to login after successful reset
+      navigate('/login'); 
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);

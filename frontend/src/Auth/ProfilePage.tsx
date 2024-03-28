@@ -69,7 +69,7 @@ const ProfilePage: React.FC = () => {
       setEditedFirstName(user.firstName || '');
       setEditedLastName(user.lastName || '');
       setEditedEmail(user.email || '');
-      // Password is not fetched from the server for security reasons
+      
     }
   }, [user]);
 
@@ -110,10 +110,10 @@ const ProfilePage: React.FC = () => {
       });
       setUser({ ...user, ...response.data.profile });
       setIsEditing({ ...isEditing, [field]: false });
-      // Add toast or another form of success notification
+      
     } catch (error) {
       console.error('Error updating profile', error);
-      // Add toast or another form of error notification
+      
     }
   };
 

@@ -30,7 +30,7 @@ const RegistrationPage: React.FC = () => {
       if (response.data.token) {
         setToken(response.data.token);
         toast.success('Registration successful!');
-        navigate('/login'); // Redirects to the Login page after registration
+        navigate('/login'); 
       } else {
         toast.error('Registration failed. Please try again.');
       }

@@ -3,9 +3,9 @@ import create from 'zustand';
 
 interface AuthState {
   token: string | null;
-  user: any; // You can replace 'any' with a more specific type for your user
+  user: any; 
   setToken: (token: string | null) => void;
-  setUser: (user: any) => void; // Again, replace 'any' with a user type
+  setUser: (user: any) => void; 
   logout: () => void;
 }
 

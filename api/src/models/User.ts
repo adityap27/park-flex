@@ -1,7 +1,6 @@
 import mongoose, { Schema, Document, CallbackError } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-// IUser interface with resetToken and resetTokenExpiry
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
@@ -9,10 +8,8 @@ export interface IUser extends Document {
   email: string;
   resetToken?: string;
   resetTokenExpiry?: number;
-  // Add any additional properties or methods here if needed
 }
 
-// UsersSchema with resetToken and resetTokenExpiry
 const UsersSchema: Schema = new Schema({
   firstName: {
     type: String,
@@ -45,7 +42,6 @@ const UsersSchema: Schema = new Schema({
   },
 });
 
-// Pre-save hook to hash the password if it's been modified
 UsersSchema.pre<IUser>('save', async function (next) {
   if (!this.isModified('password')) return next();
 
@@ -58,5 +54,4 @@ UsersSchema.pre<IUser>('save', async function (next) {
   }
 });
 
-// Create and export the mongoose model
 export const Users = mongoose.model<IUser>('User', UsersSchema);

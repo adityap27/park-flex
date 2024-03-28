@@ -21,7 +21,7 @@ const LoginPage: React.FC = () => {
       if (response.data.token) {
         setToken(response.data.token);
         toast.success('Login successful!');
-        navigate('/'); // Redirects to the Landing page
+        navigate('/'); 
       } else {
         toast.error('Incorrect email or password.');
       }
@@ -33,7 +33,7 @@ const LoginPage: React.FC = () => {
 
   const handleNavigate = (path: string) => {
     return (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      e.preventDefault(); // Prevent default anchor link behavior
+      e.preventDefault(); 
       navigate(path);
     };
   };
