@@ -38,7 +38,7 @@ const ViewListing = () => {
         }
 
         toast.promise(
-            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
+            axios.post("manage-listings/get", { listingId: state.listingId, editListing: false }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`

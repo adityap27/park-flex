@@ -76,7 +76,7 @@ export const CreateListing = () => {
 			formData.append('image', image);
 			formData.append('type', type);
 
-			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
+			axios.post('manage-listings/create', formData, {
 				headers: {
 					'Content-Type': 'multipart/form-data',
 					'Authorization': `Bearer ${token}`

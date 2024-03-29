@@ -82,7 +82,7 @@ const EditListing = () => {
                 type: type
             }
 
-            axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
+            axios.put('manage-listings/edit', json_data, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -113,7 +113,7 @@ const EditListing = () => {
         }
 
         toast.promise(
-            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
+            axios.post("manage-listings/get", { listingId: state.listingId, editListing: true }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
