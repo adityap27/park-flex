@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Users } from "../models/User";
 import { Listing } from "../models/Listing";
 import { Review } from "../models/Review";
+import Booking from "../models/Bookings";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -16,6 +17,7 @@ const dataBase = {
   listings: Listing,
   users: Users,
   reviews: Review,
+  booking: Booking,
 };
 
 export { dataBase };
