@@ -20,7 +20,7 @@ const ManageListings = () => {
         }
 
         toast.promise(
-            axios.post('http://localhost:3001/api/manage-listings/get-all', { userId: userid }, {
+            axios.post('manage-listings/get-all', { userId: userid }, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -80,7 +80,7 @@ const ManageListings = () => {
                                         confirmButtonText: "Yes, delete it!"
                                     }).then((result: any) => {
                                         if (result.isConfirmed) {
-                                            axios.post("http://localhost:3001/api/manage-listings/delete?listingId", {
+                                            axios.post("manage-listings/delete", {
                                                 "listingId": listing._id,
                                                 "userId": userid
                                             }, {
