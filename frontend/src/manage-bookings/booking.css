@@ -1,0 +1,160 @@
+/* Global Resets */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #ffffff; 
+    color: #333333; 
+  }
+  
+  /* Header Styling */
+  .Header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #7d1bde; 
+    color: #fff;
+  }
+  
+  .Header h1 {
+    font-size: 24px;
+  }
+  
+  .UserIcon {
+    padding: 8px 16px;
+    background-color: #fff; 
+    color: #000; /* Black text */
+    border-radius: 20px;
+    cursor: pointer;
+  }
+  .BookingHeader{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007208;
+    width: 100%;
+    padding: 5px;
+    color: white;
+    margin-bottom: 0px !important;
+  }
+  .completed{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #007208;
+    width: 100%;
+    padding: 5px;
+    color: white;
+    margin-bottom: 0px !important;
+  }
+  
+  /* Booking Cards Container */
+  .PreviousBookings {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+  }
+  .PreviousBookingsHeader{
+    margin: 0 20px;
+  }
+  .mainCurrentDiv{
+    border: 1px solid #ddd;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+  .image img {
+    width: 200px; 
+    height: 200px; 
+    border-radius: 8px; 
+  }
+  .CurrentBooking {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #fff; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    border-radius: 8px;
+  }
+  .BookingCard{
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0;
+  }
+  .CurrentBooking div {
+    border-radius: 8px;
+    padding: 20px;
+    margin: 0;
+  }
+  
+  .BookingCard h3, .CurrentBooking h2, .CurrentBooking h3, .BookingCard p, .CurrentBooking p {
+    margin-bottom: 10px;
+  }
+  .redbutton {
+    background-color: #bb3333 !important; 
+  }
+  .bluebutton {
+    background-color: #3125dd !important; 
+  }
+  button {
+    background-color: #393838; 
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    margin: 2px;
+  }
+  
+  button:hover {
+    background-color: #333; 
+  }
+  
+  
+  @media (max-width: 768px) {
+    .Header, .PreviousBookings, .CurrentBooking {
+      padding: 10px;
+    }
+  
+    .Header {
+      flex-direction: column;
+      text-align: center;
+    }
+  
+    .UserIcon, .BookingCard button, .CurrentBooking button {
+      width: 100%; 
+      margin-top: 10px;
+    }
+    
+  }
+  
+  @media (max-width: 425px) {
+   
+  .image{
+    display: none;
+  }
+  
+  .PreviousBookings {
+    
+    grid-template-columns: repeat(1, 1fr);
+  
+  }
+  }
+  
+  
+  
+  

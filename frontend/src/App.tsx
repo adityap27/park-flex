@@ -22,6 +22,8 @@ import ViewListing from "./view-listing/ViewListing";
 import ManageListings from "./manage-listings/ManageListings";
 import { SpotDetails } from "./spot-details/SpotDetails";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
+import ManangeBookings from "./manage-bookings/ManageBookings";
+import ViewDetails from "./manage-bookings/ViewDetails";
 import Wallet from "./wallet/Wallet";
 function App() {
   return (
@@ -74,6 +76,22 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <EditListing />
+                  </ProtectedRoute>
+                }
+              ></Route>
+                 <Route
+                path='/viewdetails'
+                element={
+                  <ProtectedRoute>
+                    <ViewDetails />
+                  </ProtectedRoute>
+                }
+              ></Route>
+                 <Route
+                path='/manage-bookings'
+                element={
+                  <ProtectedRoute>
+                    <ManangeBookings />
                   </ProtectedRoute>
                 }
               ></Route>

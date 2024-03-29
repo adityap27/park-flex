@@ -39,6 +39,10 @@ export const Header = () => {
               <p className='!text-textSecondary nav-link cursor-pointer pt-2'>My Listings</p>
             </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
+            <Link to='/manage-bookings'>
+              <p className='!text-textSecondary nav-link cursor-pointer pt-2'>My Bookings</p>
+            </Link>
+            <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
             <Link to='/wallet'>
               <p className='text-textSecondary nav-link cursor-pointer pt-2'>Wallet</p>
             </Link>
