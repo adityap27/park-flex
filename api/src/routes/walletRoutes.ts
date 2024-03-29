@@ -1,0 +1,52 @@
+import express, { Request, Response } from "express";
+import stripe from "stripe";
+import { Users } from "../models/User";
+import { Wallet } from "../models/Wallet";
+const stripeSecretKey =
+  "sk_test_51Oz4veIzvURxPk5bVYn3LDcCl1JD6hTlcYPUBqnd9TM9QLavGScbcwcdpmgLpEk2IsmKfFvbwW1deKSp8ODhFLND00Q3mlZYb5";
+const stripeClient = new stripe(stripeSecretKey);
+const router = express.Router();
+
+router.post("/add-money", async (req: Request, res: Response) => {
+  const { amount } = req.body;
+
+  console.log("Received request to add money:", amount);
+
+  try {
+    const paymentIntent = await stripeClient.paymentIntents.create({
+      amount: parseFloat(amount) * 100,
+      currency: "usd",
+      payment_method_types: ["card"],
+    });
+    res
+      .status(200)
+      .json({ success: true, message: "Money added successfully" });
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+router.get("/balance", async (req: Request, res: Response) => {
+  try {
+    const userId = req.query.userId;
+
+    const user = await Users.findById(userId);
+    if (!user) {
+      return res.status(404).send({ message: "User not found." });
+    }
+
+    const wallet = await Wallet.findOne({ userId });
+    if (!wallet) {
+      return res.status(404).send({ message: "Wallet not found." });
+    }
+
+    res.status(200).json({ balance: wallet.balance });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .send({ message: "Server error while fetching wallet balance." });
+  }
+});
+
+export default router;

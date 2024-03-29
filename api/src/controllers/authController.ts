@@ -5,7 +5,7 @@ import { IUser, Users } from '../models/User';
 import crypto from 'crypto';
 import { sendEmail } from '../utils/mailer';
 import { AuthRequest } from '../middleware/authenticateToken';
-
+import { Wallet } from '../models/Wallet';
 export const register = async (req: Request, res: Response) => {
     try {
         // Check if the user already exists
@@ -14,10 +14,9 @@ export const register = async (req: Request, res: Response) => {
             return res.status(400).send({ message: 'Email is already in use.' });
         }
     
-        
         user = new Users(req.body);
-    
         await user.save();
+        await Wallet.create({ userId: user._id, balance: 0 });
     
         const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
           expiresIn: '24h',

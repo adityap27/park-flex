@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { Users } from "../models/User";
 import { Listing } from "../models/Listing";
 import { Review } from "../models/Review";
-import Wallet from "../models/Wallet";
+import { Wallet } from "../models/Wallet";
 import Transaction from "../models/Transaction";
 
 mongoose

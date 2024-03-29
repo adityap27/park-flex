@@ -1,8 +1,10 @@
 import { AccountCard } from "../components/AccountCard";
-import { ToastContainer } from "react-toastify";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { MdRedeem } from "react-icons/md";
 import { FaWallet } from "react-icons/fa";
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js"
+const stripePromise = loadStripe("pk_test_51Oz4veIzvURxPk5bC9PpMM4Jn63K2GKU4psmnQ7VOVCCqTtCO18BM102VOPf3F2mPJMS7hfpufcNFf0qoaM1FF5700ZxpuZ1f2");
 
 const Wallet = () => {
   return (
@@ -28,9 +30,11 @@ const Wallet = () => {
             </div>
           </div>
         </div>
+        <Elements stripe={stripePromise}>
         <AccountCard />
+        </Elements>
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };
