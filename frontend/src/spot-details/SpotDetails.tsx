@@ -260,9 +260,6 @@ export const SpotDetails = () => {
                               "day"
                             );
                             if (diff <= 0) {
-                              toast("Start date cannot be after end date", {
-                                type: "error",
-                              });
                               return;
                             }
                             setStartDate(e.target.valueAsDate || undefined);
@@ -283,9 +280,6 @@ export const SpotDetails = () => {
                               "day"
                             );
                             if (diff <= 0) {
-                              toast("End date cannot be before start date", {
-                                type: "error",
-                              });
                               return;
                             }
                             setEndDate(e.target.valueAsDate || undefined);
