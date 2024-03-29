@@ -8,7 +8,7 @@ export const Footer = () => {
           <p className='text-textSecondary'>ParkFlex</p>
           <p className='text-textSecondary'>&copy;2024</p>
         </div>
-        <div className='flex flex-col lg:flex-row justify-between flex-[2] xl:flex-[1.5] mx-6'>
+        <div className='flex flex-col lg:flex-row justify-between flex-[2] xl:flex-[1.5] mx-6 my-2'>
           <p className='text-textSecondary cursor-pointer'>Privacy & Terms</p>
           <p className='text-textSecondary cursor-pointer'>Support</p>
           <Link to='/faq'>

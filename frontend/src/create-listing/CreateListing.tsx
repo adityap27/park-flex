@@ -261,7 +261,7 @@ export const CreateListing = () => {
 						</div>
 						<div className="ml-3 mt-7 mb-5">
 							<label htmlFor="parking-type">Type:</label>
-							<label className="ml-5">
+							<label className="ml-3">
 								<input
 									type="radio"
 									value="indoor"

@@ -7,8 +7,8 @@ export const Header = () => {
   return (
     <header className='sticky w-full top-0 z-50 bg-header shadow-xl border-b-1 border-borderColor'>
       <Navbar expand='md' className='py-2 px-4'>
-        <Navbar.Brand
-          href='/'
+        <Navbar.Brand as={Link}
+          to='/'
           className='flex-row flex items-center text-textSecondary'
         >
           <FaCar className='mr-2 text-3xl text-textSecondary' />
@@ -36,11 +36,11 @@ export const Header = () => {
             </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
             <Link to='/manage-listings'>
-              <p className='text-textSecondary cursor-pointer pt-2'>My Listings</p>
+              <p className='!text-textSecondary nav-link cursor-pointer pt-2'>My Listings</p>
             </Link>
             <div className='border-l-2 border-solid border-borderColor mx-4 my-2 hidden lg:block'></div>
             <Link to='/wallet'>
-              <p className='text-textSecondary cursor-pointer pt-2'>Wallet</p>
+              <p className='text-textSecondary nav-link cursor-pointer pt-2'>Wallet</p>
             </Link>
           </Nav>
         </Navbar.Collapse>

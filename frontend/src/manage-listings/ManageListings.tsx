@@ -68,8 +68,8 @@ const ManageListings = () => {
                                 </div>
                             </div>
                             <div className="flex gap-x-4">
-                                <button className="bg-green-500 inline-block py-1 border-primary h-10 rounded-md text-white hover:bg-green-600 font-medium px-3" onClick={() => navigate('/edit-listing', { state: { listingId: listing._id } })}>Edit Listing</button>
-                                <button className="bg-red-500 inline-block py-1 border-primary h-10 rounded-md text-white hover:bg-red-600 font-medium px-3" onClick={() => {
+                                <button className="bg-green-600 inline-block py-1 border-primary h-10 rounded-md text-white hover:bg-green-500 font-medium px-3" onClick={() => navigate('/edit-listing', { state: { listingId: listing._id } })}>Edit Listing</button>
+                                <button className="bg-red-600 inline-block py-1 border-primary h-10 rounded-md text-white hover:bg-red-500 font-medium px-3" onClick={() => {
                                     Swal.fire({
                                         title: "Are you sure?",
                                         text: "You won't be able to revert this!",
