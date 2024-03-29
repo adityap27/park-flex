@@ -11,17 +11,15 @@ export const AccountCard = () => {
   const [amount, setAmount] = useState("");
   const [walletBalance, setWalletBalance] = useState(undefined);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // Add loading state
+  const [isLoading, setIsLoading] = useState(true);
   const stripe = useStripe();
   const elements = useElements();
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/wallet/balance', {
-      params: {
-        userId: '66064ee77fa37b3e8edde820'
-      },
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('token')}`
       }
     }).then(response => {
       setWalletBalance(response.data.balance);
@@ -82,6 +80,7 @@ export const AccountCard = () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
         },
         body: JSON.stringify({ amount: parseFloat(amount), paymentMethodId: paymentMethod.id }),
       });
@@ -90,8 +89,7 @@ export const AccountCard = () => {
       if (!data.success) {
         throw new Error(data.error);
       }
-  
-      // Payment and backend call successful
+      setWalletBalance(data.newBalance);
       toast.success(data.message);
       setIsModalOpen(false);
       setAmount("");
