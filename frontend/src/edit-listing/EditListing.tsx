@@ -1,3 +1,7 @@
+/* Author: Shubham Patel */
+
+// This component is responsible for editing a listing. 
+
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
@@ -8,6 +12,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const EditListing = () => {
+    // Retrieving user token and ID from local storage
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userId');
+
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -32,9 +40,10 @@ const EditListing = () => {
 
     const [submitting, setSubmitting] = useState(false);
 
-
+    // Default map zoom level
     const DEFAULT_MAP_ZOOM = 16;
 
+    // LatLng class definition for location coordinates
     class LatLng {
         lat: number;
         lng: number;
@@ -47,17 +56,29 @@ const EditListing = () => {
 
     const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
     const [location, setLocation] = useState<LatLng>(initialLocation);
+
+    // Reference for map instance
     const map = useRef<Map | null>(null);
 
+    // Function to display error message for input field
     const showError = (inputField: string, message: string) => {
         setError((prevError) => ({ ...prevError, [inputField]: message }));
     };
 
+    // Function to remove error message for input field
     const showSuccess = (inputField: string) => {
         setError((prevError) => ({ ...prevError, [inputField]: "" }));
     };
 
+    // Effect hook for editing listing
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
+
         if (Object.values(error).every((error) => error === "") && submitting) {
 
             let json_data = {
@@ -73,9 +94,10 @@ const EditListing = () => {
                 type: type
             }
 
-            axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
+            axios.put('manage-listings/edit', json_data, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 if (response.data.success) {
@@ -83,17 +105,34 @@ const EditListing = () => {
                     navigate('/manage-listings');
                 }
             }).catch(error => {
-                console.error('Error updating listing: ', error);
+                // Handling errors during edit
+                if (error.response.status === 403 || error.response.status === 401) {
+                    navigate('/login');
+                    toast.error('Unauthorized');
+                } else {
+                    toast.error('Error updating listing');
+                    console.error('Error updating listing: ', error);
+                }
             });
         }
         // eslint-disable-next-line
     }, [error]);
 
+    // Effect hook for fetching listing details
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
+
+        // Fetching listing details from the server
         toast.promise(
-            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
+            axios.post("manage-listings/get", { listingId: state.listingId, editListing: true }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listing details",
@@ -111,29 +150,21 @@ const EditListing = () => {
                     return "Listing details fetched successfully";
                 },
             },
-            error: "Error loading listing details",
+            error: {
+                // Handling unauthorized errors
+                render(error: any) {
+                    if (error.data.response.status === 403 || error.data.response.status === 401) {
+                        navigate('/login');
+                        return "Unauthorized"
+                    };
+                    return "Error loading listing details"
+                }
+            }
         });
-        // axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }}).then(response => {
-        //     if (response.data.success) {
-        //         setName(response.data.data.name);
-        //         setDescription(response.data.data.description);
-        //         setAddress(response.data.data.streetAddress);
-        //         setRate(response.data.data.dailyRate);
-        //         setCountry(response.data.data.country);
-        //         setPostalCode(response.data.data.postalCode);
-        //         setCity(response.data.data.city);
-        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-        //         setType(response.data.data?.parkingType);
-        //     }
-        // }).catch(error => {
-        //     console.error('Error fetching listings: ', error);
-        // });
         // eslint-disable-next-line
     }, []);
 
+    // Function to check required input fields
     const checkRequired = (inputField: string, value: string) => {
         if (inputField === "rate") {
             if (value === "") {
@@ -146,16 +177,20 @@ const EditListing = () => {
         } else {
             if (value === "") {
                 showError(inputField, `${getFieldName(inputField)} is required`);
+            } else if (value !== value.trim()) {
+                showError(inputField, "Space not allowed at start and end");
             } else {
                 showSuccess(inputField);
             }
         }
     };
 
+    // Function to get field name
     const getFieldName = (inputField: string) => {
         return inputField.charAt(0).toUpperCase() + inputField.slice(1);
     };
 
+    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -169,6 +204,7 @@ const EditListing = () => {
         setSubmitting(true);
     };
 
+    // Effect hook for updating map view
     useEffect(() => {
         if (map?.current) {
             map.current?.on("click", (e) => {
@@ -189,7 +225,6 @@ const EditListing = () => {
         }
         // eslint-disable-next-line
     }, [map?.current]);
-
 
     return (
         <>
@@ -279,11 +314,11 @@ const EditListing = () => {
                         <div className={`form-control ${error.rate ? "error" : "success"}`}>
                             <label htmlFor="address">Daily Rate</label>
                             <input
-                                type="number"
+                                // type="number"
                                 id="rate"
                                 placeholder="Enter Daily Rate"
                                 value={rate}
-                                onChange={(e) => setRate(e.target.value)}
+                                onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                             <small>{error.rate}</small>
                         </div>
@@ -301,6 +336,7 @@ const EditListing = () => {
                     </div>
                     <div className="map">
                         <p style={{ textAlign: "left" }}>Select Location</p>
+                        {/* Rendering map */}
                         {location.lat !== 0 &&
                             location.lng !== 0 ? (
                             <MapContainer className="map-box"
@@ -313,13 +349,14 @@ const EditListing = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                                 />
+                                {/* Marker for location */}
                                 <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
                             </MapContainer>
                         ) : null}
                     </div>
                     <div className="flex items-center justify-center flex-col md:flex-row">
-                        <button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Save</button>
-                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+                        <button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-2 py-2 rounded">Save</button>
+                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-2 py-2 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
                     </div>
                 </div>
             </form>

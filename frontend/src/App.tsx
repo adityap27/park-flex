@@ -21,6 +21,9 @@ import EditListing from "./edit-listing/EditListing";
 import ViewListing from "./view-listing/ViewListing";
 import ManageListings from "./manage-listings/ManageListings";
 import { SpotDetails } from "./spot-details/SpotDetails";
+import { ProtectedRoute } from "./utils/ProtectedRoute";
+import ManangeBookings from "./manage-bookings/ManageBookings";
+import ViewDetails from "./manage-bookings/ViewDetails";
 import Wallet from "./wallet/Wallet";
 function App() {
   return (
@@ -34,17 +37,81 @@ function App() {
               <Route path='/contact-us' Component={ContactUs}></Route>
               <Route path='/' Component={LandingPage}></Route>
               <Route path='/home' Component={Home}></Route>
-              <Route path= '/login' Component={LoginPage}></Route>
-              <Route path="/register" Component={RegistrationPage}></Route>
-              <Route path="/forgetpassword" Component={ForgetPasswordPage}></Route>
-              <Route path="/resetpassword/:token" Component={ResetPasswordPage}></Route>
-              <Route path="/profile" Component={ProfilePage}>   </Route>
-              <Route path='/create-listing' Component={CreateListing}></Route>
-              <Route path='/manage-listings' Component={ManageListings}></Route>
-              <Route path='/edit-listing' Component={EditListing}></Route>
-              <Route path='/view-listing' Component={ViewListing}></Route>
+              <Route path='/login' Component={LoginPage}></Route>
+              <Route path='/register' Component={RegistrationPage}></Route>
+              <Route
+                path='/forgetpassword'
+                Component={ForgetPasswordPage}
+              ></Route>
+              <Route
+                path='/resetpassword/:token'
+                Component={ResetPasswordPage}
+              ></Route>
+              <Route
+                path='/profile'
+                element={
+                  <ProtectedRoute>
+                    <ProfilePage />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/create-listing'
+                element={
+                  <ProtectedRoute>
+                    <CreateListing />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/manage-listings'
+                element={
+                  <ProtectedRoute>
+                    <ManageListings />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/edit-listing'
+                element={
+                  <ProtectedRoute>
+                    <EditListing />
+                  </ProtectedRoute>
+                }
+              ></Route>
+                 <Route
+                path='/viewdetails'
+                element={
+                  <ProtectedRoute>
+                    <ViewDetails />
+                  </ProtectedRoute>
+                }
+              ></Route>
+                 <Route
+                path='/manage-bookings'
+                element={
+                  <ProtectedRoute>
+                    <ManangeBookings />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/view-listing'
+                element={
+                  <ProtectedRoute>
+                    <ViewListing />
+                  </ProtectedRoute>
+                }
+              ></Route>
               <Route path='/spot/:id' Component={SpotDetails}></Route>
-              <Route path='/wallet' Component={Wallet}></Route>
+              <Route
+                path='/wallet'
+                element={
+                  <ProtectedRoute>
+                    <Wallet />
+                  </ProtectedRoute>
+                }
+              ></Route>
               <Route
                 path='*'
                 Component={() => (

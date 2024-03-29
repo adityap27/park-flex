@@ -2,7 +2,7 @@ import { Icon, LatLng } from "leaflet";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 import { FaShare } from "react-icons/fa";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { getRequest } from "../utils/network-manager/axios";
 import StarRatings from "react-star-ratings";
@@ -15,10 +15,17 @@ interface ParkingSpotDetails {
   parkingSpot: ParkingSpot;
   totalReviews: number;
   reviewAverage: number;
+  existingBookings: ExistingBooking[];
+}
+
+interface ExistingBooking {
+  startDate: Date;
+  endDate: Date;
 }
 
 export const SpotDetails = () => {
   const params = useParams();
+  const navigate = useNavigate();
 
   const [parkingSpotDetails, setParkingSpotDetails] = useState<
     ParkingSpotDetails | undefined
@@ -48,6 +55,49 @@ export const SpotDetails = () => {
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [numberOfDays, setNumberOfDays] = useState(0);
+
+  const _validateDetails = () => {
+    if (numberOfDays === 0) {
+      toast("Please select dates", {
+        type: "error",
+      });
+      return;
+    }
+    let validationFailed = false;
+    parkingSpotDetails?.existingBookings.forEach((item) => {
+      const itemStartDate = dayjs(item.startDate);
+      const itemEndDate = dayjs(item.endDate);
+
+      const localStartDate = dayjs(startDate);
+      const localEndDate = dayjs(endDate);
+
+      if (
+        localStartDate.isSame(itemStartDate, "date") ||
+        localStartDate.isSame(itemEndDate, "date") ||
+        (localStartDate.isAfter(itemStartDate, "date") &&
+          localStartDate.isBefore(itemEndDate, "date")) ||
+        localEndDate.isSame(itemStartDate, "date") ||
+        localEndDate.isSame(itemEndDate, "date") ||
+        (localEndDate.isAfter(itemStartDate, "date") &&
+          localEndDate.isBefore(itemEndDate, "date"))
+      ) {
+        validationFailed = true;
+        return;
+      }
+    });
+
+    if (validationFailed) {
+      toast(
+        "There is already booking between these dates, please select other dates",
+        {
+          type: "error",
+        }
+      );
+      return;
+    }
+
+    navigate("/confirm-booking");
+  };
 
   return (
     <>
@@ -184,13 +234,17 @@ export const SpotDetails = () => {
                         <input
                           type='date'
                           className='bg-borderColor text-textSecondary mt-2 px-2 py-2 z-20 shadow-md rounded-md cursor-pointer'
-                          value={dayjs(startDate).format("YYYY-MM-DD")}
+                          min={new Date().toISOString().split("T")[0]}
+                          value={startDate?.toISOString().split("T")[0]}
                           onChange={(e) => {
                             const diff = dayjs(endDate).diff(
                               e.target.valueAsDate,
                               "day"
                             );
                             if (diff <= 0) {
+                              toast("Start date cannot be after end date", {
+                                type: "error",
+                              });
                               return;
                             }
                             setStartDate(e.target.valueAsDate || undefined);
@@ -203,13 +257,17 @@ export const SpotDetails = () => {
                         <input
                           type='date'
                           className='bg-borderColor text-textSecondary px-2 py-2 mt-2 z-20 shadow-md rounded-md cursor-pointer'
-                          value={dayjs(endDate).format("YYYY-MM-DD")}
+                          min={new Date().toISOString().split("T")[0]}
+                          value={endDate?.toISOString().split("T")[0]}
                           onChange={(e) => {
                             const diff = dayjs(e.target.valueAsDate).diff(
                               startDate,
                               "day"
                             );
                             if (diff <= 0) {
+                              toast("End date cannot be before start date", {
+                                type: "error",
+                              });
                               return;
                             }
                             setEndDate(e.target.valueAsDate || undefined);
@@ -221,15 +279,7 @@ export const SpotDetails = () => {
                     <button
                       className='w-full text-center py-3 mt-4 bg-header text-textSecondary rounded-lg z-20 shadow-md'
                       onClick={() => {
-                        if (numberOfDays === 0) {
-                          toast("Please select dates", {
-                            type: "error",
-                          });
-                        } else {
-                          toast("Your reservation is done", {
-                            type: "success",
-                          });
-                        }
+                        _validateDetails();
                       }}
                     >
                       Proceed to booking
@@ -271,14 +321,52 @@ export const SpotDetails = () => {
                 <Calendar
                   showDoubleView={true}
                   className='border-0 z-50 shadow-lg rounded-md !bg-backgroundColor text-textPrimary'
-                  tileDisabled={(date) => date.date.getDate() % 4 === 0}
+                  tileDisabled={(date) => {
+                    let isDisabled = false;
+                    parkingSpotDetails.existingBookings.forEach((item) => {
+                      const startDate = dayjs(item.startDate);
+                      const endDate = dayjs(item.endDate);
+
+                      const currentDate = dayjs(date.date);
+
+                      if (
+                        currentDate.isSame(startDate, "date") ||
+                        currentDate.isSame(endDate, "date") ||
+                        (currentDate.isAfter(startDate, "date") &&
+                          currentDate.isBefore(endDate, "date"))
+                      ) {
+                        isDisabled = true;
+                        return;
+                      }
+                    });
+
+                    return isDisabled;
+                  }}
                 />
               </div>
               <div className='block md:hidden'>
                 <Calendar
                   showDoubleView={false}
                   className='border-0 z-50 shadow-lg rounded-md !bg-backgroundColor text-textPrimary'
-                  tileDisabled={(date) => date.date.getDate() % 4 === 0}
+                  tileDisabled={(date) => {
+                    let isDisabled = false;
+                    parkingSpotDetails.existingBookings.forEach((item) => {
+                      const startDate = dayjs(item.startDate);
+                      const endDate = dayjs(item.endDate);
+                      const currentDate = dayjs(date.date);
+                      if (
+                        currentDate.isSame(startDate, "date") ||
+                        currentDate.isSame(endDate, "date") ||
+                        (currentDate.isAfter(startDate, "date") &&
+                          currentDate.isBefore(endDate, "date"))
+                      ) {
+                        isDisabled = true;
+                        return;
+                      }
+                    });
+
+                    return isDisabled;
+                  }}
                 />
               </div>
             </div>

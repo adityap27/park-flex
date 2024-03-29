@@ -48,7 +48,16 @@ router.get("/:id", async (req: Request, res: Response) => {
     .exec();
 
   let totalRating = 0;
-  sum.forEach((item) => (totalRating += item.rating));
+  sum !== undefined &&
+    sum.length > 0 &&
+    sum.forEach((item) => (totalRating += item.rating));
+
+  const existingBookings = await dataBase.booking
+    .find({
+      listingId: req.params.id,
+    })
+    .select("startDate endDate")
+    .exec();
 
   try {
     res.status(200).json({
@@ -56,7 +65,8 @@ router.get("/:id", async (req: Request, res: Response) => {
       data: {
         parkingSpot: parkingSpot,
         totalReviews: totalReviews,
-        reviewAverage: totalRating / totalReviews,
+        reviewAverage: totalReviews !== 0 ? totalRating / totalReviews : 0,
+        existingBookings: existingBookings,
       },
     });
   } catch (error) {

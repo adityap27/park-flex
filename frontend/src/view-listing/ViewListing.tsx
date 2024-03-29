@@ -1,3 +1,7 @@
+/* Author: Shubham Patel */
+
+// This component is responsible for fetching particular listing details.
+
 import { Icon, Map } from "leaflet";
 import { useEffect, useRef, useState } from "react"
 import { useLocation, useNavigate } from "react-router-dom";
@@ -8,12 +12,17 @@ import "./style.css";
 import { toast } from "react-toastify";
 
 const ViewListing = () => {
+    // Retrieving user token and ID from local storage
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userId');
+
     const navigate = useNavigate();
     const [listing, setListing] = useState<any>();
     const [imageString, setImageString] = useState<string>(ParkingLotImg);
     const [contentType, setContentType] = useState<string>("data:image/jpeg;base64,");
     const { state } = useLocation();
 
+    // LatLng class definition for location coordinates
     class LatLng {
         lat: number;
         lng: number;
@@ -27,48 +36,55 @@ const ViewListing = () => {
     const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
     const [location, setLocation] = useState<LatLng>(initialLocation);
 
+    // Effect hook for fetching listing details
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
+
+        // Fetching listing details from the server
         toast.promise(
-            axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
+            axios.post("manage-listings/get", { listingId: state.listingId, editListing: false }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listing details",
             success: {
                 render(data) {
-                setListing(data.data.data.data);
-                setLocation(new LatLng(data.data.data.data.location.coordinates[0], data.data.data.data.location.coordinates[1]));
-                // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
-                setImageString(data.data.data.data.image.data);
-                setContentType(`data:${data.data.data.data.image.contentType};base64,`);
+                    setListing(data.data.data.data);
+                    setLocation(new LatLng(data.data.data.data.location.coordinates[0], data.data.data.data.location.coordinates[1]));
+                    // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
+                    setImageString(data.data.data.data.image.data);
+                    setContentType(`data:${data.data.data.data.image.contentType};base64,`);
                     return "Listing details fetched successfully";
                 },
             },
-            error: "Error loading listing details",
+            error: {
+                // Handling unauthorized errors
+                render(error: any) {
+                    if (error.data.response.status === 403 || error.data.response.status === 401) {
+                        navigate('/login');
+                        return "Unauthorized"
+                    };
+                    return "Error loading listing details"
+                }
+            }
         });
-        // axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: false }, {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }
-        // }).then(response => {
-        //     if (response.data.success) {
-        //         setListing(response.data.data);
-        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-        //         // setImageString(Buffer.from(response.data.data.image.data).toString('base64'));
-        //         setImageString(response.data.data.image.data);
-        //         setContentType(`data:${response.data.data.image.contentType};base64,`);
-        //     }
-        // }).catch(error => {
-        //     console.error('Error fetching listings: ', error);
-        // });
         // eslint-disable-next-line
     }, []);
 
+    // Default map zoom level
     const DEFAULT_MAP_ZOOM = 16;
 
+    // Reference for map instance
     const map = useRef<Map | null>(null);
 
+    // Effect hook for updating map view
     useEffect(() => {
         if (map?.current) {
             map.current?.on("click", (e) => {
@@ -92,11 +108,11 @@ const ViewListing = () => {
 
     return (
         <div className="mx-auto px-4 sm:py-24">
-            <h1 className="text-4xl font-bold text-center mb-12 -mt-16 md:-mt-12 lg:-mt-12 md:text-left">View Listing</h1>
+            <h1 className="text-4xl font-bold text-center mb-12 mt-8 sm:-mt-16 md:-mt-12 lg:-mt-12 md:text-left">View Listing</h1>
             {listing ?
                 <>
-                    <div className="h-auto lg:w-1/2 md:w-1/2 overflow-hidden flex-shrink-0 m-auto sm:m-0 flex justify-center items-center">
-                        {imageString ? <img src={contentType + imageString} alt="parking lot" className="h-auto w-full object-center lg:h-auto lg:w-fulll" />
+                    <div className="h-auto max-w-lg lg:w-512 md:w-448 overflow-hidden flex-shrink-0 m-auto md:m-0 flex justify-center items-center">
+                        {imageString ? <img src={contentType + imageString} alt="parking lot" className="h-auto w-full object-center" />
                             : <img src={ParkingLotImg} alt="parking lot" className="h-full w-full object-center lg:h-full lg:w-full" />}
                     </div>
                     <div className="mt-6">
@@ -138,27 +154,30 @@ const ViewListing = () => {
                                 {location.lat !== 0 &&
                                     location.lng !== 0 ? (
                                     <div>
-                                    <MapContainer className="mapBox"
-                                        center={location}
-                                        zoom={DEFAULT_MAP_ZOOM}
-                                        ref={map}
-                                    >
-                                        <TileLayer
-                                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                                            url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                                        />
-                                        <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
-                                    </MapContainer>
+                                        {/* Rendering map */}
+                                        <MapContainer className="mapBox"
+                                            center={location}
+                                            zoom={DEFAULT_MAP_ZOOM}
+                                            ref={map}
+                                        >
+                                            <TileLayer
+                                                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                                                url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                                            />
+                                            {/* Marker for location */}
+                                            <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
+                                        </MapContainer>
                                     </div>
                                 ) : null}
                             </div>
                         </dl>
                     </div>
                     <div className="flex items-center justify-center flex-col mb-8">
-                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 px-2 py-2 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
                     </div>
                 </> : <></>}
         </div>
     )
 }
+
 export default ViewListing;

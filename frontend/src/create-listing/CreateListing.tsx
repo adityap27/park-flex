@@ -1,3 +1,7 @@
+/* Author: Shubham Patel */
+
+// This component is responsible for creating a listing. 
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
@@ -8,6 +12,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export const CreateListing = () => {
+	// Retrieving user token and ID from local storage
+	const token = localStorage.getItem('token');
+	const userid = localStorage.getItem('userId');
+
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
@@ -33,31 +41,43 @@ export const CreateListing = () => {
 
 	const [submitting, setSubmitting] = useState(false);
 
-
+	// Default map zoom level
 	const DEFAULT_MAP_ZOOM = 14;
 
-	const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
+
+	// Reference for map instance
 	const map = useRef<Map | null>(null);
 
+	// Function to display error message for input field
 	const showError = (inputField: string, message: string) => {
 		setError((prevError) => ({ ...prevError, [inputField]: message }));
 	};
 
+	// Function to remove error message for input field
 	const showSuccess = (inputField: string) => {
 		setError((prevError) => ({ ...prevError, [inputField]: "" }));
 	};
 
+	// Effect hook to set default location when component mounts
 	useEffect(() => {
 		setLocation(new LatLng(44.6356313, -63.5951737));
 	}, []);
 
+	// Effect hook for creating listing
 	useEffect(() => {
+		// Redirecting to login if token or userid is missing
+		if (!token || !userid) {
+			navigate('/login');
+			toast.error('Unauthorized');
+			return;
+		}
+
 		if (!image) return;
 
 		if (Object.values(error).every((error) => error === "") && submitting) {
 			const formData = new FormData();
-			formData.append('userId', '65fb948e17a0912641e6b9d4');
+			formData.append('userId', userid);
 			formData.append('name', name);
 			formData.append('description', description);
 			formData.append('streetAddress', address)
@@ -69,22 +89,31 @@ export const CreateListing = () => {
 			formData.append('image', image);
 			formData.append('type', type);
 
-			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
+			axios.post('manage-listings/create', formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data'
+					'Content-Type': 'multipart/form-data',
+					'Authorization': `Bearer ${token}`
 				}
 			}).then(response => {
-				if (response.data.success){
+				if (response.data.success) {
 					toast.success('Listing created successfully');
 					navigate('/manage-listings');
 				}
 			}).catch(error => {
-				console.error('Error creating listing: ', error);
+				// Handling errors during creation
+				if (error.response.status === 403 || error.response.status === 401) {
+					navigate('/login');
+					toast.error('Unauthorized');
+				} else {
+					toast.error('Error creating listing');
+					console.error('Error creating listing: ', error);
+				}
 			});
 		}
 		// eslint-disable-next-line
 	}, [error]);
 
+	// Function to check required input fields
 	const checkRequired = (inputField: string, value: string) => {
 		if (inputField === "rate") {
 			if (value === "") {
@@ -97,12 +126,16 @@ export const CreateListing = () => {
 		} else {
 			if (value === "") {
 				showError(inputField, `${getFieldName(inputField)} is required`);
-			} else {
+			} else if (value !== value.trim()) {
+				showError(inputField, "Space not allowed at start and end");
+			}
+			else {
 				showSuccess(inputField);
 			}
 		}
 	};
-
+	
+	// Function to check required file input
 	const checkFile = (inputField: string, value: any) => {
 		if (value == null) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
@@ -111,8 +144,9 @@ export const CreateListing = () => {
 		}
 	};
 
+	// Function to check if location is selected
 	const checkLocation = (inputField: string, value: boolean) => {
-		if(value === false) {
+		if (value === false) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
 			document.getElementById("location")?.classList.remove("border-gray-300");
 			document.getElementById("location")?.classList.add("border-red-500");
@@ -123,10 +157,12 @@ export const CreateListing = () => {
 		}
 	}
 
+	// Function to get field name
 	const getFieldName = (inputField: string) => {
 		return inputField.charAt(0).toUpperCase() + inputField.slice(1);
 	};
 
+	// Function to handle form submission
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -142,6 +178,7 @@ export const CreateListing = () => {
 		setSubmitting(true);
 	};
 
+	// Function to handle image file change
 	const onImageChange = (event: any) => {
 		if (event.target.files && event.target.files.length > 0) {
 			setImage(event.target.files[0]);
@@ -156,6 +193,7 @@ export const CreateListing = () => {
 		}
 	}
 
+	// Function to get current user's location
 	const getCurrentLocation = useCallback(() => {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
@@ -166,10 +204,12 @@ export const CreateListing = () => {
 		// eslint-disable-next-line
 	}, []);
 
+	// Effect hook to get current user's location when component mounts
 	useEffect(() => {
 		getCurrentLocation();
 	}, [getCurrentLocation]);
 
+	// Effect hook for updating map view
 	useEffect(() => {
 		if (map?.current) {
 			map.current?.on("click", (e) => {
@@ -191,7 +231,6 @@ export const CreateListing = () => {
 		}
 		// eslint-disable-next-line
 	}, [map?.current]);
-
 
 	return (
 		<>
@@ -245,13 +284,13 @@ export const CreateListing = () => {
 						</div>
 						<div className="ml-3 mt-7 mb-5">
 							<label htmlFor="parking-type">Type:</label>
-							<label className="ml-5">
+							<label className="ml-3">
 								<input
 									type="radio"
 									value="indoor"
 									checked={type === "indoor"}
 									className="mr-2"
-									onChange={() => {setType("indoor")}}
+									onChange={() => { setType("indoor") }}
 								/>
 								Indoor
 							</label>
@@ -261,7 +300,7 @@ export const CreateListing = () => {
 									value="outdoor"
 									checked={type === "outdoor"}
 									className="mr-2"
-									onChange={() => {setType("outdoor")}}
+									onChange={() => { setType("outdoor") }}
 								/>
 								Outdoor
 							</label>
@@ -281,11 +320,11 @@ export const CreateListing = () => {
 						<div className={`form-control ${error.rate ? "error" : "success"}`}>
 							<label htmlFor="address">Daily Rate</label>
 							<input
-								type="number"
+								// type="number"
 								id="rate"
 								placeholder="Enter Daily Rate"
 								value={rate}
-								onChange={(e) => setRate(e.target.value)}
+								onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
 							/>
 							<small>{error.rate}</small>
 						</div>
@@ -316,27 +355,29 @@ export const CreateListing = () => {
 						{location.lat !== 0 &&
 							location.lng !== 0 ? (
 							<>
-							<div id="location" className="border-1 border-gray-300">
-							<MapContainer className="map-box"
-								center={location}
-								zoom={DEFAULT_MAP_ZOOM}
-								style={{ height: "400px" , width: "100%"}}
-								ref={map}
-							>
-								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-								/>
-								<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
-							</MapContainer>
-							</div>
-							<small className="text-red-500">{error.location}</small>
+								<div id="location" className="border-1 border-gray-300">
+									{/* Rendering map */}
+									<MapContainer className="map-box"
+										center={location}
+										zoom={DEFAULT_MAP_ZOOM}
+										style={{ height: "400px", width: "100%" }}
+										ref={map}
+									>
+										<TileLayer
+											attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+											url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+										/>
+										{/* Marker for location */}
+										<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
+									</MapContainer>
+								</div>
+								<small className="text-red-500">{error.location}</small>
 							</>
 						) : null}
 					</div>
 					<div className="flex items-center justify-center flex-col md:flex-row">
-						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Submit</button>
-						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-2 py-2 rounded">Submit</button>
+						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-2 py-2 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
 					</div>
 				</div>
 			</form>
