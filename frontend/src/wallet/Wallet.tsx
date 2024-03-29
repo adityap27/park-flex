@@ -30,7 +30,7 @@ const Wallet = () => {
         </div>
         <AccountCard />
       </div>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
     </>
   );
 };
