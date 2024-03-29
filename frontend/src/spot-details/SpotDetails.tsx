@@ -288,6 +288,11 @@ export const SpotDetails = () => {
                         />
                       </div>
                     </div>
+                    <h4 className='text-red-400 text-sm font-semibold mt-1'>
+                      * Select start date and end date for your booking. Please
+                      see the availabilities below to fix your spot in available
+                      dates.
+                    </h4>
                     <button
                       className='w-full text-center py-3 mt-4 bg-header text-textSecondary rounded-lg z-20 shadow-md'
                       onClick={() => {
