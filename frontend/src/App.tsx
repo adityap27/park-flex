@@ -86,7 +86,14 @@ function App() {
                 }
               ></Route>
               <Route path='/spot/:id' Component={SpotDetails}></Route>
-              <Route path='/wallet' Component={Wallet}></Route>
+              <Route
+                path='/wallet'
+                element={
+                  <ProtectedRoute>
+                    <Wallet />
+                  </ProtectedRoute>
+                }
+              ></Route>
               <Route
                 path='*'
                 Component={() => (
