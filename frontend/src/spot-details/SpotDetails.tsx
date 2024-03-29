@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { formatToTwoPrecisionFloat } from "../utils/number-utils";
 import { toast } from "react-toastify";
 import { ParkingSpot } from "../home-page/Home";
+import { Link } from "react-router-dom";
 
 interface ParkingSpotDetails {
   parkingSpot: ParkingSpot;
@@ -96,7 +97,16 @@ export const SpotDetails = () => {
       return;
     }
 
-    navigate("/confirm-booking");
+    navigate("/confirm-booking", {
+      state: {
+        parkingSpot: parkingSpotDetails?.parkingSpot,
+        totalPrice: formatToTwoPrecisionFloat(
+          (parkingSpotDetails?.parkingSpot?.dailyRate || 0) * numberOfDays
+        ),
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
 
   return (
@@ -202,9 +212,17 @@ export const SpotDetails = () => {
                         />
                       </div>
                     </div>
-                    <p className='underline cursor-pointer text-textPrimary'>
-                      {parkingSpotDetails.totalReviews} Reviews
-                    </p>
+                    <Link
+                      to={
+                        "/listings/" +
+                        parkingSpotDetails.parkingSpot._id +
+                        "/reviews"
+                      }
+                    >
+                      <p className='underline cursor-pointer text-textPrimary'>
+                        {parkingSpotDetails.totalReviews} Reviews
+                      </p>
+                    </Link>
                   </div>
                   <hr className='bg-borderColor m-0 opacity-100' />
                   <div className='flex flex-col p-4'>

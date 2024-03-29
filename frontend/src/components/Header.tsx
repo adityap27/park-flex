@@ -58,7 +58,7 @@ export const Header = () => {
                   </div>
                   {showDropdown && (
                     <>
-                      <div className='absolute right-0 mt-2 w-48 bg-white rounded-md overflow-hidden shadow-xl z-10'>
+                      <div className='absolute right-0 mt-2 w-48 z-50 bg-white rounded-md overflow-hidden shadow-xl z-10'>
                         <Link
                           to='/profile'
                           className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
