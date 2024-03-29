@@ -54,3 +54,7 @@ p {
 .modal-open {
   overflow: hidden;
 }
+
+.react-calendar__tile--active {
+  color: #0d0c4d !important;
+}
