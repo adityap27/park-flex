@@ -8,7 +8,7 @@ dotenv.config();
 
 mongoose
   .connect(
-    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@webgroupproject.dhqv6jf.mongodb.net/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority&appName=WebGroupProject`
+    `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_HOSTNAME}/${process.env.MONGODB_DBNAME}?retryWrites=true&w=majority&appName=WebGroupProject`
   )
   .then(() => console.log("Connected to MongoDB"))
   .catch((error) => console.error("Connection error", error));
