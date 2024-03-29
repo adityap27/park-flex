@@ -1,4 +1,10 @@
 /* Author: Shubham Patel */
+
+/*
+This component is responsible for managing listings.
+It lists all the listings of a particular user, and allows to create, update, delete, and viewS them.
+*/
+
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -7,13 +13,16 @@ import { HiExternalLink } from "react-icons/hi";
 import { toast } from "react-toastify";
 
 const ManageListings = () => {
+    // Retrieving user token and ID from local storage
     const token = localStorage.getItem('token');
     const userid = localStorage.getItem('userId');
 
     const navigate = useNavigate();
     const [listings, setListings] = useState<Array<any>>();
 
+    // Effect hook for fetching listings
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
         if (!token || !userid) {
             navigate('/login');
             toast.error('Unauthorized');
@@ -35,6 +44,7 @@ const ManageListings = () => {
                 },
             },
             error: {
+                // Handling unauthorized errors
                 render(error: any) {
                     if (error.data.response.status === 403 || error.data.response.status === 401) {
                         navigate('/login');
@@ -99,6 +109,7 @@ const ManageListings = () => {
                                                     });
                                                 }
                                             }).catch(error => {
+                                                // Handling errors during deletion
                                                 if (error.response.status === 403 || error.response.status === 401) {
                                                     navigate('/login');
                                                     toast.error('Unauthorized');
@@ -124,6 +135,5 @@ const ManageListings = () => {
         </>
     )
 }
-
 
 export default ManageListings;

@@ -1,4 +1,7 @@
 /* Author: Shubham Patel */
+
+// This component is responsible for creating a listing. 
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
@@ -9,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export const CreateListing = () => {
+	// Retrieving user token and ID from local storage
 	const token = localStorage.getItem('token');
 	const userid = localStorage.getItem('userId');
 
@@ -37,24 +41,32 @@ export const CreateListing = () => {
 
 	const [submitting, setSubmitting] = useState(false);
 
+	// Default map zoom level
 	const DEFAULT_MAP_ZOOM = 14;
 
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
+
+	// Reference for map instance
 	const map = useRef<Map | null>(null);
 
+	// Function to display error message for input field
 	const showError = (inputField: string, message: string) => {
 		setError((prevError) => ({ ...prevError, [inputField]: message }));
 	};
 
+	// Function to remove error message for input field
 	const showSuccess = (inputField: string) => {
 		setError((prevError) => ({ ...prevError, [inputField]: "" }));
 	};
 
+	// Effect hook to set default location when component mounts
 	useEffect(() => {
 		setLocation(new LatLng(44.6356313, -63.5951737));
 	}, []);
 
+	// Effect hook for creating listing
 	useEffect(() => {
+		// Redirecting to login if token or userid is missing
 		if (!token || !userid) {
 			navigate('/login');
 			toast.error('Unauthorized');
@@ -88,6 +100,7 @@ export const CreateListing = () => {
 					navigate('/manage-listings');
 				}
 			}).catch(error => {
+				// Handling errors during creation
 				if (error.response.status === 403 || error.response.status === 401) {
 					navigate('/login');
 					toast.error('Unauthorized');
@@ -100,6 +113,7 @@ export const CreateListing = () => {
 		// eslint-disable-next-line
 	}, [error]);
 
+	// Function to check required input fields
 	const checkRequired = (inputField: string, value: string) => {
 		if (inputField === "rate") {
 			if (value === "") {
@@ -120,7 +134,8 @@ export const CreateListing = () => {
 			}
 		}
 	};
-
+	
+	// Function to check required file input
 	const checkFile = (inputField: string, value: any) => {
 		if (value == null) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
@@ -129,6 +144,7 @@ export const CreateListing = () => {
 		}
 	};
 
+	// Function to check if location is selected
 	const checkLocation = (inputField: string, value: boolean) => {
 		if (value === false) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
@@ -141,10 +157,12 @@ export const CreateListing = () => {
 		}
 	}
 
+	// Function to get field name
 	const getFieldName = (inputField: string) => {
 		return inputField.charAt(0).toUpperCase() + inputField.slice(1);
 	};
 
+	// Function to handle form submission
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault();
 
@@ -160,6 +178,7 @@ export const CreateListing = () => {
 		setSubmitting(true);
 	};
 
+	// Function to handle image file change
 	const onImageChange = (event: any) => {
 		if (event.target.files && event.target.files.length > 0) {
 			setImage(event.target.files[0]);
@@ -174,6 +193,7 @@ export const CreateListing = () => {
 		}
 	}
 
+	// Function to get current user's location
 	const getCurrentLocation = useCallback(() => {
 		if ("geolocation" in navigator) {
 			navigator.geolocation.getCurrentPosition((position) => {
@@ -184,10 +204,12 @@ export const CreateListing = () => {
 		// eslint-disable-next-line
 	}, []);
 
+	// Effect hook to get current user's location when component mounts
 	useEffect(() => {
 		getCurrentLocation();
 	}, [getCurrentLocation]);
 
+	// Effect hook for updating map view
 	useEffect(() => {
 		if (map?.current) {
 			map.current?.on("click", (e) => {
@@ -334,6 +356,7 @@ export const CreateListing = () => {
 							location.lng !== 0 ? (
 							<>
 								<div id="location" className="border-1 border-gray-300">
+									{/* Rendering map */}
 									<MapContainer className="map-box"
 										center={location}
 										zoom={DEFAULT_MAP_ZOOM}
@@ -344,6 +367,7 @@ export const CreateListing = () => {
 											attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 											url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
 										/>
+										{/* Marker for location */}
 										<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
 									</MapContainer>
 								</div>

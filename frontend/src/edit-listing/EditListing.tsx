@@ -1,4 +1,7 @@
 /* Author: Shubham Patel */
+
+// This component is responsible for editing a listing. 
+
 import { useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
@@ -9,6 +12,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const EditListing = () => {
+    // Retrieving user token and ID from local storage
     const token = localStorage.getItem('token');
     const userid = localStorage.getItem('userId');
 
@@ -36,9 +40,10 @@ const EditListing = () => {
 
     const [submitting, setSubmitting] = useState(false);
 
-
+    // Default map zoom level
     const DEFAULT_MAP_ZOOM = 16;
 
+    // LatLng class definition for location coordinates
     class LatLng {
         lat: number;
         lng: number;
@@ -51,17 +56,23 @@ const EditListing = () => {
 
     const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
     const [location, setLocation] = useState<LatLng>(initialLocation);
+
+    // Reference for map instance
     const map = useRef<Map | null>(null);
 
+    // Function to display error message for input field
     const showError = (inputField: string, message: string) => {
         setError((prevError) => ({ ...prevError, [inputField]: message }));
     };
 
+    // Function to remove error message for input field
     const showSuccess = (inputField: string) => {
         setError((prevError) => ({ ...prevError, [inputField]: "" }));
     };
 
+    // Effect hook for editing listing
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
         if (!token || !userid) {
             navigate('/login');
             toast.error('Unauthorized');
@@ -94,6 +105,7 @@ const EditListing = () => {
                     navigate('/manage-listings');
                 }
             }).catch(error => {
+                // Handling errors during edit
                 if (error.response.status === 403 || error.response.status === 401) {
                     navigate('/login');
                     toast.error('Unauthorized');
@@ -106,13 +118,16 @@ const EditListing = () => {
         // eslint-disable-next-line
     }, [error]);
 
+    // Effect hook for fetching listing details
     useEffect(() => {
+        // Redirecting to login if token or userid is missing
         if (!token || !userid) {
             navigate('/login');
             toast.error('Unauthorized');
             return;
         }
 
+        // Fetching listing details from the server
         toast.promise(
             axios.post("manage-listings/get", { listingId: state.listingId, editListing: true }, {
                 headers: {
@@ -136,6 +151,7 @@ const EditListing = () => {
                 },
             },
             error: {
+                // Handling unauthorized errors
                 render(error: any) {
                     if (error.data.response.status === 403 || error.data.response.status === 401) {
                         navigate('/login');
@@ -148,6 +164,7 @@ const EditListing = () => {
         // eslint-disable-next-line
     }, []);
 
+    // Function to check required input fields
     const checkRequired = (inputField: string, value: string) => {
         if (inputField === "rate") {
             if (value === "") {
@@ -168,10 +185,12 @@ const EditListing = () => {
         }
     };
 
+    // Function to get field name
     const getFieldName = (inputField: string) => {
         return inputField.charAt(0).toUpperCase() + inputField.slice(1);
     };
 
+    // Function to handle form submission
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
 
@@ -185,6 +204,7 @@ const EditListing = () => {
         setSubmitting(true);
     };
 
+    // Effect hook for updating map view
     useEffect(() => {
         if (map?.current) {
             map.current?.on("click", (e) => {
@@ -316,6 +336,7 @@ const EditListing = () => {
                     </div>
                     <div className="map">
                         <p style={{ textAlign: "left" }}>Select Location</p>
+                        {/* Rendering map */}
                         {location.lat !== 0 &&
                             location.lng !== 0 ? (
                             <MapContainer className="map-box"
@@ -328,6 +349,7 @@ const EditListing = () => {
                                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
                                     url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                                 />
+                                {/* Marker for location */}
                                 <Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
                             </MapContainer>
                         ) : null}
