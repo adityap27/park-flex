@@ -352,8 +352,8 @@ export const CreateListing = () => {
 						) : null}
 					</div>
 					<div className="flex items-center justify-center flex-col md:flex-row">
-						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-6 py-4 rounded">Submit</button>
-						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+						<button type="submit" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-10 mb-4 md:mb-10 md:mr-4 px-2 py-2 rounded">Submit</button>
+						<button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 md:mt-10 mb-10 px-2 py-2 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
 					</div>
 				</div>
 			</form>

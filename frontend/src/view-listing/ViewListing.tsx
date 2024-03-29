@@ -159,7 +159,7 @@ const ViewListing = () => {
                         </dl>
                     </div>
                     <div className="flex items-center justify-center flex-col mb-8">
-                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 px-6 py-4 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
+                        <button type="button" className="flex justify-center bg-buttonPrimary hover:bg-blue-700 text-white font-bold text-center mt-4 px-2 py-2 rounded" onClick={() => navigate('/manage-listings')}>Close</button>
                     </div>
                 </> : <></>}
         </div>
