@@ -8,6 +8,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const EditListing = () => {
+    const token = localStorage.getItem('token');
+    const userid = localStorage.getItem('userId');
+
     const navigate = useNavigate();
     const [name, setName] = useState<string>("");
     const [description, setDescription] = useState<string>("");
@@ -58,6 +61,12 @@ const EditListing = () => {
     };
 
     useEffect(() => {
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
+
         if (Object.values(error).every((error) => error === "") && submitting) {
 
             let json_data = {
@@ -75,7 +84,8 @@ const EditListing = () => {
 
             axios.put('http://localhost:3001/api/manage-listings/edit', json_data, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }).then(response => {
                 if (response.data.success) {
@@ -83,17 +93,30 @@ const EditListing = () => {
                     navigate('/manage-listings');
                 }
             }).catch(error => {
-                console.error('Error updating listing: ', error);
+                if (error.response.status === 403 || error.response.status === 401) {
+                    navigate('/login');
+                    toast.error('Unauthorized');
+                } else {
+                    toast.error('Error updating listing');
+                    console.error('Error updating listing: ', error);
+                }
             });
         }
         // eslint-disable-next-line
     }, [error]);
 
     useEffect(() => {
+        if (!token || !userid) {
+            navigate('/login');
+            toast.error('Unauthorized');
+            return;
+        }
+
         toast.promise(
             axios.post("http://localhost:3001/api/manage-listings/get", { listingId: state.listingId, editListing: true }, {
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 }
             }), {
             pending: "Loading listing details",
@@ -111,26 +134,16 @@ const EditListing = () => {
                     return "Listing details fetched successfully";
                 },
             },
-            error: "Error loading listing details",
+            error: {
+                render(error: any) {
+                    if (error.data.response.status === 403 || error.data.response.status === 401) {
+                        navigate('/login');
+                        return "Unauthorized"
+                    };
+                    return "Error loading listing details"
+                }
+            }
         });
-        // axios.post("http://localhost:3001/api/manage-listings/get", {listingId: state.listingId, editListing: true}, {
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     }}).then(response => {
-        //     if (response.data.success) {
-        //         setName(response.data.data.name);
-        //         setDescription(response.data.data.description);
-        //         setAddress(response.data.data.streetAddress);
-        //         setRate(response.data.data.dailyRate);
-        //         setCountry(response.data.data.country);
-        //         setPostalCode(response.data.data.postalCode);
-        //         setCity(response.data.data.city);
-        //         setLocation(new LatLng(response.data.data.location.coordinates[0], response.data.data.location.coordinates[1]));
-        //         setType(response.data.data?.parkingType);
-        //     }
-        // }).catch(error => {
-        //     console.error('Error fetching listings: ', error);
-        // });
         // eslint-disable-next-line
     }, []);
 
@@ -146,6 +159,8 @@ const EditListing = () => {
         } else {
             if (value === "") {
                 showError(inputField, `${getFieldName(inputField)} is required`);
+            } else if (value !== value.trim()) {
+                showError(inputField, "Space not allowed at start and end");
             } else {
                 showSuccess(inputField);
             }
@@ -189,7 +204,6 @@ const EditListing = () => {
         }
         // eslint-disable-next-line
     }, [map?.current]);
-
 
     return (
         <>
@@ -279,11 +293,11 @@ const EditListing = () => {
                         <div className={`form-control ${error.rate ? "error" : "success"}`}>
                             <label htmlFor="address">Daily Rate</label>
                             <input
-                                type="number"
+                                // type="number"
                                 id="rate"
                                 placeholder="Enter Daily Rate"
                                 value={rate}
-                                onChange={(e) => setRate(e.target.value)}
+                                onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
                             />
                             <small>{error.rate}</small>
                         </div>

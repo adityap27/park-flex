@@ -1,12 +1,13 @@
 import express, { Request, Response } from "express"
 import { dataBase } from "../dao/connection";
 import multer from 'multer';
+import { authenticateToken } from "../middleware/authenticateToken";
 const router = express.Router();
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
-router.post('/create', upload.single('image'), async (req: Request, res: Response) => {
+router.post('/create', authenticateToken, upload.single('image'), async (req: Request, res: Response) => {
     try {
         if(!req.body.userId) {
           res.status(400).json({ success: false, message: "User ID missing" });
@@ -52,7 +53,7 @@ router.post('/create', upload.single('image'), async (req: Request, res: Respons
       }
 });
 
-router.put('/edit', async (req: Request, res: Response) => {
+router.put('/edit', authenticateToken, async (req: Request, res: Response) => {
   try {
       if(!req.body.listingId) {
         res.status(400).json({ success: false, message: "Listing ID missing" });
@@ -88,7 +89,7 @@ router.put('/edit', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/get-all', async (req: Request, res: Response) => {
+router.post('/get-all', authenticateToken, async (req: Request, res: Response) => {
   try {
       if(!req.body.userId) {
         res.status(400).json({ success: false, message: "User ID missing" });
@@ -104,7 +105,7 @@ router.post('/get-all', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/get', async (req: Request, res: Response) => {
+router.post('/get', authenticateToken, async (req: Request, res: Response) => {
   try {
       if(!req.body.listingId) {
         res.status(400).json({ success: false, message: "Listing ID missing" });
@@ -126,21 +127,21 @@ router.post('/get', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/delete', async (req: Request, res: Response) => {
+router.post('/delete', authenticateToken, async (req: Request, res: Response) => {
   try {
-      if(!req.query.listingId) {
+      if(!req.body.listingId) {
         res.status(400).json({ success: false, message: "Listing ID missing" });
         return;
       }
 
-      if(!req.query.userId) {
+      if(!req.body.userId) {
         res.status(400).json({ success: false, message: "User ID missing" });
         return;
       }
   
-      const listing = await dataBase.listings.deleteOne({_id: req.query.listingId});
+      const listing = await dataBase.listings.deleteOne({_id: req.body.listingId});
   
-      const listings = await dataBase.listings.find({owner: req.query.userId});
+      const listings = await dataBase.listings.find({owner: req.body.userId});
 
       res.status(201).json({ success: true, message: "Listing deleted successfully", data: listings});
     } catch (error) {

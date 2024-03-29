@@ -3,6 +3,7 @@ import axios from 'axios';
 import { PencilSquare } from 'react-bootstrap-icons';
 import useAuthStore from '../stores/useAuthStore';
 import { Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 type ProfileFieldProps = {
   label: string;
@@ -51,8 +52,9 @@ const ProfileField: React.FC<ProfileFieldProps> = ({
 );
 
 const ProfilePage: React.FC = () => {
-  const { token, user, setUser } = useAuthStore();
+  const { token, user, setUser, setToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
+  const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState({
     firstName: false,
     lastName: false,
@@ -118,22 +120,36 @@ const ProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+  const storedUser = localStorage.getItem('user');
+  const storedUserId = localStorage.getItem('userId');
+
+  console.log('Token:', storedToken);
+  console.log('User:', storedUser && JSON.parse(storedUser)); // Parsing because user is stored as a string
+  console.log('UserID:', storedUserId);
     const fetchProfile = async () => {
-      if (token) {
-        try {
-          const response = await axios.get('http://localhost:3001/api/auth/profile', {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-          setUser(response.data.profile);
-        } catch (error) {
-          console.error('Error fetching profile', error);
-        }
+      if (!token) {
+        navigate('/login');
+        return;
       }
-      setIsLoading(false);
+      
+      try {
+        const response = await axios.get('http://localhost:3001/api/auth/profile', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      setUser(response.data.profile);
+      } catch (error) {
+        console.error('Error fetching profile', error);
+        // Clear the token and user, and redirect to login
+        setToken(null);
+        navigate('/login');
+      } finally {
+        setIsLoading(false);
+      }
     };
 
     fetchProfile();
-  }, [token, setUser]);
+  }, [token, setUser, setToken, navigate]);
 
   if (!token) return <Navigate to="/login" />;
   if (isLoading) return <div>Loading...</div>;

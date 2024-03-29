@@ -22,6 +22,7 @@ import ViewListing from "./view-listing/ViewListing";
 import ManageListings from "./manage-listings/ManageListings";
 import { SpotDetails } from "./spot-details/SpotDetails";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
+import Wallet from "./wallet/Wallet";
 function App() {
   return (
     <>
@@ -85,6 +86,7 @@ function App() {
                 }
               ></Route>
               <Route path='/spot/:id' Component={SpotDetails}></Route>
+              <Route path='/wallet' Component={Wallet}></Route>
               <Route
                 path='*'
                 Component={() => (

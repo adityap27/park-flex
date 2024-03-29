@@ -8,6 +8,9 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export const CreateListing = () => {
+	const token = localStorage.getItem('token');
+	const userid = localStorage.getItem('userId');
+
 	const navigate = useNavigate();
 	const [name, setName] = useState<string>("");
 	const [description, setDescription] = useState<string>("");
@@ -33,10 +36,8 @@ export const CreateListing = () => {
 
 	const [submitting, setSubmitting] = useState(false);
 
-
 	const DEFAULT_MAP_ZOOM = 14;
 
-	const initialLocation: LatLng = new LatLng(44.6356313, -63.5951737);
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
 	const map = useRef<Map | null>(null);
 
@@ -53,11 +54,17 @@ export const CreateListing = () => {
 	}, []);
 
 	useEffect(() => {
+		if (!token || !userid) {
+			navigate('/login');
+			toast.error('Unauthorized');
+			return;
+		}
+
 		if (!image) return;
 
 		if (Object.values(error).every((error) => error === "") && submitting) {
 			const formData = new FormData();
-			formData.append('userId', '65fb948e17a0912641e6b9d4');
+			formData.append('userId', userid);
 			formData.append('name', name);
 			formData.append('description', description);
 			formData.append('streetAddress', address)
@@ -71,15 +78,22 @@ export const CreateListing = () => {
 
 			axios.post('http://localhost:3001/api/manage-listings/create', formData, {
 				headers: {
-					'Content-Type': 'multipart/form-data'
+					'Content-Type': 'multipart/form-data',
+					'Authorization': `Bearer ${token}`
 				}
 			}).then(response => {
-				if (response.data.success){
+				if (response.data.success) {
 					toast.success('Listing created successfully');
 					navigate('/manage-listings');
 				}
 			}).catch(error => {
-				console.error('Error creating listing: ', error);
+				if (error.response.status === 403 || error.response.status === 401) {
+					navigate('/login');
+					toast.error('Unauthorized');
+				} else {
+					toast.error('Error creating listing');
+					console.error('Error creating listing: ', error);
+				}
 			});
 		}
 		// eslint-disable-next-line
@@ -97,7 +111,10 @@ export const CreateListing = () => {
 		} else {
 			if (value === "") {
 				showError(inputField, `${getFieldName(inputField)} is required`);
-			} else {
+			} else if (value !== value.trim()) {
+				showError(inputField, "Space not allowed at start and end");
+			}
+			else {
 				showSuccess(inputField);
 			}
 		}
@@ -112,7 +129,7 @@ export const CreateListing = () => {
 	};
 
 	const checkLocation = (inputField: string, value: boolean) => {
-		if(value === false) {
+		if (value === false) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
 			document.getElementById("location")?.classList.remove("border-gray-300");
 			document.getElementById("location")?.classList.add("border-red-500");
@@ -192,7 +209,6 @@ export const CreateListing = () => {
 		// eslint-disable-next-line
 	}, [map?.current]);
 
-
 	return (
 		<>
 			<form id="form" className="form" onSubmit={handleSubmit} autoComplete="off">
@@ -251,7 +267,7 @@ export const CreateListing = () => {
 									value="indoor"
 									checked={type === "indoor"}
 									className="mr-2"
-									onChange={() => {setType("indoor")}}
+									onChange={() => { setType("indoor") }}
 								/>
 								Indoor
 							</label>
@@ -261,7 +277,7 @@ export const CreateListing = () => {
 									value="outdoor"
 									checked={type === "outdoor"}
 									className="mr-2"
-									onChange={() => {setType("outdoor")}}
+									onChange={() => { setType("outdoor") }}
 								/>
 								Outdoor
 							</label>
@@ -281,11 +297,11 @@ export const CreateListing = () => {
 						<div className={`form-control ${error.rate ? "error" : "success"}`}>
 							<label htmlFor="address">Daily Rate</label>
 							<input
-								type="number"
+								// type="number"
 								id="rate"
 								placeholder="Enter Daily Rate"
 								value={rate}
-								onChange={(e) => setRate(e.target.value)}
+								onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
 							/>
 							<small>{error.rate}</small>
 						</div>
@@ -316,21 +332,21 @@ export const CreateListing = () => {
 						{location.lat !== 0 &&
 							location.lng !== 0 ? (
 							<>
-							<div id="location" className="border-1 border-gray-300">
-							<MapContainer className="map-box"
-								center={location}
-								zoom={DEFAULT_MAP_ZOOM}
-								style={{ height: "400px" , width: "100%"}}
-								ref={map}
-							>
-								<TileLayer
-									attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-									url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-								/>
-								<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
-							</MapContainer>
-							</div>
-							<small className="text-red-500">{error.location}</small>
+								<div id="location" className="border-1 border-gray-300">
+									<MapContainer className="map-box"
+										center={location}
+										zoom={DEFAULT_MAP_ZOOM}
+										style={{ height: "400px", width: "100%" }}
+										ref={map}
+									>
+										<TileLayer
+											attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+											url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+										/>
+										<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
+									</MapContainer>
+								</div>
+								<small className="text-red-500">{error.location}</small>
 							</>
 						) : null}
 					</div>
