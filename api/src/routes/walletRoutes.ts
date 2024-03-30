@@ -3,6 +3,7 @@ import stripe from "stripe";
 import { Users } from "../models/User";
 import { Wallet } from "../models/Wallet";
 import { authenticateToken, AuthRequest } from "../middleware/authenticateToken";
+import Transaction from "../models/Transaction";
 
 const stripeSecretKey ="sk_test_51Oz4veIzvURxPk5bVYn3LDcCl1JD6hTlcYPUBqnd9TM9QLavGScbcwcdpmgLpEk2IsmKfFvbwW1deKSp8ODhFLND00Q3mlZYb5";
 const stripeClient = new stripe(stripeSecretKey);
@@ -24,6 +25,12 @@ router.post("/add-money", authenticateToken, async (req: AuthRequest, res: Respo
     });
     wallet.balance += parseFloat(amount);
     await wallet.save();
+    const transaction = new Transaction({
+      userId: userId,
+      amount: parseFloat(amount),
+      type: 'top-up', 
+    });
+    await transaction.save();
     res
       .status(200)
       .json({ success: true, message: "Money added successfully" , newBalance: wallet.balance});
