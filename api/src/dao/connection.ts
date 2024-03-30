@@ -17,7 +17,7 @@ const dataBase = {
   listings: Listing,
   users: Users,
   reviews: Review,
-  booking: Booking,
+  bookings: Booking,
 };
 
 export { dataBase };

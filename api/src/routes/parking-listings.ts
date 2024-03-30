@@ -52,7 +52,7 @@ router.get("/:id", async (req: Request, res: Response) => {
     sum.length > 0 &&
     sum.forEach((item) => (totalRating += item.rating));
 
-  const existingBookings = await dataBase.booking
+  const existingBookings = await dataBase.bookings
     .find({
       listingId: req.params.id,
     })
