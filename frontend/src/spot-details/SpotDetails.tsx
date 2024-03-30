@@ -10,6 +10,7 @@ import dayjs from "dayjs";
 import { formatToTwoPrecisionFloat } from "../utils/number-utils";
 import { toast } from "react-toastify";
 import { ParkingSpot } from "../home-page/Home";
+import { Link } from "react-router-dom";
 
 interface ParkingSpotDetails {
   parkingSpot: ParkingSpot;
@@ -96,7 +97,16 @@ export const SpotDetails = () => {
       return;
     }
 
-    navigate("/confirm-booking");
+    navigate("/confirm-booking", {
+      state: {
+        parkingSpot: parkingSpotDetails?.parkingSpot,
+        totalPrice: formatToTwoPrecisionFloat(
+          (parkingSpotDetails?.parkingSpot?.dailyRate || 0) * numberOfDays
+        ),
+        startDate: startDate,
+        endDate: endDate,
+      },
+    });
   };
 
   return (
@@ -202,9 +212,17 @@ export const SpotDetails = () => {
                         />
                       </div>
                     </div>
-                    <p className='underline cursor-pointer text-textPrimary'>
-                      {parkingSpotDetails.totalReviews} Reviews
-                    </p>
+                    <Link
+                      to={
+                        "/listings/" +
+                        parkingSpotDetails.parkingSpot._id +
+                        "/reviews"
+                      }
+                    >
+                      <p className='underline cursor-pointer text-textPrimary'>
+                        {parkingSpotDetails.totalReviews} Reviews
+                      </p>
+                    </Link>
                   </div>
                   <hr className='bg-borderColor m-0 opacity-100' />
                   <div className='flex flex-col p-4'>
@@ -242,9 +260,6 @@ export const SpotDetails = () => {
                               "day"
                             );
                             if (diff <= 0) {
-                              toast("Start date cannot be after end date", {
-                                type: "error",
-                              });
                               return;
                             }
                             setStartDate(e.target.valueAsDate || undefined);
@@ -265,9 +280,6 @@ export const SpotDetails = () => {
                               "day"
                             );
                             if (diff <= 0) {
-                              toast("End date cannot be before start date", {
-                                type: "error",
-                              });
                               return;
                             }
                             setEndDate(e.target.valueAsDate || undefined);
@@ -276,6 +288,11 @@ export const SpotDetails = () => {
                         />
                       </div>
                     </div>
+                    <h4 className='text-red-400 text-sm font-semibold mt-1'>
+                      * Select start date and end date for your booking. Please
+                      see the availabilities below to fix your spot in available
+                      dates.
+                    </h4>
                     <button
                       className='w-full text-center py-3 mt-4 bg-header text-textSecondary rounded-lg z-20 shadow-md'
                       onClick={() => {
