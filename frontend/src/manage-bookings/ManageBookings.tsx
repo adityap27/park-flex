@@ -3,6 +3,7 @@ import PreviousBookings from './PreviousBookings';
 import "./booking.css";
 import { Link } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore'; 
+import axios from 'axios';
 
 type Booking = {
   _id: string;
@@ -24,61 +25,49 @@ const ManageBookings: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const { user, userId } = useAuthStore(state => ({ user: state.user, userId: state.userId }));
   const token = useAuthStore(state => state.token);
+  console.log(token)
 
   console.log(userId)
-  const user_id = userId;
+  const user_id = userId;    
 
-  const deleteBooking = async (bookingId: string) => {
+const deleteBooking = async (bookingId: string) => {
     try {
-      // Replace this URL with the actual endpoint you use for deleting bookings
-      const response = await fetch(`http://localhost:3001/api/manage-bookings/bookings/${bookingId}`, {
-        method: 'DELETE',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Include authentication tokens if your API requires them
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to cancel the booking');
-      }
-  
-      // Assuming the DELETE operation was successful, update the state to remove the canceled booking
-      setCurrentBookings(current => current.filter(booking => booking._id !== bookingId));
-      setPreviousBookings(prev => prev.filter(booking => booking._id !== bookingId));
+        const response = await axios.delete(`http://localhost:3001/api/manage-bookings/bookings/${bookingId}`, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        setCurrentBookings(current => current.filter(booking => booking._id !== bookingId));
+        setPreviousBookings(prev => prev.filter(booking => booking._id !== bookingId));
     } catch (error) {
-      console.error('There was a problem with canceling the booking:', error);
+        console.error('There was a problem with canceling the booking:', error);
     }
-  };
-  
+};
 
 
   useEffect(() => {
     const fetchCurrentBooking = async () => {
       setIsLoading(true);
       try {
-        const response = await fetch(`http://localhost:3001/api/manage-bookings/bookings/user/${user_id}`);
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        let bookings: Booking[] = await response.json();
+        const response = await axios.get(`http://localhost:3001/api/manage-bookings/bookings/user/${user_id}`);
         
-  console.log(bookings)
+        let bookings: Booking[] = response.data;
+        
+        console.log(bookings)
 
         // Fetch listing names for each booking
         const listingsWithNames = await Promise.all(bookings.map(async (booking) => {
-          const listingResponse = await fetch("http://localhost:3001/api/manage-listings/get", {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ listingId: booking.listingId })
-          });
-          if (!listingResponse.ok) {
-            throw new Error('Listing fetch was not ok');
-          }
-          const listing = await listingResponse.json();
+          const listingResponse = await axios.post("http://localhost:3001/api/manage-listings/get", 
+            { listingId: booking.listingId },
+            {
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+              },
+            }
+          );
+          const listing = listingResponse.data;
           return { ...booking, listingName: listing.data.name };
         }));
 
@@ -112,6 +101,7 @@ const ManageBookings: React.FC = () => {
     return <div>Loading...</div>;
   }
 
+
   return (
     <>
       <div className="CurrentBooking">
@@ -122,10 +112,9 @@ const ManageBookings: React.FC = () => {
               <h3 className='fs-4'>{booking.listingName}</h3>
               <p>From: {new Date(booking.startDate).toLocaleDateString()} To: {new Date(booking.endDate).toLocaleDateString()}</p>
               <p className='mb-2'>Price: ${booking.bookingPrice}</p>
-              <button className="btn btn-info mr-3 btn-sm mb-2">Edit</button>
+              <Link state={booking}  to='/confirmbooking'> <button className="btn btn-info mr-3 btn-sm mb-2">Edit</button></Link>
               <button className="btn-danger btn mr-3 btn-sm mb-2" onClick={() => deleteBooking(booking._id)}>Cancel Booking</button>
-              <Link state={booking}  to='/viewdetails'> <button className="bg-buttonPrimary hover:bg-blue-700 text-white text-center btn btn-sm rounded">View Details</button></Link>
-             
+              <Link state={booking}  to='/viewdetails'> <button className="bg-buttonPrimary hover:bg-blue-700 text-white text-center btn btn-sm rounded mb-2 mr-2">View Details</button></Link>
             </div>
           </div>
         )) : <p>No current bookings available.</p>}
