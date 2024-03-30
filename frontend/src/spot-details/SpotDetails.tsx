@@ -55,11 +55,17 @@ export const SpotDetails = () => {
 
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
-  const [numberOfDays, setNumberOfDays] = useState(0);
 
   const _validateDetails = () => {
-    if (numberOfDays === 0) {
+    if (startDate === undefined || endDate === undefined) {
       toast("Please select dates", {
+        type: "error",
+      });
+      return;
+    }
+    const numberOfDays = dayjs(endDate).diff(dayjs(startDate), "day");
+    if (numberOfDays <= 0) {
+      toast("End date should be greater than Start date", {
         type: "error",
       });
       return;
@@ -255,15 +261,7 @@ export const SpotDetails = () => {
                           min={new Date().toISOString().split("T")[0]}
                           value={startDate?.toISOString().split("T")[0]}
                           onChange={(e) => {
-                            const diff = dayjs(endDate).diff(
-                              e.target.valueAsDate,
-                              "day"
-                            );
-                            if (diff <= 0) {
-                              return;
-                            }
                             setStartDate(e.target.valueAsDate || undefined);
-                            setNumberOfDays(diff);
                           }}
                         />
                       </div>
@@ -275,23 +273,15 @@ export const SpotDetails = () => {
                           min={new Date().toISOString().split("T")[0]}
                           value={endDate?.toISOString().split("T")[0]}
                           onChange={(e) => {
-                            const diff = dayjs(e.target.valueAsDate).diff(
-                              startDate,
-                              "day"
-                            );
-                            if (diff <= 0) {
-                              return;
-                            }
                             setEndDate(e.target.valueAsDate || undefined);
-                            setNumberOfDays(diff);
                           }}
                         />
                       </div>
                     </div>
                     <h4 className='text-red-400 text-sm font-semibold mt-1'>
-                      * Select start date and end date for your booking. Please
-                      see the availabilities below to fix your spot in available
-                      dates.
+                      {dayjs(endDate).diff(dayjs(startDate), "day") <= 0
+                        ? "* End date needs to be greater than Start date"
+                        : "* Select start date and end date for your booking. Please see the availabilities below to fix your spot in available dates."}
                     </h4>
                     <button
                       className='w-full text-center py-3 mt-4 bg-header text-textSecondary rounded-lg z-20 shadow-md'
@@ -305,12 +295,17 @@ export const SpotDetails = () => {
                   <div className='flex flex-row w-full px-4 py-2 justify-between'>
                     <h5 className='text-textPrimary'>
                       Sub total : ${parkingSpotDetails.parkingSpot.dailyRate} *{" "}
-                      {numberOfDays}
+                      {dayjs(endDate).diff(dayjs(startDate), "day") > 0
+                        ? dayjs(endDate).diff(dayjs(startDate), "day")
+                        : 0}
                     </h5>
                     <h5 className='text-textPrimary'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
-                        parkingSpotDetails.parkingSpot.dailyRate * numberOfDays
+                        parkingSpotDetails.parkingSpot.dailyRate *
+                          (dayjs(endDate).diff(dayjs(startDate), "day") > 0
+                            ? dayjs(endDate).diff(dayjs(startDate), "day")
+                            : 0)
                       )}
                     </h5>
                   </div>
@@ -322,7 +317,10 @@ export const SpotDetails = () => {
                     <h3 className='text-textPrimary text-2xl font-bold'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
-                        parkingSpotDetails.parkingSpot.dailyRate * numberOfDays
+                        parkingSpotDetails.parkingSpot.dailyRate *
+                          (dayjs(endDate).diff(dayjs(startDate), "day") > 0
+                            ? dayjs(endDate).diff(dayjs(startDate), "day")
+                            : 0)
                       )}
                     </h3>
                   </div>
