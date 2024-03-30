@@ -63,7 +63,11 @@ export const SpotDetails = () => {
       });
       return;
     }
-    const numberOfDays = dayjs(endDate).diff(dayjs(startDate), "day");
+    const numberOfDays = dayjs(endDate).isSame(dayjs(startDate), "day")
+      ? 1
+      : dayjs(endDate).diff(dayjs(startDate), "day");
+    if (numberOfDays === 0) {
+    }
     if (numberOfDays <= 0) {
       toast("End date should be greater than Start date", {
         type: "error",
@@ -279,7 +283,8 @@ export const SpotDetails = () => {
                       </div>
                     </div>
                     <h4 className='text-red-400 text-sm font-semibold mt-1'>
-                      {dayjs(endDate).diff(dayjs(startDate), "day") <= 0
+                      {dayjs(endDate).diff(dayjs(startDate), "day") <= 0 &&
+                      !dayjs(endDate).isSame(dayjs(startDate), "day")
                         ? "* End date needs to be greater than Start date"
                         : "* Select start date and end date for your booking. Please see the availabilities below to fix your spot in available dates."}
                     </h4>
@@ -295,17 +300,21 @@ export const SpotDetails = () => {
                   <div className='flex flex-row w-full px-4 py-2 justify-between'>
                     <h5 className='text-textPrimary'>
                       Sub total : ${parkingSpotDetails.parkingSpot.dailyRate} *{" "}
-                      {dayjs(endDate).diff(dayjs(startDate), "day") > 0
-                        ? dayjs(endDate).diff(dayjs(startDate), "day")
-                        : 0}
+                      {dayjs(endDate).isSame(dayjs(startDate), "day")
+                        ? 1
+                        : dayjs(endDate).diff(dayjs(startDate), "day") < 0
+                        ? 0
+                        : dayjs(endDate).diff(dayjs(startDate), "day") + 1}
                     </h5>
                     <h5 className='text-textPrimary'>
                       ${" "}
                       {formatToTwoPrecisionFloat(
                         parkingSpotDetails.parkingSpot.dailyRate *
-                          (dayjs(endDate).diff(dayjs(startDate), "day") > 0
-                            ? dayjs(endDate).diff(dayjs(startDate), "day")
-                            : 0)
+                          (dayjs(endDate).isSame(dayjs(startDate), "day")
+                            ? 1
+                            : dayjs(endDate).diff(dayjs(startDate), "day") < 0
+                            ? 0
+                            : dayjs(endDate).diff(dayjs(startDate), "day") + 1)
                       )}
                     </h5>
                   </div>
@@ -318,9 +327,11 @@ export const SpotDetails = () => {
                       ${" "}
                       {formatToTwoPrecisionFloat(
                         parkingSpotDetails.parkingSpot.dailyRate *
-                          (dayjs(endDate).diff(dayjs(startDate), "day") > 0
-                            ? dayjs(endDate).diff(dayjs(startDate), "day")
-                            : 0)
+                          (dayjs(endDate).isSame(dayjs(startDate), "day")
+                            ? 1
+                            : dayjs(endDate).diff(dayjs(startDate), "day") < 0
+                            ? 0
+                            : dayjs(endDate).diff(dayjs(startDate), "day") + 1)
                       )}
                     </h3>
                   </div>
