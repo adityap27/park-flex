@@ -49,7 +49,7 @@ export const AccountCard = () => {
 
   const isValidNumber = (value: string) => {
     const validNumberRegex = /^[+-]?\d+(\.\d+)?$/;
-    return validNumberRegex.test(value) && parseFloat(value) >= 0;
+    return validNumberRegex.test(value) && parseFloat(value) > 0;
   };
 
   const handleAddMoney = async (event: { preventDefault: () => void; }) => {
