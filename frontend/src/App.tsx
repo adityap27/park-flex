@@ -25,6 +25,7 @@ import { ProtectedRoute } from "./utils/ProtectedRoute";
 import ManangeBookings from "./manage-bookings/ManageBookings";
 import ViewDetails from "./manage-bookings/ViewDetails";
 import Wallet from "./wallet/Wallet";
+import { Reviews } from "./ratings-and-reviews/Reviews";
 function App() {
   return (
     <>
@@ -39,6 +40,7 @@ function App() {
               <Route path='/home' Component={Home}></Route>
               <Route path='/login' Component={LoginPage}></Route>
               <Route path='/register' Component={RegistrationPage}></Route>
+              <Route path='/listings/:listingId/reviews' Component={Reviews}></Route>
               <Route
                 path='/forgetpassword'
                 Component={ForgetPasswordPage}
