@@ -1,3 +1,4 @@
+/* Author: Mann Patel */
 import {  Response } from "express";
 import { Wallet } from "../models/Wallet";
 import stripe from "stripe";
@@ -9,6 +10,12 @@ import mongoose from "mongoose";
 const stripeSecretKey ="sk_test_51Oz4veIzvURxPk5bVYn3LDcCl1JD6hTlcYPUBqnd9TM9QLavGScbcwcdpmgLpEk2IsmKfFvbwW1deKSp8ODhFLND00Q3mlZYb5";
 const stripeClient = new stripe(stripeSecretKey);
 
+/**
+ * Add money to the owner's wallet and create a transaction record.
+ * @param ownerId The ID of the owner whose wallet to update.
+ * @param amount The amount of money to add.
+ * @param bookingId The ID of the booking associated with the transaction.
+ */
 export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.Types.ObjectId, amount: number, bookingId: string): Promise<void> {
   try {
     const wallet = await Wallet.findOne({ userId: ownerId });
@@ -29,6 +36,12 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
   }
 }
 
+/**
+ * Deduct money from the seeker's wallet and create a transaction record.
+ * @param seekerId The ID of the seeker whose wallet to update.
+ * @param amount The amount of money to add.
+ * @param bookingId The ID of the booking associated with the transaction.
+ */
 export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seekerId: mongoose.Types.ObjectId, amount: number, bookingId: string): Promise<void> {
   try {
     const wallet = await Wallet.findOne({ userId: seekerId });
@@ -55,8 +68,7 @@ export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seeker
   }
 }
 
-
-export const addMoney =  async (req: AuthRequest, res: Response) => {
+export const addMoneyToWallet =  async (req: AuthRequest, res: Response) => {
     const userId = req.user._id;
     const wallet = await Wallet.findOne({ userId });
     if (!wallet) {
@@ -86,7 +98,7 @@ export const addMoney =  async (req: AuthRequest, res: Response) => {
     }
   };
 
-export const withdrawMoney = async (req: AuthRequest, res: Response) => {
+export const withdrawMoneyFromWallet = async (req: AuthRequest, res: Response) => {
     const userId = req.user._id;
     const wallet = await Wallet.findOne({ userId });
     if (!wallet) {

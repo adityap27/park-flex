@@ -1,4 +1,8 @@
-import React, { useEffect, useState } from "react";
+/** 
+* Author: Mann Patel 
+* Defines the AccountCard component for managing wallet operations.
+*/
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Modal, Button } from "react-bootstrap";
@@ -13,7 +17,7 @@ export const AccountCard = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const stripe = useStripe();
-  const elements = useElements();
+  const stripeElements = useElements();
 
   useEffect(() => {
     axios.get('http://localhost:3001/api/wallet/balance', {
@@ -55,11 +59,11 @@ export const AccountCard = () => {
   const handleAddMoney = async (event: { preventDefault: () => void; }) => {
     event.preventDefault();
   
-    if (!stripe || !elements) {
+    if (!stripe || !stripeElements) {
       return;
     }
   
-    const cardElement = elements.getElement(CardNumberElement);
+    const cardElement = stripeElements.getElement(CardNumberElement);
   
     if (!cardElement) {
       toast.error("Invalid card information");
@@ -131,7 +135,6 @@ export const AccountCard = () => {
     toast.error("Please enter a valid amount.");
   }
   };
-  
   
   return (
     <>
