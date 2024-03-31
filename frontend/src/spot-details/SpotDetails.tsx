@@ -349,7 +349,7 @@ export const SpotDetails = () => {
                   className='border-0 z-50 shadow-lg rounded-md !bg-backgroundColor text-textPrimary'
                   tileDisabled={(date) => {
                     let isDisabled = false;
-                    parkingSpotDetails.existingBookings.forEach((item) => {
+                    parkingSpotDetails?.existingBookings?.forEach((item) => {
                       const startDate = dayjs(item.startDate);
                       const endDate = dayjs(item.endDate);
 
@@ -376,7 +376,7 @@ export const SpotDetails = () => {
                   className='border-0 z-50 shadow-lg rounded-md !bg-backgroundColor text-textPrimary'
                   tileDisabled={(date) => {
                     let isDisabled = false;
-                    parkingSpotDetails.existingBookings.forEach((item) => {
+                    parkingSpotDetails?.existingBookings?.forEach((item) => {
                       const startDate = dayjs(item.startDate);
                       const endDate = dayjs(item.endDate);
                       const currentDate = dayjs(date.date);
