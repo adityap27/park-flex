@@ -24,8 +24,10 @@ import { SpotDetails } from "./spot-details/SpotDetails";
 import { ProtectedRoute } from "./utils/ProtectedRoute";
 import ManangeBookings from "./manage-bookings/ManageBookings";
 import ViewDetails from "./manage-bookings/ViewDetails";
+
 import Wallet from "./wallet/Wallet";
 import TransactionHistory from "./wallet/TransactionHistory";
+import ConfirmBooking from "./manage-bookings/ConfirmBooking";
 function App() {
   return (
     <>
@@ -85,6 +87,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ViewDetails />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/confirmbooking'
+                element={
+                  <ProtectedRoute>
+                    <ConfirmBooking />
                   </ProtectedRoute>
                 }
               ></Route>

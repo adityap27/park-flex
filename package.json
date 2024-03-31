@@ -7,8 +7,8 @@
         "install": "concurrently \"pnpm run install-api\" \"pnpm run install-frontend\" ",
         "install-api": "cd api && pnpm install",
         "install-frontend": "cd frontend && pnpm install",
-        "start-api": "cd api && nodemon --watch api --exec pnpm start",
-        "start-frontend": "cd frontend &&  nodemon --watch api --exec pnpm start"
+        "start-api": "cd api && nodemon --exec ts-node index.ts",
+        "start-frontend": "cd frontend &&  nodemon --exec react-scripts start"
     },
     "devDependencies": {
         "concurrently": "^8.2.2",

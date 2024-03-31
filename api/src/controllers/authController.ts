@@ -148,11 +148,24 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     if (!user) {
       return res.status(404).send({ message: 'User not found.' });
     }
-
     res.send({ profile: user.toObject() }); 
   } catch (error) {
     console.error(error);
     res.status(500).send({ message: 'Server error while fetching profile.' });
+  }
+};
+export const getUserByID = async (req: AuthRequest, res: Response) => {
+  try {
+      
+      const { id } = req.params;
+      const user = await Users.findById(id);
+      if (!user) {
+          return res.status(404).send({ message: 'User not found.' });
+      }
+      res.status(200).send({user});
+  } catch (error) {
+      console.error(error);
+      res.status(500).send({ message: 'Server error while fetching user by ID.' });
   }
 };
 

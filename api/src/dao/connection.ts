@@ -21,7 +21,7 @@ const dataBase = {
   reviews: Review,
   wallets: Wallet,
   transactions: Transaction,
-  booking: Booking,
+  bookings: Booking,
 };
 
 export { dataBase };
