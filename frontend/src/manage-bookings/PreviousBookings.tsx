@@ -1,11 +1,12 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 type Booking = {
   _id: string;
   listingId: string;
   listingName: string,
   seekerId: string;
-  startDate: string; // These are now more specifically named than dateStart/dateEnd
+  startDate: string;
   endDate: string;
   vehicleType: string;
   specialRequests: string;
@@ -19,7 +20,7 @@ interface PreviousBookingsProps {
 }
 
 const PreviousBookings: React.FC<PreviousBookingsProps> = ({ data }) => {
-  // Now you can map over data to display previous bookings
+ 
   return (
     <>
       <div className="PreviousBookingsHeader">
@@ -32,7 +33,7 @@ const PreviousBookings: React.FC<PreviousBookingsProps> = ({ data }) => {
             <p>{new Date(booking.startDate).toLocaleDateString()} - {new Date(booking.endDate).toLocaleDateString()}</p>
             <p>{booking.bookingPrice}$</p>
             <button className="bg-buttonPrimary hover:bg-blue-700 text-white text-center btn btn-sm rounded mr-2">Book Again</button>
-            <button className="bg-buttonPrimary hover:bg-blue-700 text-white text-center btn btn-sm rounded">View Details</button>
+            <Link state={booking}  to='/viewdetails'> <button className="bg-buttonPrimary hover:bg-blue-700 text-white text-center btn btn-sm rounded">View Details</button></Link>
           </div>
         ))}
       </div>

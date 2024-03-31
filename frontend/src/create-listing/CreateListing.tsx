@@ -30,10 +30,10 @@ export const CreateListing = () => {
 		name: "",
 		description: "",
 		address: "",
-		country: "",
-		city: "",
-		postalCode: "",
 		rate: "",
+		country: "",
+		postalCode: "",
+		city: "",
 		image: "",
 		location: ""
 	});
@@ -43,6 +43,8 @@ export const CreateListing = () => {
 
 	// Default map zoom level
 	const DEFAULT_MAP_ZOOM = 14;
+
+	const MAX_IMAGE_SIZE_IN_BYTES = 1 * 1024 * 1024;
 
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
 
@@ -71,6 +73,15 @@ export const CreateListing = () => {
 			navigate('/login');
 			toast.error('Unauthorized');
 			return;
+		}
+
+		if (submitting) {
+			for (const [key, value] of Object.entries(error)) {
+				if (value.length > 0) {
+					toast.error(value);
+					break;
+				}
+			}
 		}
 
 		if (!image) return;
@@ -117,9 +128,9 @@ export const CreateListing = () => {
 	const checkRequired = (inputField: string, value: string) => {
 		if (inputField === "rate") {
 			if (value === "") {
-				showError(inputField, `${getFieldName(inputField)} is required`);
+				showError(inputField, "Daily Rate is required");
 			} else if (parseFloat(value) <= 0) {
-				showError(inputField, `${getFieldName(inputField)} should be positive`);
+				showError(inputField, "Daily Rate should be positive");
 			} else {
 				showSuccess(inputField);
 			}
@@ -127,7 +138,7 @@ export const CreateListing = () => {
 			if (value === "") {
 				showError(inputField, `${getFieldName(inputField)} is required`);
 			} else if (value !== value.trim()) {
-				showError(inputField, "Space not allowed at start and end");
+				showError(inputField, `${getFieldName(inputField)} contains space at start and end`);
 			}
 			else {
 				showSuccess(inputField);
@@ -139,6 +150,8 @@ export const CreateListing = () => {
 	const checkFile = (inputField: string, value: any) => {
 		if (value == null) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
+		} else if (value.size > MAX_IMAGE_SIZE_IN_BYTES) {
+			showError(inputField, "Max allowed image size if 1 MB");
 		} else {
 			showSuccess(inputField);
 		}
@@ -148,12 +161,12 @@ export const CreateListing = () => {
 	const checkLocation = (inputField: string, value: boolean) => {
 		if (value === false) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
-			document.getElementById("location")?.classList.remove("border-gray-300");
-			document.getElementById("location")?.classList.add("border-red-500");
+			// document.getElementById("location")?.classList.remove("border-gray-300");
+			// document.getElementById("location")?.classList.add("border-red-500");
 		} else {
 			showSuccess(inputField);
-			document.getElementById("location")?.classList.remove("border-red-500");
-			document.getElementById("location")?.classList.add("border-gray-300");
+			// document.getElementById("location")?.classList.remove("border-red-500");
+			// document.getElementById("location")?.classList.add("border-gray-300");
 		}
 	}
 
@@ -238,7 +251,7 @@ export const CreateListing = () => {
 				<h1 className="text-4xl font-bold text-center mb-8">Create Listing</h1>
 				<div className="container">
 					<div className="left-column">
-						<div className={`form-control ${error.name ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="name">Name</label>
 							<input
 								type="text"
@@ -247,9 +260,9 @@ export const CreateListing = () => {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
-							<small>{error.name}</small>
+							{/* <small>{error.name}</small> */}
 						</div>
-						<div className={`form-control ${error.address ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">Street Address</label>
 							<input
 								type="text"
@@ -258,9 +271,9 @@ export const CreateListing = () => {
 								value={address}
 								onChange={(e) => setAddress(e.target.value)}
 							/>
-							<small>{error.address}</small>
+							{/* <small>{error.address}</small> */}
 						</div>
-						<div className={`form-control ${error.country ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">Country</label>
 							<input
 								type="text"
@@ -269,9 +282,9 @@ export const CreateListing = () => {
 								value={country}
 								onChange={(e) => setCountry(e.target.value)}
 							/>
-							<small>{error.country}</small>
+							{/* <small>{error.country}</small> */}
 						</div>
-						<div className={`form-control ${error.city ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">City</label>
 							<input
 								type="text"
@@ -280,7 +293,7 @@ export const CreateListing = () => {
 								value={city}
 								onChange={(e) => setCity(e.target.value)}
 							/>
-							<small>{error.city}</small>
+							{/* <small>{error.city}</small> */}
 						</div>
 						<div className="ml-3 mt-7 mb-5">
 							<label htmlFor="parking-type">Type:</label>
@@ -307,7 +320,7 @@ export const CreateListing = () => {
 						</div>
 					</div>
 					<div className="right-column">
-						<div className={`form-control ${error.description ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="description">Description</label>
 							<input
 								id="description"
@@ -315,9 +328,9 @@ export const CreateListing = () => {
 								value={description}
 								onChange={(e) => setDescription(e.target.value)}
 							/>
-							<small>{error.description}</small>
+							{/* <small>{error.description}</small> */}
 						</div>
-						<div className={`form-control ${error.rate ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">Daily Rate</label>
 							<input
 								// type="number"
@@ -326,9 +339,9 @@ export const CreateListing = () => {
 								value={rate}
 								onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
 							/>
-							<small>{error.rate}</small>
+							{/* <small>{error.rate}</small> */}
 						</div>
-						<div className={`form-control ${error.postalCode ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">Postal Code</label>
 							<input
 								type="text"
@@ -337,9 +350,9 @@ export const CreateListing = () => {
 								value={postalCode}
 								onChange={(e) => setPostalCode(e.target.value)}
 							/>
-							<small>{error.postalCode}</small>
+							{/* <small>{error.postalCode}</small> */}
 						</div>
-						<div className={`form-control ${error.image ? "error" : "success"}`}>
+						<div className={`form-control success`}>
 							<label htmlFor="address">Image</label>
 							<input
 								type="file"
@@ -347,7 +360,7 @@ export const CreateListing = () => {
 								onChange={onImageChange}
 								accept="image/*"
 							/>
-							<small>{error.image}</small>
+							{/* <small>{error.image}</small> */}
 						</div>
 					</div>
 					<div className="map">
@@ -371,7 +384,7 @@ export const CreateListing = () => {
 										<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
 									</MapContainer>
 								</div>
-								<small className="text-red-500">{error.location}</small>
+								{/* <small className="text-red-500">{error.location}</small> */}
 							</>
 						) : null}
 					</div>

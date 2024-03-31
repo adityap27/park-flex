@@ -1,0 +1,32 @@
+.view-details {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    margin: 20px;
+  }
+  
+  .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    padding: 20px;
+    width: 300px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .card h2 {
+    margin-top: 0;
+  }
+  
+  .owner-details {
+    background-color: #f9f9f9;
+  }
+  
+  .listing-details {
+    background-color: #e9e9ff;
+  }
+  
+  .booking-details {
+    background-color: #e9ffe9;
+  }
+  
