@@ -44,6 +44,8 @@ export const CreateListing = () => {
 	// Default map zoom level
 	const DEFAULT_MAP_ZOOM = 14;
 
+	const MAX_IMAGE_SIZE_IN_BYTES = 1 * 1024 * 1024;
+
 	const [location, setLocation] = useState<LatLng>(new LatLng(44.6356313, -63.5951737));
 
 	// Reference for map instance
@@ -139,6 +141,8 @@ export const CreateListing = () => {
 	const checkFile = (inputField: string, value: any) => {
 		if (value == null) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
+		} else if (value.size > MAX_IMAGE_SIZE_IN_BYTES) {
+			showError(inputField, "Max allowed image size if 1 MB");
 		} else {
 			showSuccess(inputField);
 		}
