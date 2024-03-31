@@ -146,7 +146,7 @@ export const AccountCard = () => {
     </p>
     {isLoading ? (
       <div className="ml-3">
-      <Oval color="#4fa94d" width={20} height={20}  />
+      <Oval color="black" secondaryColor="true" width={20} height={20}  />
       </div>
     ) : (
       <p className="text-lg mt-1 text-center text-darkblue ml-2 font-bold">
@@ -234,12 +234,12 @@ export const AccountCard = () => {
           </div>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="outline-danger" onClick={handleModalClose} className="mr-2">
-            Close
-          </Button>
-          <Button variant="outline-primary" disabled={!stripe} onClick={handleAddMoney}>
-            Add ${amount}
-          </Button>
+        <Button onClick={handleModalClose} className="mr-2 bg-header text-white">
+    Close
+  </Button>
+  <Button  disabled={!stripe} onClick={handleAddMoney} className="bg-header text-white">
+    Add ${amount}
+  </Button>
         </Modal.Footer>
       </Modal>
     </>

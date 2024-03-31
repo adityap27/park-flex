@@ -26,7 +26,7 @@ import ManangeBookings from "./manage-bookings/ManageBookings";
 import ViewDetails from "./manage-bookings/ViewDetails";
 
 import Wallet from "./wallet/Wallet";
-import TransactionHistory from "./wallet/TransactionHistory";
+import TransactionHistory from "./Transactions/Transactions";
 import ConfirmBooking from "./manage-bookings/ConfirmBooking";
 function App() {
   return (

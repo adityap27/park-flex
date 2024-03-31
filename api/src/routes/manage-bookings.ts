@@ -1,19 +1,29 @@
 import express from "express";
-import Booking from "../models/Bookings"; 
+import Booking from "../models/Bookings";
 import { Listing } from "../models/Listing";
-import { addMoneyToOwner, deductMoneyFromSeeker } from "../controllers/walletController";
-
+import {
+  addMoneyToOwner,
+  deductMoneyFromSeeker,
+} from "../controllers/walletController";
 
 const router = express.Router();
 
 // POST for confirm a booking
 router.post("/add-booking", async (req, res) => {
-  const { listingId, seekerId, startDate, endDate, vehicleType, specialRequests, bookingPrice } = req.body;
+  const {
+    listingId,
+    seekerId,
+    startDate,
+    endDate,
+    vehicleType,
+    specialRequests,
+    bookingPrice,
+  } = req.body;
   const listing = await Listing.findById(listingId);
-    if (!listing) {
-      return res.status(404).json({ message: "Listing not found" });
-    }
-    const ownerId = listing.owner;
+  if (!listing) {
+    return res.status(404).json({ message: "Listing not found" });
+  }
+  const ownerId = listing.owner;
   // Convert startDate and endDate to Date objects to ensure correct comparison
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -24,13 +34,18 @@ router.post("/add-booking", async (req, res) => {
       listingId,
       $or: [
         { startDate: { $lte: end }, endDate: { $gte: start } },
-        { startDate: { $gte: start, $lte: end } }, 
-        { endDate: { $gte: start, $lte: end } }
-      ]
+        { startDate: { $gte: start, $lte: end } },
+        { endDate: { $gte: start, $lte: end } },
+      ],
     });
 
     if (existingBooking) {
-      return res.status(400).json({ message: "This listing is already booked for the selected dates. Please select different dates." });
+      return res
+        .status(400)
+        .json({
+          message:
+            "This listing is already booked for the selected dates. Please select different dates.",
+        });
     }
 
     const newBooking = new Booking({
@@ -40,12 +55,13 @@ router.post("/add-booking", async (req, res) => {
       endDate: end,
       vehicleType,
       specialRequests,
-      bookingPrice
+      bookingPrice,
     });
-    await addMoneyToOwner(ownerId, bookingPrice);
-    await deductMoneyFromSeeker(seekerId, bookingPrice);
-
     const savedBooking = await newBooking.save();
+
+    await addMoneyToOwner(ownerId, bookingPrice,savedBooking._id);
+    await deductMoneyFromSeeker(seekerId, bookingPrice, savedBooking._id);
+
     res.status(201).json(savedBooking);
   } catch (error) {
     res.status(400).json({ message: "Error creating booking", error });
@@ -73,16 +89,19 @@ router.get("/bookings/user/:userId", async (req, res) => {
     }
     res.status(200).json(userBookings);
   } catch (error) {
-    res.status(500).json({ message: "Error retrieving user's bookings", error });
+    res
+      .status(500)
+      .json({ message: "Error retrieving user's bookings", error });
   }
 });
-
 
 // PUT for Update a booking
 router.put("/bookings/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const updatedBooking = await Booking.findByIdAndUpdate(id, req.body, { new: true });
+    const updatedBooking = await Booking.findByIdAndUpdate(id, req.body, {
+      new: true,
+    });
     if (!updatedBooking) {
       return res.status(404).json({ message: "Booking not found" });
     }
@@ -91,7 +110,6 @@ router.put("/bookings/:id", async (req, res) => {
     res.status(400).json({ message: "Error updating booking", error });
   }
 });
-
 
 // DELETE for Delete a booking
 router.delete("/bookings/:id", async (req, res) => {
@@ -106,6 +124,5 @@ router.delete("/bookings/:id", async (req, res) => {
     res.status(400).json({ message: "Error deleting booking", error });
   }
 });
-
 
 export default router;
