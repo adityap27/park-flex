@@ -38,6 +38,35 @@ router.post("/add-money", authenticateToken, async (req: AuthRequest, res: Respo
     res.status(500).json({ success: false, error: error.message });
   }
 });
+router.post("/withdraw-money", authenticateToken, async (req: AuthRequest, res: Response) => {
+  const userId = req.user._id;
+  const wallet = await Wallet.findOne({ userId });
+  if (!wallet) {
+    return res.status(404).send({ message: 'Wallet not found.' });
+  }
+  const { amount } = req.body;
+  console.log("Received request to withdraw money:", amount);
+  try {
+    if (wallet.balance < parseFloat(amount)) {
+      return res.status(400).json({ message: "Insufficient funds" });
+    }
+
+    wallet.balance -= parseFloat(amount);
+    await wallet.save();
+
+    const transaction = new Transaction({
+      userId: userId,
+      amount: parseFloat(amount),
+      type: 'withdrawal', 
+    });
+    await transaction.save();
+    res
+      .status(200)
+      .json({ success: true, message: "Withdrawal Successful, money will be refunded to original payment method in 1-2 business days." , newBalance: wallet.balance});
+  } catch (error: any) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
 
 router.get("/balance", authenticateToken, async (req: AuthRequest, res: Response) => {
   try {
@@ -60,5 +89,22 @@ router.get("/balance", authenticateToken, async (req: AuthRequest, res: Response
       .send({ message: "Server error while fetching wallet balance." });
   }
 });
+router.get("/transactions", authenticateToken, async (req: AuthRequest, res: Response) => {
+  try {
+    const userId = req.user._id;
+    const transactions = await Transaction.find({ userId }).sort({ createdAt: -1 });
+
+    const formattedTransactions = transactions.map(transaction => ({
+      ...transaction.toJSON(),
+      date: transaction.createdAt.toISOString(),
+    }));
+
+    res.json(formattedTransactions);
+  } catch (error) {
+    console.error("Error fetching transactions:", error);
+    res.status(500).json({ message: "Server error while fetching transactions." });
+  }
+});
+
 
 export default router;

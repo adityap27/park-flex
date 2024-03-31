@@ -25,6 +25,7 @@ import { ProtectedRoute } from "./utils/ProtectedRoute";
 import ManangeBookings from "./manage-bookings/ManageBookings";
 import ViewDetails from "./manage-bookings/ViewDetails";
 import Wallet from "./wallet/Wallet";
+import TransactionHistory from "./wallet/TransactionHistory";
 function App() {
   return (
     <>
@@ -109,6 +110,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Wallet />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/transaction-history'
+                element={
+                  <ProtectedRoute>
+                    <TransactionHistory />
                   </ProtectedRoute>
                 }
               ></Route>

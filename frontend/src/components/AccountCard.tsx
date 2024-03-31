@@ -97,7 +97,40 @@ export const AccountCard = () => {
       toast.error(error.message || "Failed to process payment. Please try again.");
     }
   };
+  const handleWithdrawMoney = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault();
+    if (!walletBalance || parseFloat(amount) > walletBalance) {
+      toast.error("Insufficient funds");
+      return;
+    }
+    if (isValidNumber(amount)) {
+    try {
+      
+      const res = await fetch('http://localhost:3001/api/wallet/withdraw-money', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`
+        },
+        body: JSON.stringify({ amount: parseFloat(amount) }),
+      });
+      const data = await res.json();
   
+      if (!data.success) {
+        throw new Error(data.error);
+      }
+      setWalletBalance(data.newBalance);
+      toast.success(data.message);
+      setIsModalOpen(false);
+      setAmount("");
+    } catch (error:any) {
+      toast.error(error.message || "Failed to process payment. Please try again.");
+    }
+  }
+  else{
+    toast.error("Please enter a valid amount.");
+  }
+  };
   
   
   return (
@@ -167,6 +200,7 @@ export const AccountCard = () => {
           <hr className="h-16 w-px bg-white" />
           <div className="flex-1 text-center">
             <button
+            onClick={handleWithdrawMoney}
               className="text-white font-bold text-lg md:text-2xl"
             >
               Withdraw
