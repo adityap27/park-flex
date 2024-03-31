@@ -4,6 +4,7 @@ import parkingListings from "./parking-listings";
 import manageBookings from './manage-bookings';
 import authRoutes from './authRoutes';
 import walletRoutes from './walletRoutes';
+import transactionRoutes from './transactionRoutes';
 
 const router = express.Router();
 
@@ -12,5 +13,6 @@ router.use('/manage-bookings', manageBookings);
 router.use("/parking-listings", parkingListings);
 router.use('/auth', authRoutes);
 router.use('/wallet', walletRoutes);
+router.use('/transaction', transactionRoutes);
 export default router;
 

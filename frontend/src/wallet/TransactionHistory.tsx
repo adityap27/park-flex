@@ -21,7 +21,7 @@ const TransactionHistory: React.FC = () => {
   const [selectedTypes, setSelectedTypes] = useState<TransactionType[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:3001/api/wallet/transactions", {
+    fetch("http://localhost:3001/api/transaction/get-transactions", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`, 
       },
