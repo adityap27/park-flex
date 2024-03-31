@@ -20,7 +20,7 @@ export const AccountCard = () => {
   const stripeElements = useElements();
 
   useEffect(() => {
-    axios.get('http://localhost:3001/api/wallet/balance', {
+    axios.get('http://localhost:3001/api/wallet/get-balance', {
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${localStorage.getItem('token')}`
