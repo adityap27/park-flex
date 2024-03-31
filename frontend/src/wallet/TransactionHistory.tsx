@@ -5,6 +5,7 @@ enum TransactionType {
   TopUp = "top-up",
   Withdrawal = "withdrawal",
   Earning = "earning",
+  Payment = "payment"
 }
 
 interface Transaction {
@@ -105,6 +106,11 @@ const TransactionHistory: React.FC = () => {
                 {transaction.type === 'top-up' ? (
                   <div className="font-semibold">
                       Top-Up
+                  </div>
+                ) : null}
+                {transaction.type === 'payment' ? (
+                  <div className="font-semibold">
+                      Payment
                   </div>
                 ) : null}
                 {transaction.type === 'earning' ? (

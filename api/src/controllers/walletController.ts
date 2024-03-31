@@ -1,14 +1,58 @@
-// controllers/walletController.ts
-
 import {  Response } from "express";
 import { Wallet } from "../models/Wallet";
 import stripe from "stripe";
 import Transaction from "../models/Transaction";
 import { AuthRequest } from "../middleware/authenticateToken";
 import { Users } from "../models/User";
+import mongoose from "mongoose";
 
 const stripeSecretKey ="sk_test_51Oz4veIzvURxPk5bVYn3LDcCl1JD6hTlcYPUBqnd9TM9QLavGScbcwcdpmgLpEk2IsmKfFvbwW1deKSp8ODhFLND00Q3mlZYb5";
 const stripeClient = new stripe(stripeSecretKey);
+
+export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.Types.ObjectId, amount: number): Promise<void> {
+  try {
+    const wallet = await Wallet.findOne({ userId: ownerId });
+    if (!wallet) {
+      throw new Error("Owner's wallet not found.");
+    }
+    wallet.balance += amount;
+    await wallet.save();
+    const transaction = new Transaction({
+      userId: ownerId,
+      amount,
+      type: 'earning',
+    });
+    await transaction.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
+export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seekerId: mongoose.Types.ObjectId, amount: number): Promise<void> {
+  try {
+    const wallet = await Wallet.findOne({ userId: seekerId });
+    if (!wallet) {
+      throw new Error("Seeker's wallet not found.");
+    }
+
+    if (wallet.balance < amount) {
+      throw new Error("Insufficient funds in seeker's wallet.");
+    }
+
+    wallet.balance -= amount;
+    await wallet.save();
+
+    const transaction = new Transaction({
+      userId: seekerId,
+      amount: amount,
+      type: 'payment',
+    });
+    await transaction.save();
+  } catch (error) {
+    throw error;
+  }
+}
+
 
 export const addMoney =  async (req: AuthRequest, res: Response) => {
     const userId = req.user._id;

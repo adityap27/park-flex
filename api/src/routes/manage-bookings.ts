@@ -1,13 +1,19 @@
 import express from "express";
-import mongoose from "mongoose";
 import Booking from "../models/Bookings"; 
+import { Listing } from "../models/Listing";
+import { addMoneyToOwner, deductMoneyFromSeeker } from "../controllers/walletController";
+
 
 const router = express.Router();
 
 // POST for confirm a booking
 router.post("/add-booking", async (req, res) => {
   const { listingId, seekerId, startDate, endDate, vehicleType, specialRequests, bookingPrice } = req.body;
-
+  const listing = await Listing.findById(listingId);
+    if (!listing) {
+      return res.status(404).json({ message: "Listing not found" });
+    }
+    const ownerId = listing.owner;
   // Convert startDate and endDate to Date objects to ensure correct comparison
   const start = new Date(startDate);
   const end = new Date(endDate);
@@ -36,6 +42,8 @@ router.post("/add-booking", async (req, res) => {
       specialRequests,
       bookingPrice
     });
+    await addMoneyToOwner(ownerId, bookingPrice);
+    await deductMoneyFromSeeker(seekerId, bookingPrice);
 
     const savedBooking = await newBooking.save();
     res.status(201).json(savedBooking);
