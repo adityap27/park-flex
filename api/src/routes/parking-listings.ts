@@ -1,5 +1,7 @@
 import express, { Request, Response } from "express";
 import { dataBase } from "../dao/connection";
+import jwt from "jsonwebtoken";
+import { AuthRequest } from "../middleware/authenticateToken";
 
 const router = express.Router();
 
@@ -24,7 +26,19 @@ router.get("/", async (req: Request, res: Response) => {
   }
 });
 
-router.get("/:id", async (req: Request, res: Response) => {
+router.get("/:id", async (req: AuthRequest, res: Response) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+  let userId = undefined;
+  if (token) {
+    jwt.verify(token, process.env.JWT_SECRET as string, (err, user) => {
+      if (user) {
+        // @ts-ignore
+        userId = user._id;
+      }
+    });
+  }
+
   let parkingSpot = await dataBase.listings
     .findOne({
       _id: req.params.id,
@@ -59,6 +73,17 @@ router.get("/:id", async (req: Request, res: Response) => {
     .select("startDate endDate")
     .exec();
 
+  let isWishListed = false;
+  if (userId) {
+    const result = await dataBase.wishlists.findOne({
+      user: userId,
+      listing: req.params.id,
+    });
+    if (result) {
+      isWishListed = true;
+    }
+  }
+
   try {
     res.status(200).json({
       success: true,
@@ -67,6 +92,7 @@ router.get("/:id", async (req: Request, res: Response) => {
         totalReviews: totalReviews,
         reviewAverage: totalReviews !== 0 ? totalRating / totalReviews : 0,
         existingBookings: existingBookings,
+        isWishListed: isWishListed,
       },
     });
   } catch (error) {
