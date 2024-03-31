@@ -3,6 +3,7 @@ import { Users } from "../models/User";
 import { Listing } from "../models/Listing";
 import { Review } from "../models/Review";
 import Booking from "../models/Bookings";
+import { Wishlist } from "../models/WishList";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -18,6 +19,7 @@ const dataBase = {
   users: Users,
   reviews: Review,
   bookings: Booking,
+  wishlists: Wishlist
 };
 
 export { dataBase };
