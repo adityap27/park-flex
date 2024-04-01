@@ -27,7 +27,7 @@ import ViewDetails from "./manage-bookings/ViewDetails";
 
 import Wallet from "./wallet/Wallet";
 import ConfirmBooking from "./manage-bookings/ConfirmBooking";
-import { Reviews } from "./ratings-and-reviews/Reviews";
+import { ReviewsPage } from "./ratings-and-reviews/ReviewsPage";
 function App() {
   return (
     <>
@@ -42,7 +42,7 @@ function App() {
               <Route path='/home' Component={Home}></Route>
               <Route path='/login' Component={LoginPage}></Route>
               <Route path='/register' Component={RegistrationPage}></Route>
-              <Route path='/listings/:listingId/reviews' Component={Reviews}></Route>
+              <Route path='/listings/:listingId/reviews' Component={ReviewsPage}></Route>
               <Route
                 path='/forgetpassword'
                 Component={ForgetPasswordPage}
