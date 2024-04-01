@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import { getRequest, postRequest } from "../utils/network-manager/axios";
@@ -11,26 +11,24 @@ export const Wishlist = () => {
     undefined
   );
 
-  const _fetchWishlist = () => {
-    toast.promise(
-      getRequest<ParkingSpotsResponse>(
-        "manage-wishlists/get-all?userId=" + userId
-      ),
-      {
-        pending: "Loading Wishlist",
-        success: {
-          render(data) {
-            setWishlist(data.data.data.data);
-            return "Successfully fetched wishlist";
-          },
-        },
-        error: "System not able to fetch details",
-      }
+  const _fetchWishlist = useCallback(() => {
+    return getRequest<ParkingSpotsResponse>(
+      "manage-wishlists/get-all?userId=" + userId
     );
-  };
-  useEffect(() => {
-    _fetchWishlist();
   }, [userId]);
+
+  useEffect(() => {
+    toast.promise(_fetchWishlist(), {
+      pending: "Loading Wishlist",
+      success: {
+        render(data) {
+          setWishlist(data.data.data.data);
+          return "Successfully fetched details";
+        },
+      },
+      error: "System not able to fetch details",
+    });
+  }, [_fetchWishlist, userId]);
 
   const _manageWishlist = async (id: string) => {
     const response = await postRequest<{}>("/manage-wishlists/delete", {
@@ -40,7 +38,8 @@ export const Wishlist = () => {
     if (response.data) {
       toast("Successfully updated wishlist");
     }
-    _fetchWishlist();
+    const result = await _fetchWishlist();
+    setWishlist(result.data.data);
   };
 
   const _renderSpotCard = (parkingSpot: ParkingSpot, index: number) => {

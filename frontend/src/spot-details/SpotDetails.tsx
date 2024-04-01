@@ -36,28 +36,28 @@ export const SpotDetails = () => {
     ParkingSpotDetails | undefined
   >(undefined);
 
-  const _fetchListing = useCallback(() => {
-    toast.promise(
-      getRequest<{
-        success: boolean;
-        data: ParkingSpotDetails;
-      }>("parking-listings/" + params.id),
-      {
-        pending: "Loading parking spot details",
-        success: {
-          render(data) {
-            setParkingSpotDetails(data.data.data.data);
-            return "Successfully fetched parking spot details";
-          },
-        },
-        error: "Error loading parking spot details",
-      }
-    );
+  const _fetchListing = useCallback(async () => {
+    return getRequest<{
+      success: boolean;
+      data: ParkingSpotDetails;
+    }>("parking-listings/" + params.id);
   }, [params]);
+
   useEffect(() => {
-    if (params.id) {
-      _fetchListing();
-    }
+    const _init = async () => {
+      if (params.id) {
+        const response = await toast.promise(_fetchListing(), {
+          pending: "Loading parking spot details",
+          success: "Successfully fetched details",
+          error: "Error loading parking spot details",
+        });
+        if (response.data) {
+          setParkingSpotDetails(response.data.data);
+        }
+      }
+    };
+
+    _init();
   }, [_fetchListing, params]);
 
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
@@ -144,7 +144,8 @@ export const SpotDetails = () => {
         toast("Successfully updated wishlist");
       }
     }
-    _fetchListing();
+    const result = await _fetchListing();
+    setParkingSpotDetails(result.data.data);
   };
 
   return (
