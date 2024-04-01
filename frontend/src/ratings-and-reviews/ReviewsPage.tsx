@@ -21,6 +21,11 @@ export function ReviewsPage() {
   const [loading, setLoading] = useState({ isLoading: true, success: false });
 
   useEffect(() => {
+    getReviewsData();
+  }, []);
+
+  // Callback function to update reviews data
+  const getReviewsData = () => {
     // Scroll to top of page when the page opens.
     window.scrollTo(0, 0);
 
@@ -35,7 +40,7 @@ export function ReviewsPage() {
         toast.error(error.response?.data?.error || "Something went wrong.");
         setLoading({ isLoading: false, success: false });
       });
-  }, []);
+  };
 
   function sortReviews(reviews: Review[]) {
     switch (sortingKey) {
@@ -174,7 +179,7 @@ export function ReviewsPage() {
                 </div>
               </div>
               <div className="col-span-1 w-screen md:w-auto order-2 md:order-3">
-                <AddReviewModal />
+                <AddReviewModal onReviewAdded={getReviewsData}/>
               </div>
             </div>
           ) : (

@@ -7,8 +7,7 @@ import { useParams } from "react-router-dom";
 import StarRatings from "react-star-ratings";
 import { toast } from "react-toastify";
 
-export function AddReviewModal() {
-  // State variables
+export function AddReviewModal({ onReviewAdded }: { onReviewAdded: () => void }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { listingId } = useParams();
   const [rating, setRating] = useState(0);
@@ -62,6 +61,7 @@ export function AddReviewModal() {
       .then((response) => {
         toast.success(response.data.message);
         setIsModalOpen(false);
+        onReviewAdded(); // Re-render reviews to show new review.
       })
       .catch((error) => {
         toast.error(
@@ -80,15 +80,15 @@ export function AddReviewModal() {
     <>
       {/* Button to open the modal */}
       <button
-        className="bg-header text-white hover:bg-white hover:text-header hover:border-header border font-semibold ml-2 mt-4 p-2 rounded-md"
+        className="disabled:bg-gray-600 disabled:cursor-not-allowed bg-header text-white enabled:hover:bg-white enabled:hover:text-header enabled:hover:border-header border font-semibold ml-2 mt-4 p-2 rounded-md"
         onClick={toggleModal}
+        disabled={!localStorage.getItem('token')}
       >
         + Add Review
       </button>
       {/* Information for users */}
       <p className="text-black ml-4 p-2 rounded-md max-w-sm">
-        Note: To add your own review, you need a previous booking with this parking
-        spot.
+        Note: { localStorage.getItem('token') ? "To add your own review, you need a previous booking with this parking spot." : "Please login to add review." }
       </p>
       {/* Modal with a Form*/}
       {isModalOpen && (
