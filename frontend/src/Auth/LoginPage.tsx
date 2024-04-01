@@ -5,6 +5,12 @@ import useAuthStore from '../stores/useAuthStore';
 import axios from 'axios';
 import LoginImage from '../assets/images/Login.jpg';
 
+// Email validation function
+const isValidEmail = (email: string): boolean => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+};
+
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -16,22 +22,37 @@ const LoginPage: React.FC = () => {
 
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Validate email
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address.');
+      return; // Stop the login process if the email is invalid
+    }
+
     try {
       const response = await axios.post('http://localhost:3001/api/auth/login', {
         email,
         password,
       });
-      if (response.data.token && response.data.user) {
-        setToken(response.data.token);
-        setUser(response.data.user);
-        toast.success('Login successful!');
-        navigate('/'); 
-      } else {
-        toast.error('Incorrect email or password.');
-      }
+      // Success case: token and user data are present
+      setToken(response.data.token);
+      setUser(response.data.user);
+      toast.success('Login successful!');
+      navigate('/');
     } catch (error) {
-      console.error(error);
-      toast.error('Login failed. Please try again.');
+      if (axios.isAxiosError(error) && error.response) {
+        // Check if it's an incorrect email/password error
+        if (error.response.status === 400) {
+          toast.error('Incorrect email or password.');
+        } else {
+          // Other types of server-side errors
+          toast.error('An error occurred. Please try again later.');
+        }
+      } else {
+        // Non-Axios error, e.g., network error or JSON parsing error.
+        toast.error('Network error. Please check your connection and try again.');
+      }
+      console.error('Login error:', error);
     }
   };
 
@@ -73,7 +94,7 @@ const LoginPage: React.FC = () => {
           </div>
           <div className="text-center">
             <a onClick={handleNavigate('/forgetpassword')} className="inline-block align-baseline font-bold text-sm text-blue-500 hover:text-blue-800" href="/forgot-password">
-              Forgot Password
+              Forgot Password?
             </a>
             <p className="text-sm text-gray-600 mt-4">
               Need an Account? <a onClick={handleNavigate('/register')} className="text-blue-500 hover:text-blue-800" href="/register">Create an account</a>

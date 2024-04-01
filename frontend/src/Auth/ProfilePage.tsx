@@ -4,7 +4,7 @@ import { PencilSquare } from 'react-bootstrap-icons';
 import useAuthStore from '../stores/useAuthStore';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { toast } from 'react-toastify';
 type ProfileFieldProps = {
   label: string;
   value: string;
@@ -66,6 +66,42 @@ const ProfilePage: React.FC = () => {
   const [editedEmail, setEditedEmail] = useState('');
   const [editedPassword, setEditedPassword] = useState('');
 
+  const isValidName = (name: string): boolean => /^[A-Za-z\s]+$/.test(name);
+  const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidPassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handleValidation = (field: string, value: string): boolean => {
+    switch (field) {
+      case 'firstName':
+      case 'lastName':
+        if (!isValidName(value)) {
+          toast.error(`Please enter a valid ${field} with characters only.`);
+          return false;
+        }
+        break;
+      case 'email':
+        if (!isValidEmail(value)) {
+          toast.error("Please enter a valid email address.");
+          return false;
+        }
+        break;
+      case 'password':
+        if (!isValidPassword(value)) {
+          toast.error("Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.");
+          return false;
+        }
+        break;
+      default:
+        break;
+    }
+    return true;
+  };
+
+
+
   useEffect(() => {
     if (user) {
       setEditedFirstName(user.firstName || '');
@@ -100,27 +136,36 @@ const ProfilePage: React.FC = () => {
 
   const handleEditSubmit = async (field: string) => {
     if (!token) return;
+    
+    // Get the value to validate
+    const valueToValidate = 
+      field === 'firstName' ? editedFirstName :
+      field === 'lastName' ? editedLastName :
+      field === 'email' ? editedEmail :
+      field === 'password' ? editedPassword : '';
+
+    // If validation fails, don't submit
+    if (!handleValidation(field, valueToValidate)) return;
+
+    // Prepare data for the update
+    const updateData = { [field]: valueToValidate };
+
     try {
-      const updateData = {
-        [field]: field === 'firstName' ? editedFirstName :
-                 field === 'lastName' ? editedLastName :
-                 field === 'email' ? editedEmail :
-                 field === 'password' ? editedPassword : ''
-      };
+      // Attempt to update the profile
       const response = await axios.put('http://localhost:3001/api/auth/profile', updateData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser({ ...user, ...response.data.profile });
       setIsEditing({ ...isEditing, [field]: false });
-      
+      toast.success(`${field} updated successfully!`);
     } catch (error) {
       console.error('Error updating profile', error);
-      
+      toast.error(`An error occurred while updating ${field}.`);
     }
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+  const storedToken = localStorage.getItem('token');
   const storedUser = localStorage.getItem('user');
   const storedUserId = localStorage.getItem('userId');
 

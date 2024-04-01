@@ -26,6 +26,7 @@ import ManangeBookings from "./manage-bookings/ManageBookings";
 import ViewDetails from "./manage-bookings/ViewDetails";
 
 import Wallet from "./wallet/Wallet";
+import TransactionHistory from "./Transactions/Transactions";
 import ConfirmBooking from "./manage-bookings/ConfirmBooking";
 import { Reviews } from "./ratings-and-reviews/Reviews";
 function App() {
@@ -121,6 +122,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <Wallet />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/transaction-history'
+                element={
+                  <ProtectedRoute>
+                    <TransactionHistory />
                   </ProtectedRoute>
                 }
               ></Route>
