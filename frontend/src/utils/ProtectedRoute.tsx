@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This file declares Route component which checks user is logged in or not. if not logged route to login page.
+ */
 import React from "react";
 import { Navigate } from "react-router-dom";
 import useAuthStore from "../stores/useAuthStore";

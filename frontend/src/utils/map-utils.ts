@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This file contains utility function for calculating radius from location coordinates
+ */
 // https://stackoverflow.com/a/27943/10879375
 export const calculateDistanceFromLatLon = (
   latitude1: number,

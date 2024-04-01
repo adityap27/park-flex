@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This page is used to list all parking spots and allow to filter those parking spots
+ */
 import Form from "react-bootstrap/Form";
 import { TbFilter } from "react-icons/tb";
 import { useEffect, useState } from "react";
@@ -6,7 +10,6 @@ import { getRequest } from "../utils/network-manager/axios";
 import { calculateDistanceFromLatLon } from "../utils/map-utils";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import { FaHeart } from "react-icons/fa";
 
 export interface ParkingSpotsResponse {
   success: boolean;

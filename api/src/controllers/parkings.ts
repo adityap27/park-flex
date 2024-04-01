@@ -1,8 +1,16 @@
-import express, { Request, Response } from "express";
+/**
+ * Author : Ketul Patel
+ */
+import { Request, Response } from "express";
 import { dataBase } from "../dao/connection";
 import jwt from "jsonwebtoken";
 import { AuthRequest } from "../middleware/authenticateToken";
 
+/**
+ * This method queries database to find all available parking spots and give it as a response.
+ * @param req
+ * @param res
+ */
 export const getAllParkingSpot = async (req: Request, res: Response) => {
   try {
     res.status(200).json({
@@ -24,6 +32,11 @@ export const getAllParkingSpot = async (req: Request, res: Response) => {
   }
 };
 
+/**
+ * This method finds a particular parking spot based on given id with it's existing booking dates, reviews and wish list details.
+ * @param req
+ * @param res
+ */
 export const getParkingSpotById = async (req: AuthRequest, res: Response) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];

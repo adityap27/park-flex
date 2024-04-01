@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This file contains various utility functions for making API calls using axios
+ */
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
 axios.defaults.baseURL = "http://localhost:3001/api";

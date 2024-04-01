@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This page shows all wish listed items which user has saved.
+ */
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -88,8 +92,10 @@ export const Wishlist = () => {
                   )}
                 </div>
               ) : (
-                <div className="flex justify-center items-center mt-10 mb-10">
-                    <p className="text-xl md:text-2xl lg:text-3xl">No wishlisted parking spots found</p>
+                <div className='flex justify-center items-center mt-10 mb-10'>
+                  <p className='text-xl md:text-2xl lg:text-3xl'>
+                    No wishlisted parking spots found
+                  </p>
                 </div>
               )}
             </div>

@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This component allows user to pick a various filters like location and parking type, etc.
+ */
 import { IoClose } from "react-icons/io5";
 import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import { Icon, LatLng, Map } from "leaflet";

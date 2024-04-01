@@ -1,7 +1,11 @@
+/**
+ * Author : Ketul Patel
+ * This page shows parking spots in details with existing booking dates, reviews and location etc.
+ */
 import { Icon, LatLng } from "leaflet";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { FaHeart, FaShare } from "react-icons/fa";
+import { FaHeart } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCallback, useEffect, useState } from "react";
 import { getRequest, postRequest } from "../utils/network-manager/axios";
