@@ -1,22 +1,24 @@
 import { Icon, LatLng } from "leaflet";
 import Calendar from "react-calendar";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import { FaShare } from "react-icons/fa";
+import { FaHeart, FaShare } from "react-icons/fa";
 import { useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { getRequest } from "../utils/network-manager/axios";
+import { useCallback, useEffect, useState } from "react";
+import { getRequest, postRequest } from "../utils/network-manager/axios";
 import StarRatings from "react-star-ratings";
 import dayjs from "dayjs";
 import { formatToTwoPrecisionFloat } from "../utils/number-utils";
 import { toast } from "react-toastify";
 import { ParkingSpot } from "../home-page/Home";
 import { Link } from "react-router-dom";
+import useAuthStore from "../stores/useAuthStore";
 
 interface ParkingSpotDetails {
   parkingSpot: ParkingSpot;
   totalReviews: number;
   reviewAverage: number;
   existingBookings: ExistingBooking[];
+  isWishListed: boolean;
 }
 
 interface ExistingBooking {
@@ -25,6 +27,8 @@ interface ExistingBooking {
 }
 
 export const SpotDetails = () => {
+  const userId = localStorage.getItem("userId");
+  const { token } = useAuthStore();
   const params = useParams();
   const navigate = useNavigate();
 
@@ -32,26 +36,29 @@ export const SpotDetails = () => {
     ParkingSpotDetails | undefined
   >(undefined);
 
-  useEffect(() => {
-    if (params.id) {
-      toast.promise(
-        getRequest<{
-          success: boolean;
-          data: ParkingSpotDetails;
-        }>("parking-listings/" + params.id),
-        {
-          pending: "Loading parking spot details",
-          success: {
-            render(data) {
-              setParkingSpotDetails(data.data.data.data);
-              return "Successfully fetched parking spot details";
-            },
-          },
-          error: "Error loading parking spot details",
-        }
-      );
-    }
+  const _fetchListing = useCallback(async () => {
+    return getRequest<{
+      success: boolean;
+      data: ParkingSpotDetails;
+    }>("parking-listings/" + params.id);
   }, [params]);
+
+  useEffect(() => {
+    const _init = async () => {
+      if (params.id) {
+        const response = await toast.promise(_fetchListing(), {
+          pending: "Loading parking spot details",
+          success: "Successfully fetched details",
+          error: "Error loading parking spot details",
+        });
+        if (response.data) {
+          setParkingSpotDetails(response.data.data);
+        }
+      }
+    };
+
+    _init();
+  }, [_fetchListing, params]);
 
   const [startDate, setStartDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
@@ -119,6 +126,28 @@ export const SpotDetails = () => {
     });
   };
 
+  const _manageWishlist = async (isWishListed: boolean) => {
+    if (isWishListed === false) {
+      const response = await postRequest<{}>("/manage-wishlists/add", {
+        userId: userId,
+        listingId: parkingSpotDetails?.parkingSpot._id,
+      });
+      if (response.data) {
+        toast("Successfully updated wishlist");
+      }
+    } else {
+      const response = await postRequest<{}>("/manage-wishlists/delete", {
+        userId: userId,
+        listingId: parkingSpotDetails?.parkingSpot._id,
+      });
+      if (response.data) {
+        toast("Successfully updated wishlist");
+      }
+    }
+    const result = await _fetchListing();
+    setParkingSpotDetails(result.data.data);
+  };
+
   return (
     <>
       <div className='flex flex-col flex-1'>
@@ -153,19 +182,21 @@ export const SpotDetails = () => {
                 >
                   Location
                 </h5>
-                <h5
-                  className='flex flex-row items-center justify-center cursor-pointer text-textSecondary'
-                  onClick={() => {
-                    navigator.share({
-                      text: "url to be shared",
-                    });
-                  }}
-                >
-                  <span className='mr-1'>
-                    <FaShare />
-                  </span>
-                  Share
-                </h5>
+                {token ? (
+                  <h5
+                    className='flex flex-row items-center justify-center cursor-pointer text-textSecondary'
+                    onClick={async () => {
+                      await _manageWishlist(parkingSpotDetails.isWishListed);
+                    }}
+                  >
+                    <span className='mr-1'>
+                      <FaHeart
+                        fill={parkingSpotDetails.isWishListed ? "red" : "white"}
+                      />
+                    </span>
+                    {parkingSpotDetails.isWishListed ? "Remove" : "Save"}
+                  </h5>
+                ) : null}
               </div>
             </div>
             <div
