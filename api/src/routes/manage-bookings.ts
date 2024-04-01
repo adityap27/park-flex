@@ -57,13 +57,13 @@ router.post("/add-booking", async (req, res) => {
       specialRequests,
       bookingPrice,
     });
-    const savedBooking = await newBooking.save();
 
-    
-    res.status(201).json(savedBooking);
     await addMoneyToOwner(ownerId, bookingPrice);
     await deductMoneyFromSeeker(seekerId, bookingPrice);
+    const savedBooking = await newBooking.save();
 
+    res.status(201).json(savedBooking);
+    
   } catch (error) {
     res.status(400).json({ message: "Error creating booking", error });
   }
