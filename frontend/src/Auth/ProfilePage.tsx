@@ -120,7 +120,7 @@ const ProfilePage: React.FC = () => {
   };
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
+  const storedToken = localStorage.getItem('token');
   const storedUser = localStorage.getItem('user');
   const storedUserId = localStorage.getItem('userId');
 

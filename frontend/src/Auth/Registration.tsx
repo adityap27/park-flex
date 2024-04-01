@@ -1,10 +1,10 @@
-// src/Auth/RegistrationPage.tsx
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import useAuthStore from '../stores/useAuthStore';
 import axios from 'axios';
 import RegistrationImage from '../assets/images/Login.jpg';
+
 const RegistrationPage: React.FC = () => {
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -14,12 +14,45 @@ const RegistrationPage: React.FC = () => {
   const setToken = useAuthStore((state) => state.setToken);
   const navigate = useNavigate();
 
+  // Validation functions
+  const isValidName = (name: string): boolean => /^[A-Za-z\s]+$/.test(name);
+  const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  const isValidPassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    // Name validations
+    if (!isValidName(firstName)) {
+      toast.error("Please enter a valid first name with characters only.");
+      return;
+    }
+    if (!isValidName(lastName)) {
+      toast.error("Please enter a valid last name with characters only.");
+      return;
+    }
+
+    // Email validation
+    if (!isValidEmail(email)) {
+      toast.error("Please enter a valid email address.");
+      return;
+    }
+
+    if (!isValidPassword(password)) {
+      toast.error("Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.");
+      return;
+    }
+
+    // Password match validation
     if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
+
+    // Attempt to register
     try {
       const response = await axios.post('http://localhost:3001/api/auth/register', {
         firstName,
@@ -30,7 +63,7 @@ const RegistrationPage: React.FC = () => {
       if (response.data.token) {
         setToken(response.data.token);
         toast.success('Registration successful!');
-        navigate('/login'); 
+        navigate('/'); 
       } else {
         toast.error('Registration failed. Please try again.');
       }
