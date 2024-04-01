@@ -88,8 +88,8 @@ export const Wishlist = () => {
                   )}
                 </div>
               ) : (
-                <div className='text-center flex flex-row items-center justify-center h-full w-full'>
-                  <h5 className='text-textPrimary'>No wish list founds</h5>
+                <div className="flex justify-center items-center mt-10 mb-10">
+                    <p className="text-xl md:text-2xl lg:text-3xl">No wishlisted parking spots found</p>
                 </div>
               )}
             </div>
