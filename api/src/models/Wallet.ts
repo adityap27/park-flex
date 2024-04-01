@@ -1,3 +1,7 @@
+/**
+ * Author: Mann Patel 
+ * Defines the schema and model for wallets in the database.
+ */
 import mongoose from "mongoose";
 
 interface IWallet extends mongoose.Document {
@@ -18,6 +22,6 @@ const walletSchema = new mongoose.Schema({
   },
 });
 
-const Wallet = mongoose.model<IWallet>("Wallet", walletSchema);
+export const Wallet = mongoose.model<IWallet>("Wallet", walletSchema);
 
-export default Wallet;
+
