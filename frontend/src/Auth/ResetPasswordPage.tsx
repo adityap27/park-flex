@@ -18,6 +18,7 @@ const ResetPasswordPage: React.FC = () => {
     return passwordRegex.test(password);
   };
 
+  //handle submit
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!token) {
