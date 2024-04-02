@@ -18,9 +18,7 @@ export const register = async (req: Request, res: Response) => {
         await user.save();
         await Wallet.create({ userId: user._id, balance: 0 });
     
-        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
-          expiresIn: '24h',
-        });
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string);
         
         res.status(201).send({ user: user._id, token });
     } catch (error) {
@@ -44,11 +42,8 @@ export const login = async (req: Request, res: Response) => {
           return res.status(400).send({ message: 'Invalid email or password.' });
       }
   
-      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
-        expiresIn: '24h',
-      });
-      
-      
+      const token = jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string); 
+   
       const userToSend = {
         _id: user._id,
       };

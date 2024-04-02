@@ -36,7 +36,7 @@ const ResetPasswordPage: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/api/auth/reset-password', {
+      await axios.post('auth/reset-password', {
         token,
         newPassword,
       });

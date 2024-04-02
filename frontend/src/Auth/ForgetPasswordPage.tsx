@@ -19,7 +19,7 @@ const ForgetPasswordPage: React.FC = () => {
     }
 
     try {
-      await axios.post('http://localhost:3001/api/auth/forget-password', { email });
+      await axios.post('auth/forget-password', { email });
       toast.success('If that email address is in our database, we will send a reset link to it shortly.');
     } catch (error) {
       toast.error('An error occurred. Please try again later.');

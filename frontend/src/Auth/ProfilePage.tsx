@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { PencilSquare } from 'react-bootstrap-icons';
 import useAuthStore from '../stores/useAuthStore';
 import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+
 type ProfileFieldProps = {
   label: string;
   value: string;
@@ -24,30 +24,36 @@ const ProfileField: React.FC<ProfileFieldProps> = ({
   onEditSubmit,
   type = 'text',
 }) => (
-  <div className="flex items-center p-4 border-b border-gray-200">
-    {!isEditing ? (
-      <>
-        <span className="flex-grow text-lg font-medium">{label}</span>
-        <span className="flex-grow text-right text-gray-700">{value}</span>
-        <PencilSquare className="h-5 w-5 text-blue-500 cursor-pointer" onClick={onEditClick} />
-      </>
-    ) : (
-      <>
-        <span className="flex-grow text-lg font-medium">{label}</span>
-        <input
-          type={type}
-          value={value}
-          onChange={(e) => onEditChange(e.target.value)}
-          className="flex-grow text-right border p-1 rounded"
-        />
-        <button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded"
-          onClick={onEditSubmit}
-        >
-          Save
-        </button>
-      </>
-    )}
+  <div className="flex flex-col md:flex-row items-center py-4 border-b border-gray-200 dark:border-gray-600">
+    <div className="flex-1">
+      <label className="block text-lg font-medium text-gray-800 dark:text-gray-200">{label}</label>
+      {!isEditing ? (
+        <div className="flex justify-between items-center">
+          <span className="text-right text-gray-500 dark:text-gray-400">{value}</span>
+          <button
+            className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+            onClick={onEditClick}
+          >
+            Edit
+          </button>
+        </div>
+      ) : (
+        <div className="flex justify-between items-center">
+          <input
+            type={type}
+            value={value}
+            onChange={(e) => onEditChange(e.target.value)}
+            className="border p-1 rounded text-gray-700 focus:ring-blue-500 focus:border-blue-500"
+          />
+          <button
+            className="ml-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-2 rounded focus:outline-none focus:shadow-outline"
+            onClick={onEditSubmit}
+          >
+            Save
+          </button>
+        </div>
+      )}
+    </div>
   </div>
 );
 
@@ -152,7 +158,7 @@ const ProfilePage: React.FC = () => {
 
     try {
       // Attempt to update the profile
-      const response = await axios.put('http://localhost:3001/api/auth/profile', updateData, {
+      const response = await axios.put('auth/profile', updateData, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser({ ...user, ...response.data.profile });
@@ -179,7 +185,7 @@ const ProfilePage: React.FC = () => {
       }
       
       try {
-        const response = await axios.get('http://localhost:3001/api/auth/profile', {
+        const response = await axios.get('auth/profile', {
           headers: { Authorization: `Bearer ${token}` },
         });
       setUser(response.data.profile);
@@ -197,12 +203,12 @@ const ProfilePage: React.FC = () => {
   }, [token, setUser, setToken, navigate]);
 
   if (!token) return <Navigate to="/login" />;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen space-y-6">
-      <h1 className="text-3xl font-bold mb-4">Profile</h1>
-      <div className="space-y-4 w-full max-w-md">
+    <div className="flex flex-col items-center justify-center min-h-screen p-4">
+      <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-8">Profile</h1>
+      <div className="w-full max-w-lg bg-white dark:bg-gray-800 shadow rounded-lg p-6">
         <ProfileField
           label="First Name"
           value={editedFirstName}
@@ -230,7 +236,7 @@ const ProfilePage: React.FC = () => {
         />
         <ProfileField
           label="Password"
-          value={isEditing.password ? editedPassword : '........'}
+          value={isEditing.password ? editedPassword : '********'}
           isEditing={isEditing.password}
           onEditClick={() => handleEditClick('password')}
           onEditChange={(value) => handleEditChange('password', value)}
