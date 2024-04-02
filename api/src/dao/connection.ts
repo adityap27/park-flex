@@ -5,6 +5,7 @@ import { Review } from "../models/Review";
 import { Wallet } from "../models/Wallet";
 import Transaction from "../models/Transaction";
 import Booking from "../models/Bookings";
+import { Wishlist } from "../models/WishList";
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -22,6 +23,7 @@ const dataBase = {
   wallets: Wallet,
   transactions: Transaction,
   bookings: Booking,
+  wishlists: Wishlist
 };
 
 export { dataBase };

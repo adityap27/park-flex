@@ -28,8 +28,16 @@ import ViewDetails from "./manage-bookings/ViewDetails";
 import Wallet from "./wallet/Wallet";
 import TransactionHistory from "./Transactions/Transactions";
 import ConfirmBooking from "./manage-bookings/ConfirmBooking";
-import { Reviews } from "./ratings-and-reviews/Reviews";
+import { ReviewsPage } from "./ratings-and-reviews/ReviewsPage";
+import { Wishlist } from "./wishlist/Wishlist";
+import { useEffect } from "react";
+import axios from "axios";
 function App() {
+  const token = localStorage.getItem("token");
+  useEffect(() => {
+    axios.defaults.headers["Authorization"] = "Bearer " + token;
+  }, [token]);
+
   return (
     <>
       <Router>
@@ -43,7 +51,7 @@ function App() {
               <Route path='/home' Component={Home}></Route>
               <Route path='/login' Component={LoginPage}></Route>
               <Route path='/register' Component={RegistrationPage}></Route>
-              <Route path='/listings/:listingId/reviews' Component={Reviews}></Route>
+              <Route path='/listings/:listingId/reviews' Component={ReviewsPage}></Route>
               <Route
                 path='/forgetpassword'
                 Component={ForgetPasswordPage}
@@ -84,7 +92,7 @@ function App() {
                   </ProtectedRoute>
                 }
               ></Route>
-                 <Route
+              <Route
                 path='/viewdetails'
                 element={
                   <ProtectedRoute>
@@ -100,7 +108,7 @@ function App() {
                   </ProtectedRoute>
                 }
               ></Route>
-                 <Route
+              <Route
                 path='/manage-bookings'
                 element={
                   <ProtectedRoute>
@@ -113,6 +121,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <ViewListing />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/wish-list'
+                element={
+                  <ProtectedRoute>
+                    <Wishlist />
                   </ProtectedRoute>
                 }
               ></Route>

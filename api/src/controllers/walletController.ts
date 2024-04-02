@@ -16,7 +16,7 @@ const stripeClient = new stripe(stripeSecretKey);
  * @param amount The amount of money to add.
  * @param bookingId The ID of the booking associated with the transaction.
  */
-export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.Types.ObjectId, amount: number, bookingId: string): Promise<void> {
+export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.Types.ObjectId, amount: number): Promise<void> {
   try {
     const wallet = await Wallet.findOne({ userId: ownerId });
     if (!wallet) {
@@ -28,7 +28,6 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
       userId: ownerId,
       amount,
       type: 'earning',
-      bookingId: bookingId
     });
     await transaction.save();
   } catch (error) {
@@ -42,7 +41,7 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
  * @param amount The amount of money to add.
  * @param bookingId The ID of the booking associated with the transaction.
  */
-export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seekerId: mongoose.Types.ObjectId, amount: number, bookingId: string): Promise<void> {
+export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seekerId: mongoose.Types.ObjectId, amount: number): Promise<void> {
   try {
     const wallet = await Wallet.findOne({ userId: seekerId });
     if (!wallet) {
@@ -60,7 +59,6 @@ export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seeker
       userId: seekerId,
       amount: amount,
       type: 'payment',
-      bookingId: bookingId
     });
     await transaction.save();
   } catch (error) {

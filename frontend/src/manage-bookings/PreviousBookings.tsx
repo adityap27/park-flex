@@ -1,3 +1,9 @@
+/**
+ * Author : Neel Patel
+ * This page shows all previous booking with option to view details.
+ * This component is responsible for managing previous bookings.
+ */
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 

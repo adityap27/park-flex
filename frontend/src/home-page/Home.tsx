@@ -1,3 +1,7 @@
+/**
+ * Author : Ketul Patel
+ * This page is used to list all parking spots and allow to filter those parking spots
+ */
 import Form from "react-bootstrap/Form";
 import { TbFilter } from "react-icons/tb";
 import { useEffect, useState } from "react";
@@ -60,18 +64,27 @@ function Home() {
   >([]);
   const [searchText, setSearchText] = useState("");
 
+  const _getListings = async () => {
+    const data = await toast.promise(
+      getRequest<ParkingSpotsResponse>("parking-listings"),
+      {
+        pending: "Loading Parking Spots",
+        success: "Successfully fetched details",
+        error: "System not able to fetch details",
+      }
+    );
+    return data;
+  };
   useEffect(() => {
-    toast.promise(getRequest<ParkingSpotsResponse>("parking-listings"), {
-      pending: "Loading Parking Spots",
-      success: {
-        render(data) {
-          setParkingSpots(data.data.data.data);
-          setFilteredParkingSpots(data.data.data.data);
-          return "Successfully fetched parking spots";
-        },
-      },
-      error: "System not able to fetch details",
-    });
+    const _init = async () => {
+      const result = await _getListings();
+      if (result.data) {
+        setParkingSpots(result.data.data);
+        setFilteredParkingSpots(result.data.data);
+      }
+    };
+
+    _init();
   }, []);
 
   const _renderSpotCard = (parkingSpot: ParkingSpot, index: number) => {

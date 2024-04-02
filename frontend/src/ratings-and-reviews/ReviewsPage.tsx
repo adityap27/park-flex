@@ -6,13 +6,14 @@ import { SpotReviewSummaryCard } from "./SummaryCard/SpotReviewSummaryCard";
 import { HostReviewSummaryCard } from "./SummaryCard/HostReviewSummaryCard";
 import { ReviewCard } from "./ReviewCard";
 import { Review } from "./ReviewCard";
+import { AddReviewModal } from "./AddReviewModal";
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 
 // This component displays list of review cards with sort and filter dropdowns.
-export function Reviews() {
+export function ReviewsPage() {
   const [reviewsData, setReviewsData] = useState<any>(null);
   const { listingId } = useParams();
   const [sortingKey, setSortingKey] = useState("recentFirst");
@@ -20,6 +21,11 @@ export function Reviews() {
   const [loading, setLoading] = useState({ isLoading: true, success: false });
 
   useEffect(() => {
+    getReviewsData();
+  }, []);
+
+  // Callback function to update reviews data
+  const getReviewsData = () => {
     // Scroll to top of page when the page opens.
     window.scrollTo(0, 0);
 
@@ -31,10 +37,10 @@ export function Reviews() {
         setLoading({ isLoading: false, success: true });
       })
       .catch((error) => {
-        toast.error(error.response.data.error);
+        toast.error(error.response?.data?.error || "Something went wrong.");
         setLoading({ isLoading: false, success: false });
       });
-  }, []);
+  };
 
   function sortReviews(reviews: Review[]) {
     switch (sortingKey) {
@@ -173,13 +179,7 @@ export function Reviews() {
                 </div>
               </div>
               <div className="col-span-1 w-screen md:w-auto order-2 md:order-3">
-                <button className="cursor-not-allowed bg-gray-500 text-white ml-4 mt-4 p-2 rounded-md">
-                  + Add Review
-                </button>
-                <p className="text-black ml-4 p-2 rounded-md max-w-sm">
-                  To add your own review, you need a previous booking with this
-                  parking spot.
-                </p>
+                <AddReviewModal onReviewAdded={getReviewsData}/>
               </div>
             </div>
           ) : (

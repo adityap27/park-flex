@@ -1,3 +1,8 @@
+/**
+ * Author : Neel Patel
+ * This page shows booking information detail like owner, user, listing, booking, parking spot and charges information.
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import axios from 'axios'; // Import axios
