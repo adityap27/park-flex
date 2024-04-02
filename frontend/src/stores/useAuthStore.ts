@@ -1,5 +1,7 @@
+/* Author: Jay Rana */
 import create from 'zustand';
 
+// Defines the shape of the authentication state and its updater functions.
 interface AuthState {
   token: string | null;
   user: any; 
@@ -9,12 +11,14 @@ interface AuthState {
   logout: () => void;
 }
 
+// Creates a store to manage authentication state.
 const useAuthStore = create<AuthState>((set) => ({
   
   token: localStorage.getItem('token') || null,
   user: JSON.parse(localStorage.getItem('user') || 'null'),
   userId: localStorage.getItem('userId') || null, 
   
+  // Function to set or remove the authentication token in both state and localStorage
   setToken: (token) => {
     if (token === null) {
       localStorage.removeItem('token');
@@ -35,6 +39,7 @@ const useAuthStore = create<AuthState>((set) => ({
     set({ user, userId: user?._id || null });
   },
   
+  // Function to clear the authentication state and remove related data from localStorage.
   logout: () => {
     localStorage.removeItem('token');
     localStorage.removeItem('user');

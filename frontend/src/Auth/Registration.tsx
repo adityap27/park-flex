@@ -1,10 +1,12 @@
-// src/Auth/RegistrationPage.tsx
+/* Author: Jay Rana */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import useAuthStore from "../stores/useAuthStore";
 import axios from "axios";
 import RegistrationImage from "../assets/images/Login.jpg";
+
+// Main functional component for user registration
 const RegistrationPage: React.FC = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -14,7 +16,7 @@ const RegistrationPage: React.FC = () => {
   const setToken = useAuthStore((state) => state.setToken);
   const navigate = useNavigate();
 
-  // Validation functions
+  // Validation functions for form fields
   const isValidName = (name: string): boolean => /^[A-Za-z\s]+$/.test(name);
   const isValidEmail = (email: string): boolean =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
@@ -24,10 +26,11 @@ const RegistrationPage: React.FC = () => {
     return passwordRegex.test(password);
   };
 
+  // Handler for form submission
   const handleRegister = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Name validations
+    
     if (!isValidName(firstName)) {
       toast.error("Please enter a valid first name with characters only.");
       return;
@@ -37,7 +40,7 @@ const RegistrationPage: React.FC = () => {
       return;
     }
 
-    // Email validation
+    
     if (!isValidEmail(email)) {
       toast.error("Please enter a valid email address.");
       return;
@@ -50,13 +53,13 @@ const RegistrationPage: React.FC = () => {
       return;
     }
 
-    // Password match validation
+    
     if (password !== confirmPassword) {
       toast.error("Passwords do not match.");
       return;
     }
 
-    // Attempt to register
+    // Attempt to register user with provided credentials
     try {
       const response = await axios.post('auth/register', {
         firstName,
@@ -79,6 +82,7 @@ const RegistrationPage: React.FC = () => {
     }
   };
 
+  // Registration page UI
   return (
     <div className='flex flex-col md:flex-row min-h-screen bg-gray-100'>
       <div className='md:flex-1 flex justify-center items-center bg-green-500'>

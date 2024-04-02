@@ -1,3 +1,4 @@
+/* Author: Jay Rana */
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import useAuthStore from '../stores/useAuthStore';
@@ -5,6 +6,7 @@ import { Navigate } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
+// Type definition for ProfileField component props
 type ProfileFieldProps = {
   label: string;
   value: string;
@@ -15,6 +17,7 @@ type ProfileFieldProps = {
   type?: string;
 };
 
+// Component for displaying and editing a single profile field
 const ProfileField: React.FC<ProfileFieldProps> = ({
   label,
   value,
@@ -57,6 +60,7 @@ const ProfileField: React.FC<ProfileFieldProps> = ({
   </div>
 );
 
+// Main profile page component
 const ProfilePage: React.FC = () => {
   const { token, user, setUser, setToken } = useAuthStore();
   const [isLoading, setIsLoading] = useState(true);
@@ -67,11 +71,14 @@ const ProfilePage: React.FC = () => {
     email: false,
     password: false,
   });
+
+  // States for edited values
   const [editedFirstName, setEditedFirstName] = useState('');
   const [editedLastName, setEditedLastName] = useState('');
   const [editedEmail, setEditedEmail] = useState('');
   const [editedPassword, setEditedPassword] = useState('');
 
+  // Validation functions
   const isValidName = (name: string): boolean => /^[A-Za-z\s]+$/.test(name);
   const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
   const isValidPassword = (password: string): boolean => {
@@ -143,21 +150,21 @@ const ProfilePage: React.FC = () => {
   const handleEditSubmit = async (field: string) => {
     if (!token) return;
     
-    // Get the value to validate
+    
     const valueToValidate = 
       field === 'firstName' ? editedFirstName :
       field === 'lastName' ? editedLastName :
       field === 'email' ? editedEmail :
       field === 'password' ? editedPassword : '';
 
-    // If validation fails, don't submit
+    
     if (!handleValidation(field, valueToValidate)) return;
 
-    // Prepare data for the update
+    
     const updateData = { [field]: valueToValidate };
 
     try {
-      // Attempt to update the profile
+      
       const response = await axios.put('auth/profile', updateData, {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -170,13 +177,14 @@ const ProfilePage: React.FC = () => {
     }
   };
 
+  // Fetches user profile data on component mount
   useEffect(() => {
   const storedToken = localStorage.getItem('token');
   const storedUser = localStorage.getItem('user');
   const storedUserId = localStorage.getItem('userId');
 
   console.log('Token:', storedToken);
-  console.log('User:', storedUser && JSON.parse(storedUser)); // Parsing because user is stored as a string
+  console.log('User:', storedUser && JSON.parse(storedUser)); 
   console.log('UserID:', storedUserId);
     const fetchProfile = async () => {
       if (!token) {
@@ -191,7 +199,7 @@ const ProfilePage: React.FC = () => {
       setUser(response.data.profile);
       } catch (error) {
         console.error('Error fetching profile', error);
-        // Clear the token and user, and redirect to login
+        
         setToken(null);
         navigate('/login');
       } finally {
@@ -205,6 +213,7 @@ const ProfilePage: React.FC = () => {
   if (!token) return <Navigate to="/login" />;
   if (isLoading) return <div className="flex justify-center items-center min-h-screen">Loading...</div>;
 
+  // Profile page UI
   return (
     <div className="flex flex-col items-center justify-center min-h-screen p-4">
       <h1 className="text-2xl md:text-3xl font-bold text-gray-800 dark:text-white mb-8">Profile</h1>

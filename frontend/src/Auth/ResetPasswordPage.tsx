@@ -1,12 +1,14 @@
+/* Author: Jay Rana */
 import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
-import LoginImage from '../assets/images/Login.jpg'; // Ensure this path is correct
+import LoginImage from '../assets/images/Login.jpg'; 
 
+// Functional component for the Reset password page
 const ResetPasswordPage: React.FC = () => {
   const navigate = useNavigate();
-  const { token } = useParams<{ token: string }>(); // Ensure your routing parameters are correctly captured
+  const { token } = useParams<{ token: string }>(); 
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
 
@@ -23,18 +25,19 @@ const ResetPasswordPage: React.FC = () => {
       return;
     }
 
-    // Check if the new password is valid
+    
     if (!isValidPassword(newPassword)) {
       toast.error('Password must be at least 8 characters long, include an uppercase letter, a lowercase letter, a number, and a special character.');
-      return; // Stop form submission if the new password is invalid
+      return; 
     }
 
-    // Check if passwords match
+    
     if (newPassword !== confirmNewPassword) {
       toast.error('Passwords do not match.');
-      return; // Prevent form submission if passwords don't match
+      return; 
     }
 
+    // Attempt to reset the password with the provided token and new password
     try {
       await axios.post('auth/reset-password', {
         token,
@@ -51,6 +54,7 @@ const ResetPasswordPage: React.FC = () => {
     }
   };
 
+  // ResetPassword page UI
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       <div className="md:flex-1 flex justify-center items-center bg-blue-500">

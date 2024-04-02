@@ -1,3 +1,4 @@
+/* Author: Jay Rana */
 import express from 'express';
 import { register, login, forgetPassword, resetPassword, logout, getProfile, updateProfile, getUserByID } from '../controllers/authController';
 import { authenticateToken } from '../middleware/authenticateToken';

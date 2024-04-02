@@ -1,23 +1,24 @@
+/* Author: Jay Rana */
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoginImage from '../assets/images/Login.jpg'; 
 
+// Functional component for the forget password page
 const ForgetPasswordPage: React.FC = () => {
   const [email, setEmail] = useState('');
 
-  // Email validation function
   const isValidEmail = (email: string): boolean => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Check if the email is valid
     if (!isValidEmail(email)) {
       toast.error('Please enter a valid email address.');
-      return; // Stop the form submission if the email is invalid
+      return; 
     }
 
+    // Attempt to send the forget password request
     try {
       await axios.post('auth/forget-password', { email });
       toast.success('If that email address is in our database, we will send a reset link to it shortly.');
@@ -26,6 +27,7 @@ const ForgetPasswordPage: React.FC = () => {
     }
   };
 
+   // Render forget password page
   return (
     <div className="flex flex-col md:flex-row min-h-screen bg-gray-100">
       <div className="md:flex-1 flex justify-center items-center bg-blue-500">

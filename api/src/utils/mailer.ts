@@ -1,7 +1,8 @@
-// utils/mailer.ts
+/* Author: Jay Rana */
 
 import nodemailer from 'nodemailer';
 
+// Async function to send emails via Gmail.
 export const sendEmail = async (to: string, subject: string, body: string) => {
   const transporter = nodemailer.createTransport({
     service: 'gmail',
@@ -11,6 +12,7 @@ export const sendEmail = async (to: string, subject: string, body: string) => {
     },
   });
 
+  // Setting up email options: sender, recipient, subject, and body.
   const mailOptions = {
     from: process.env.GMAIL_EMAIL,
     to: to,

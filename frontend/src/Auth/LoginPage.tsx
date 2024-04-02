@@ -1,3 +1,4 @@
+/* Author: Jay Rana */
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -5,12 +6,13 @@ import useAuthStore from "../stores/useAuthStore";
 import axios from "axios";
 import LoginImage from "../assets/images/Login.jpg";
 
-// Email validation function
+// Validates email format
 const isValidEmail = (email: string): boolean => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   return emailRegex.test(email);
 };
 
+// Functional component
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -23,10 +25,9 @@ const LoginPage: React.FC = () => {
   const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Validate email
     if (!isValidEmail(email)) {
       toast.error("Please enter a valid email address.");
-      return; // Stop the login process if the email is invalid
+      return; 
     }
 
     try {
@@ -34,18 +35,18 @@ const LoginPage: React.FC = () => {
         email,
         password,
       });
-      // Success case: token and user data are present
+      
       setToken(response.data.token);
       setUser(response.data.user);
       toast.success('Login successful!');
       navigate('/');
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        // Check if it's an incorrect email/password error
+        
         if (error.response.status === 400) {
           toast.error('Incorrect email or password.');
         } else {
-          // Other types of server-side errors
+          
           toast.error('An error occurred. Please try again later.');
         }
       }
@@ -53,6 +54,7 @@ const LoginPage: React.FC = () => {
     
   };
 
+  // Handler for navigation links
   const handleNavigate = (path: string) => {
     return (e: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       e.preventDefault();
@@ -60,6 +62,7 @@ const LoginPage: React.FC = () => {
     };
   };
 
+  // Render Login page
   return (
     <div className='flex flex-col md:flex-row min-h-screen bg-gray-100'>
       <div className='md:flex-1 flex justify-center items-center bg-blue-500'>

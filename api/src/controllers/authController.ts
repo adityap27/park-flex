@@ -1,3 +1,4 @@
+/* Author: Jay Rana */
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
@@ -6,9 +7,11 @@ import crypto from 'crypto';
 import { sendEmail } from '../utils/mailer';
 import { AuthRequest } from '../middleware/authenticateToken';
 import { Wallet } from '../models/Wallet';
+
+// Handles user registration.
 export const register = async (req: Request, res: Response) => {
     try {
-        // Check if the user already exists
+        
         let user = await Users.findOne({ email: req.body.email });
         if (user) {
             return res.status(400).send({ message: 'Email is already in use.' });
@@ -30,6 +33,7 @@ export const register = async (req: Request, res: Response) => {
     }
 };
 
+// Handles user login, including token generation.
 export const login = async (req: Request, res: Response) => {
   try {
       const user = await Users.findOne({ email: req.body.email });
@@ -48,7 +52,7 @@ export const login = async (req: Request, res: Response) => {
         _id: user._id,
       };
 
-      // Send the token and the user data
+      
       res.header('Authorization', token).send({ token, user: userToSend });
   } catch (error) {
       if (error instanceof Error) {
@@ -59,7 +63,7 @@ export const login = async (req: Request, res: Response) => {
   }
 };
 
-
+// Handles password reset requests.
 export const forgetPassword = async (req: Request, res: Response) => {
   try {
     const user = await Users.findOne({ email: req.body.email });
@@ -67,6 +71,7 @@ export const forgetPassword = async (req: Request, res: Response) => {
       return res.status(200).send({ message: 'If that email address is in our database, we will send a reset link to it shortly.' });
     }
 
+    // Generate and hash a reset token.
     const resetToken = crypto.randomBytes(20).toString('hex');
     const resetTokenHash = crypto.createHash('sha256').update(resetToken).digest('hex');
 
@@ -92,8 +97,10 @@ export const forgetPassword = async (req: Request, res: Response) => {
   }
 };
 
+// Handles resetting the user's password.
 export const resetPassword = async (req: Request, res: Response) => {
   try {
+    // Validate reset token and expiry.
     const { token, newPassword } = req.body;
 
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
@@ -112,6 +119,7 @@ export const resetPassword = async (req: Request, res: Response) => {
 
     await user.save();
 
+    // Notify user of successful password reset.
     await sendEmail(
       user.email,
       'Password Reset Confirmation',
@@ -125,11 +133,12 @@ export const resetPassword = async (req: Request, res: Response) => {
   }
 };
 
-
+// Logs the user out.
 export const logout = async (req: Request, res: Response) => {
   res.status(200).send({ message: 'Logged out successfully' });
 };
 
+// Retrieves the profile information for the logged-in user.
 export const getProfile = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
@@ -149,6 +158,8 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     res.status(500).send({ message: 'Server error while fetching profile.' });
   }
 };
+
+// Fetches a user by their ID.
 export const getUserByID = async (req: AuthRequest, res: Response) => {
   try {
       
@@ -164,7 +175,7 @@ export const getUserByID = async (req: AuthRequest, res: Response) => {
   }
 };
 
-
+// Updates profile information for the logged-in user.
 export const updateProfile = async (req: AuthRequest, res: Response) => {
   try {
     if (!req.user) {
@@ -186,8 +197,6 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
 
       if (field === 'password') {
         
-        //const salt = await bcrypt.genSalt(10);
-        //user.password = await bcrypt.hash(req.body[field], salt);
         user.password = req.body[field];
       } else {
         // @ts-ignore: Ignore the error about indexing with a string
