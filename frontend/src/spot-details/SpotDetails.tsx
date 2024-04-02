@@ -118,7 +118,7 @@ export const SpotDetails = () => {
       return;
     }
 
-    navigate("/confirm-booking", {
+    navigate("/confirmbooking", {
       state: {
         parkingSpot: parkingSpotDetails?.parkingSpot,
         totalPrice: formatToTwoPrecisionFloat(

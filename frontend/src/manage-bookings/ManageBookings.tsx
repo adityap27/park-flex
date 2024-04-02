@@ -1,3 +1,9 @@
+/**
+ * Author : Neel Patel
+ * This page shows all current and previous booking with options to edit, delete or view details.
+ * This component is responsible for managing current bookings.
+ */
+
 import React, { useEffect, useState } from 'react';
 import PreviousBookings from './PreviousBookings';
 import "./booking.css";

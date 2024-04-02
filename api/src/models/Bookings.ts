@@ -1,3 +1,8 @@
+/**
+ * Author: Neel Patel 
+ * Defines the schema and model for Bookings in the database.
+ */
+
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IBooking extends Document {
@@ -14,12 +19,12 @@ const BookingSchema: Schema = new Schema(
   {
     listingId: {
       type: Schema.Types.ObjectId,
-      ref: "Listing",
+      ref: "Listings",
       required: true,
     },
     seekerId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "Users",
       required: true,
     },
     startDate: {

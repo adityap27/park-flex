@@ -1,6 +1,14 @@
+/**
+ * Author : Neel Patel
+ * This component is responsible for add/confirm bookings with all required information.
+ * This component also allows user to edit booking after onces it done.
+ */
+
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import useAuthStore from '../stores/useAuthStore';
+import { toast } from "react-toastify";
+import axios from 'axios';
 type Booking = {
     listingId: string;
     seekerId: string;
@@ -9,27 +17,30 @@ type Booking = {
     vehicleType: string;
     specialRequests: string;
     bookingPrice: number;
-    createdAt: string;
-    updatedAt: string;
+   
   };
 const ConfirmBooking: React.FC = () => {
+    const { userId } = useAuthStore(state => ({ user: state.user, userId: state.userId }));
     const navigate = useNavigate();
     const location = useLocation();
-    const booking = location.state; 
+    const { parkingSpot, totalPrice, startDate, endDate } = location.state;
+    const booking = location.state
+    console.log(booking);
     const [confirmBookingDetails, setConfirmBookingDetails] = useState<Booking>(() => {
         return {
-        listingId: booking.listingId,
-        seekerId: booking.seekerId,
-        startDate: booking.startDate,
-        endDate: booking.endDate,
-        vehicleType: "",
-        specialRequests: "",
-        bookingPrice: booking.bookingPrice,
-        createdAt: booking.createdAt,
-        updatedAt: booking.updatedAt,
+        listingId: parkingSpot ? parkingSpot._id : booking.listingId,
+        seekerId: userId || '',
+        startDate: startDate ? startDate : booking.startDate,
+        endDate: endDate ? endDate : booking.endDate,
+        vehicleType: booking ? booking.vehicleType : "",
+        specialRequests: booking ? booking.specialRequests : "",
+        bookingPrice: totalPrice ? totalPrice : booking.bookingPrice
         };
     });
+    console.log(totalPrice);
+    console.log(confirmBookingDetails);
     const { token } = useAuthStore(state => ({ token: state.token }));
+    console.log(token);
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setConfirmBookingDetails(prevDetails => ({
           ...prevDetails,
@@ -40,11 +51,29 @@ const ConfirmBooking: React.FC = () => {
     const submitEvent = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const isUpdate = booking && booking._id;
-        const url = isUpdate
-        ? `http://localhost:3001/api/manage-booking/bookings/${booking._id}` 
-        : 'http://localhost:3001/api/manage-booking/add-booking';
-        const method = isUpdate ? 'PUT' : 'POST';
+
+        try {
+
+          const balanceResponse = await axios.get("http://localhost:3001/api/wallet/get-balance", {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            }
+        });
+
+        const balance = balanceResponse.data.balance;
+
+        if (balance < confirmBookingDetails.bookingPrice) {
+          toast.error("Your balance is insufficient. Please top up your wallet.")
+          navigate('/wallet', { state: { message: 'Your balance is insufficient. Please top up your wallet.' } });
+            return;
+        }
+
+        const url = booking._id
+        ? `http://localhost:3001/api/manage-bookings/bookings/${booking._id}` 
+        : 'http://localhost:3001/api/manage-bookings/add-booking';
+        const method = booking._id ? 'PUT' : 'POST';
+
+        console.log(confirmBookingDetails)
         try {
         const response = await fetch(url, {
             method: method,
@@ -52,7 +81,16 @@ const ConfirmBooking: React.FC = () => {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${token}`, 
             },
-            body: JSON.stringify(booking), 
+            body: JSON.stringify({
+              listingId : confirmBookingDetails.listingId,
+              seekerId: confirmBookingDetails.seekerId,
+              startDate: confirmBookingDetails.startDate,
+              endDate: confirmBookingDetails.endDate,
+              vehicleType: confirmBookingDetails.vehicleType,
+              specialRequests: confirmBookingDetails.specialRequests,
+              bookingPrice: confirmBookingDetails.bookingPrice
+              
+            }), 
         });
 
         if (!response.ok) {
@@ -65,6 +103,15 @@ const ConfirmBooking: React.FC = () => {
         console.error('Error processing booking:', error);
         
         }
+          
+        } catch (error) {
+
+          console.error('Error in getting balance:', error);
+          
+        }
+
+
+    
     };
 
     return (
@@ -88,7 +135,7 @@ const ConfirmBooking: React.FC = () => {
         />
       </div>
       {/* Include other fields as necessary */}
-      <button type="submit">Confirm Booking</button>
+      <button onClick={submitEvent}>Confirm Booking</button>
     </form>
     );
     };
