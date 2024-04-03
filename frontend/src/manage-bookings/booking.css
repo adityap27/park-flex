@@ -28,7 +28,7 @@
   .UserIcon {
     padding: 8px 16px;
     background-color: #fff; 
-    color: #000; /* Black text */
+    color: #000; 
     border-radius: 20px;
     cursor: pointer;
   }
@@ -73,6 +73,8 @@
     display: flex;
     justify-content: space-between;
   }
+
+  /* Styling for images. */
   .image img {
     width: 200px; 
     height: 200px; 
@@ -120,10 +122,48 @@
     margin: 2px;
   }
   
+  
   button:hover {
     background-color: #333; 
   }
-  
+
+  /* Hover effect for CurrentBooking cards */
+.CurrentBooking > div:hover, .BookingCard:hover {
+  transform: scale(1.03); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+}
+
+/* Hover effect for PreviousBooking cards */
+.PreviousBookings > div:hover {
+  transform: scale(1.03); 
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); 
+  transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out; 
+}
+
+.CurrentBooking, .PreviousBookings {
+    border: 1px solid;
+    border-color: #007bff; 
+    border-radius: 8px;
+    margin: 20px auto; 
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.button, .btn-primary {
+    background-color: #fff;
+    color: #007bff; 
+    border: 1px solid #007bff; 
+    transition: all 0.2s ease-in-out; 
+}
+
+.button:hover, .btn-primary:hover {
+    background-color: #007bff; 
+    color: #fff; 
+    transform: scale(1.05); 
+}
+
   
   @media (max-width: 768px) {
     .Header, .PreviousBookings, .CurrentBooking {
