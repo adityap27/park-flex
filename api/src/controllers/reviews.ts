@@ -4,6 +4,7 @@
 import { Request, Response } from "express";
 import { dataBase } from "../dao/connection";
 import { AuthRequest } from "../middleware/authenticateToken";
+import { createNotification } from "../utils/notifications";
 
 /**
  * Get all reviews of a particular listing, with listing and owner information.
@@ -159,9 +160,9 @@ export const addReviewForListing = async (req: AuthRequest, res: Response) => {
       return res
         .status(400)
         .json({
-          error:
-            "To add your own review, you need a previous booking with this parking spot.",
-        });
+        error:
+          "To add your own review, you need a previous booking with this parking spot.",
+      });
     }
 
     // Check if the user has not already reviewed this listing
@@ -173,8 +174,8 @@ export const addReviewForListing = async (req: AuthRequest, res: Response) => {
       return res
         .status(400)
         .json({
-          error: "You have already reviewed this parking spot listing.",
-        });
+        error: "You have already reviewed this parking spot listing.",
+      });
     }
 
     // Create and save review in database.
@@ -186,6 +187,12 @@ export const addReviewForListing = async (req: AuthRequest, res: Response) => {
     });
     await newReview.save();
     res.status(200).json({ message: "Review added successfully." });
+
+    // Send notification to owner.
+    createNotification(
+      listing.owner.toString(),
+      `You have a new review on your listing: ${listing.name}.`
+    );
   } catch (error) {
     res.status(500).json({ error: "Something went wrong." + error });
   }

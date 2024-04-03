@@ -32,6 +32,7 @@ import { ReviewsPage } from "./ratings-and-reviews/ReviewsPage";
 import { Wishlist } from "./wishlist/Wishlist";
 import { useEffect } from "react";
 import axios from "axios";
+import Notifications from "./notifications/Notifications";
 function App() {
   const token = localStorage.getItem("token");
   useEffect(() => {
@@ -146,6 +147,14 @@ function App() {
                 element={
                   <ProtectedRoute>
                     <TransactionHistory />
+                  </ProtectedRoute>
+                }
+              ></Route>
+              <Route
+                path='/notifications'
+                element={
+                  <ProtectedRoute>
+                    <Notifications />
                   </ProtectedRoute>
                 }
               ></Route>

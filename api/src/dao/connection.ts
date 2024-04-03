@@ -8,6 +8,7 @@ import Booking from "../models/Bookings";
 import { Wishlist } from "../models/WishList";
 import dotenv from "dotenv";
 import { CustomerQuery } from "../models/CustomerQuery";
+import { Notification } from "../models/Notifications";
 dotenv.config();
 
 mongoose
@@ -26,6 +27,7 @@ const dataBase = {
   bookings: Booking,
   wishlists: Wishlist,
   customerQuery: CustomerQuery,
+  notifications: Notification
 };
 
 export { dataBase };

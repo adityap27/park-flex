@@ -8,6 +8,7 @@ import walletRoutes from "./walletRoutes";
 import transactionRoutes from "./transactionRoutes";
 import manageWishlists from "./manage-wishlists";
 import customerQuery from "./customer-query";
+import notificationRoutes from "./notifications";
 
 const router = express.Router();
 
@@ -20,5 +21,6 @@ router.use("/wallet", walletRoutes);
 router.use("/transaction", transactionRoutes);
 router.use("/manage-wishlists", manageWishlists);
 router.use("/customer-query", customerQuery);
+router.use("/notifications", notificationRoutes);
 
 export default router;
