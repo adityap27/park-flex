@@ -3,10 +3,10 @@
     "version": "1.0.0",
     "description": "",
     "scripts": {
-        "start": "concurrently \"pnpm run start-api\" \"pnpm run start-frontend\"",
-        "install": "concurrently \"pnpm run install-api\" \"pnpm run install-frontend\" ",
-        "install-api": "cd api && pnpm install",
-        "install-frontend": "cd frontend && pnpm install",
+        "start": "concurrently \"npm run start-api\" \"npm run start-frontend\"",
+        "install": "concurrently \"npm run install-api\" \"npm run install-frontend\" ",
+        "install-api": "cd api && npm install",
+        "install-frontend": "cd frontend && npm install",
         "start-api": "cd api && nodemon --exec ts-node index.ts",
         "start-frontend": "cd frontend &&  nodemon --exec react-scripts start"
     },
