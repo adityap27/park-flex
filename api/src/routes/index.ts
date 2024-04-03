@@ -7,6 +7,7 @@ import reviewRoutes from "./reviews";
 import walletRoutes from "./walletRoutes";
 import transactionRoutes from "./transactionRoutes";
 import manageWishlists from "./manage-wishlists";
+import customerQuery from "./customer-query";
 
 const router = express.Router();
 
@@ -18,5 +19,6 @@ router.use("/listings/:listingId", reviewRoutes);
 router.use("/wallet", walletRoutes);
 router.use("/transaction", transactionRoutes);
 router.use("/manage-wishlists", manageWishlists);
+router.use("/customer-query", customerQuery);
 
 export default router;

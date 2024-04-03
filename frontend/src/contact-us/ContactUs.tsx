@@ -1,13 +1,14 @@
 import { useState } from "react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { postRequest } from "../utils/network-manager/axios";
 export const ContactUs = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const showNotification = () => {
+  const registerQuery = async () => {
     if (name === "") {
       toast.error("Please fill the name");
       return;
@@ -20,7 +21,25 @@ export const ContactUs = () => {
       toast.error("Email address required in proper format");
       return;
     }
-    toast.success("Email sent Successfully");
+    await toast.promise(
+      postRequest<{ message: String }>("/customer-query/register", {
+        name: name,
+        email: email,
+        message: message,
+      }),
+      {
+        pending: "Registering query",
+        success: {
+          render({ data }) {
+            setEmail("");
+            setMessage("");
+            setName("");
+            return data.data.message;
+          },
+        },
+        error: "System not able to register query, please try again",
+      }
+    );
   };
   return (
     <div>
@@ -81,7 +100,7 @@ export const ContactUs = () => {
               type='submit'
               onClick={(e) => {
                 e.preventDefault();
-                showNotification();
+                registerQuery();
               }}
               className='bg-buttonPrimary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring focus:border-blue-300'
             >
