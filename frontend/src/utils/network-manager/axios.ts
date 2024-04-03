@@ -4,7 +4,7 @@
  */
 import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios";
 
-axios.defaults.baseURL = "http://localhost:3001/api";
+axios.defaults.baseURL = "https://park-flex-api.onrender.com/api";
 
 axios.interceptors.request.use(
   (request) => {
