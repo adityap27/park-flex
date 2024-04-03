@@ -6,6 +6,7 @@ import Transaction from "../models/Transaction";
 import { AuthRequest } from "../middleware/authenticateToken";
 import { Users } from "../models/User";
 import mongoose from "mongoose";
+import { createNotification } from "../utils/notifications";
 
 const stripeSecretKey ="sk_test_51Oz4veIzvURxPk5bVYn3LDcCl1JD6hTlcYPUBqnd9TM9QLavGScbcwcdpmgLpEk2IsmKfFvbwW1deKSp8ODhFLND00Q3mlZYb5";
 const stripeClient = new stripe(stripeSecretKey);
@@ -30,6 +31,12 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
       type: 'earning',
     });
     await transaction.save();
+    // Send notification to owner.
+    createNotification(
+      ownerId.toString(),
+      `Amount $${amount} has been credited in your wallet.`
+    );
+    
   } catch (error) {
     throw error;
   }

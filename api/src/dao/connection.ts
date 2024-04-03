@@ -7,6 +7,7 @@ import Transaction from "../models/Transaction";
 import Booking from "../models/Bookings";
 import { Wishlist } from "../models/WishList";
 import dotenv from 'dotenv';
+import { Notification } from "../models/Notifications";
 dotenv.config();
 
 mongoose
@@ -23,7 +24,8 @@ const dataBase = {
   wallets: Wallet,
   transactions: Transaction,
   bookings: Booking,
-  wishlists: Wishlist
+  wishlists: Wishlist,
+  notifications: Notification
 };
 
 export { dataBase };
