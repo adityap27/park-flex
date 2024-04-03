@@ -89,7 +89,7 @@ export const AccountCard = () => {
         throw new Error(error.message);
       }
 
-      const res = await fetch("http://localhost:3001/api/wallet/add-money", {
+      const res = await fetch("https://park-flex-api.onrender.com/api/wallet/add-money", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
