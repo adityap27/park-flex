@@ -18,11 +18,15 @@ const ForgetPasswordPage: React.FC = () => {
       return; 
     }
 
+    const loadingToast = toast.loading('Sending reset link...');
+
     // Attempt to send the forget password request
     try {
       await axios.post('auth/forget-password', { email });
+      toast.dismiss(loadingToast);
       toast.success('If that email address is in our database, we will send a reset link to it shortly.');
     } catch (error) {
+      toast.dismiss(loadingToast);
       toast.error('An error occurred. Please try again later.');
     }
   };
