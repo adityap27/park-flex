@@ -16,20 +16,11 @@ export const Footer = () => {
           <p className='text-textSecondary'>&copy;2024</p>
         </div>
         <div className='flex flex-col lg:flex-row justify-between flex-[2] xl:flex-[1.5] mx-6 my-2'>
-          <p className='text-textSecondary cursor-pointer hover:underline'>
-            Privacy & Terms
-          </p>
-          <p className='text-textSecondary cursor-pointer hover:underline'>
-            Support
-          </p>
           <Link to='/faq'>
             <p className='text-textSecondary cursor-pointer hover:underline'>
               FAQ
             </p>
           </Link>
-          <p className='text-textSecondary cursor-pointer hover:underline'>
-            About
-          </p>
           <Link to='/contact-us'>
             <p className='text-textSecondary cursor-pointer hover:underline'>
               Contact
