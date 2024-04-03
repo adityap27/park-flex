@@ -30,17 +30,22 @@ const LoginPage: React.FC = () => {
       return; 
     }
 
+    const loadingToast = toast.loading('Logging in...');
+
     try {
       const response = await axios.post('auth/login', {
         email,
         password,
       });
       
+      toast.dismiss(loadingToast);
       setToken(response.data.token);
       setUser(response.data.user);
       toast.success('Login successful!');
       navigate('/');
     } catch (error) {
+
+      toast.dismiss(loadingToast);
       if (axios.isAxiosError(error) && error.response) {
         
         if (error.response.status === 400) {
