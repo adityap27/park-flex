@@ -59,6 +59,8 @@ const RegistrationPage: React.FC = () => {
       return;
     }
 
+    const loadingToast = toast.loading('Registering...');
+
     // Attempt to register user with provided credentials
     try {
       const response = await axios.post('auth/register', {
@@ -67,6 +69,8 @@ const RegistrationPage: React.FC = () => {
         email,
         password,
       });
+      toast.dismiss(loadingToast);
+    
       if (response.data.token) {
         setToken(response.data.token);
         axios.defaults.headers["Authorization"] =
@@ -77,6 +81,7 @@ const RegistrationPage: React.FC = () => {
         toast.error("Registration failed. Please try again.");
       }
     } catch (error) {
+      toast.dismiss(loadingToast);
       console.error(error);
       toast.error("An error occurred during registration.");
     }
