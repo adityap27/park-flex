@@ -40,7 +40,7 @@ router.get(
       }
 
       const wishlists = await dataBase.wishlists.find({
-        user: req.query.userId,
+        user: req.query.userId as string,
       });
       let wishlistData: any = [];
       for (const wishlist of wishlists) {
