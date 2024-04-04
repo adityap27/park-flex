@@ -246,7 +246,9 @@ export const SpotDetails = () => {
                     </p>
                     <div className='flex flex-row items-center'>
                       <p className='text-textPrimary mt-1'>
-                        {parkingSpotDetails.reviewAverage}
+                        {formatToTwoPrecisionFloat(
+                          parkingSpotDetails.reviewAverage
+                        )}
                       </p>
                       <div className='ml-2'>
                         <StarRatings
