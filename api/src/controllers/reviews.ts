@@ -1,6 +1,5 @@
-/**
- * Author: Aditya Purohit
- */
+// Author: Aditya Purohit
+
 import { Request, Response } from "express";
 import { dataBase } from "../dao/connection";
 import { AuthRequest } from "../middleware/authenticateToken";

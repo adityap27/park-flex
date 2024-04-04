@@ -1,6 +1,5 @@
-/**
-*  Author: Aditya Purohit
-*/
+// Author: Aditya Purohit
+
 import express from 'express';
 
 import { getReviewsByListingId, addReviewForListing } from '../controllers/reviews';

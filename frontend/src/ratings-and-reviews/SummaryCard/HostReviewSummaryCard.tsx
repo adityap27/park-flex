@@ -1,6 +1,5 @@
-/*
-  Author: Aditya Purohit
-*/
+// Author: Aditya Purohit
+
 import StarRatings from "react-star-ratings";
 import { User } from "../ReviewCard";
 

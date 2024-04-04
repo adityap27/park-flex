@@ -1,3 +1,5 @@
+// Author: Aditya Purohit
+
 import mongoose from "mongoose";
 
 interface IReview extends mongoose.Document {
