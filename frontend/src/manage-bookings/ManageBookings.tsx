@@ -37,9 +37,6 @@ const ManageBookings: React.FC = () => {
     userId: state.userId,
   }));
   const token = useAuthStore((state) => state.token);
-  console.log(token);
-
-  console.log(userId);
   const user_id = userId;
 
   // Function to handle the deletion of a booking.
@@ -76,8 +73,6 @@ const ManageBookings: React.FC = () => {
 
         let bookings: Booking[] = response.data;
 
-        console.log(bookings);
-
         // Fetch listing names for each booking
         const listingsWithNames = await Promise.all(
           bookings.map(async (booking) => {
@@ -92,7 +87,6 @@ const ManageBookings: React.FC = () => {
               }
             );
             const listing = listingResponse.data;
-            console.log(listing.data.image.contentType);
             return {
               ...booking,
               listingName: listing.data.name,
@@ -119,7 +113,6 @@ const ManageBookings: React.FC = () => {
 
         setCurrentBookings(current);
         setPreviousBookings(previous);
-        console.log(currentBookings);
       } catch (error) {
         console.error("There was a problem with your fetch operation:", error);
       } finally {

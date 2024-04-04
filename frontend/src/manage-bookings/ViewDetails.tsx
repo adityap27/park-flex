@@ -65,7 +65,6 @@ const ViewDetails = () => {
       setIsLoading(true);
       try {
         if (!booking || !booking.listingId) {
-          console.log("Booking or booking.listingId is undefined");
           setIsLoading(false);
           return;
         }
