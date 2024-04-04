@@ -51,7 +51,7 @@
 
 The first step is to clone the Group project repo in your machine using the below command. Run the below command at the destination in cmd where you want to clone the repository.
 ```
-git clone git@git.cs.dal.ca:ketulp/csci-5709-grp-09.git
+git clone https://git.cs.dal.ca/ketulp/csci-5709-grp-09.git
 ```
 
 Next, Change the directory to the client side of the project using:
