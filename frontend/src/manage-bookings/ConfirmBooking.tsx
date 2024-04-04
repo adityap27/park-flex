@@ -31,7 +31,6 @@ const ConfirmBooking: React.FC = () => {
   const location = useLocation();
   const { parkingSpot, totalPrice, startDate, endDate } = location.state;
   const booking = location.state;
-  console.log(booking);
 
   // State for managing booking details form
   const [confirmBookingDetails, setConfirmBookingDetails] = useState<Booking>(
@@ -47,10 +46,7 @@ const ConfirmBooking: React.FC = () => {
       };
     }
   );
-  console.log(totalPrice);
-  console.log(confirmBookingDetails);
   const { token } = useAuthStore((state) => ({ token: state.token }));
-  console.log(token);
 
   // Handler for form field changes
   const handleChange = (
@@ -97,7 +93,6 @@ const ConfirmBooking: React.FC = () => {
         : "https://park-flex-api.onrender.com/api/manage-bookings/add-booking";
       const method = booking._id ? "PUT" : "POST";
 
-      console.log(confirmBookingDetails);
       try {
         const response = await fetch(url, {
           method: method,

@@ -39,6 +39,7 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
     );
     
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
@@ -70,6 +71,7 @@ export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seeker
     });
     await transaction.save();
   } catch (error) {
+    console.log(error);
     throw error;
   }
 }
