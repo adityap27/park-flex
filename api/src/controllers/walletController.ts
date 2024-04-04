@@ -25,6 +25,7 @@ export const addMoneyToOwner = async function addMoneyToOwner(ownerId: mongoose.
     }
     wallet.balance += amount;
     await wallet.save();
+    // Create Transaction for Owner
     const transaction = new Transaction({
       userId: ownerId,
       amount,
@@ -61,7 +62,7 @@ export const deductMoneyFromSeeker = async function deductMoneyFromSeeker(seeker
 
     wallet.balance -= amount;
     await wallet.save();
-
+  // Create Transaction for Seeker
     const transaction = new Transaction({
       userId: seekerId,
       amount: amount,

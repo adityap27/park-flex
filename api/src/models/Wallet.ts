@@ -1,7 +1,6 @@
-/**
- * Author: Mann Patel 
- * Defines the schema and model for wallets in the database.
- */
+/** Author: Mann Patel */
+ 
+/* Defines the schema and model for wallets in the database. */
 import mongoose from "mongoose";
 
 interface IWallet extends mongoose.Document {
