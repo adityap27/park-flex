@@ -20,6 +20,10 @@
     1.	Authentication - Jay Navinbhai Rana 
     2.	Explore Listings - Ketul Patel
     3.	Manage Listing - Shubham Vijaykumar Patel
+        * Create Listing
+        * Edit Listing
+        * View Listing
+        * Delete Listing
     4.	Rating and Reviews - Aditya Maheshbhai Purohit
     5.	Wallet Management - Mann Patel
         * Add Money to Wallet.
