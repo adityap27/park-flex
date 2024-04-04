@@ -24,6 +24,12 @@
         * Logout
         * Profile Management
     2.	Explore Listings - Ketul Patel
+        * ⁠List all parking spots available
+        * ⁠Filter parking spots based on parking type, user location and radius
+        * View individual parking spot in details 
+        * Get estimate about user expected parking spot booking
+        * Availability check to reduce conflicting booking
+
     3.	Manage Listing - Shubham Vijaykumar Patel
         * Create Listing
         * Edit Listing
