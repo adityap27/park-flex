@@ -36,6 +36,8 @@
         * View Listing
         * Delete Listing
     4.	Rating and Reviews - Aditya Maheshbhai Purohit
+        * View all reviews and ratings of a listing.
+        * Add a new review and rating of a listing.
     5.	Wallet Management - Mann Patel
         * Add Money to Wallet.
         * Withdraw Money from Wallet.  
