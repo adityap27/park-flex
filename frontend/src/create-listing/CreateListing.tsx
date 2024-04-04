@@ -161,12 +161,8 @@ export const CreateListing = () => {
 	const checkLocation = (inputField: string, value: boolean) => {
 		if (value === false) {
 			showError(inputField, `${getFieldName(inputField)} is required`);
-			// document.getElementById("location")?.classList.remove("border-gray-300");
-			// document.getElementById("location")?.classList.add("border-red-500");
 		} else {
 			showSuccess(inputField);
-			// document.getElementById("location")?.classList.remove("border-red-500");
-			// document.getElementById("location")?.classList.add("border-gray-300");
 		}
 	}
 
@@ -195,14 +191,6 @@ export const CreateListing = () => {
 	const onImageChange = (event: any) => {
 		if (event.target.files && event.target.files.length > 0) {
 			setImage(event.target.files[0]);
-			//setImage(URL.createObjectURL(event.target.files[0]));
-			// const reader = new FileReader();
-			// reader.readAsDataURL(event.target.files[0]);
-			// reader.onload = () => {
-			// 	if (typeof reader.result === "string") {
-			// 	setImage(reader.result);
-			// 	}
-			// };
 		}
 	}
 
@@ -260,7 +248,6 @@ export const CreateListing = () => {
 								value={name}
 								onChange={(e) => setName(e.target.value)}
 							/>
-							{/* <small>{error.name}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">Street Address</label>
@@ -271,7 +258,6 @@ export const CreateListing = () => {
 								value={address}
 								onChange={(e) => setAddress(e.target.value)}
 							/>
-							{/* <small>{error.address}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">Country</label>
@@ -282,7 +268,6 @@ export const CreateListing = () => {
 								value={country}
 								onChange={(e) => setCountry(e.target.value)}
 							/>
-							{/* <small>{error.country}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">City</label>
@@ -293,7 +278,6 @@ export const CreateListing = () => {
 								value={city}
 								onChange={(e) => setCity(e.target.value)}
 							/>
-							{/* <small>{error.city}</small> */}
 						</div>
 						<div className="ml-3 mt-7 mb-5">
 							<label htmlFor="parking-type">Type:</label>
@@ -328,7 +312,6 @@ export const CreateListing = () => {
 								value={description}
 								onChange={(e) => setDescription(e.target.value)}
 							/>
-							{/* <small>{error.description}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">Daily Rate</label>
@@ -339,7 +322,6 @@ export const CreateListing = () => {
 								value={rate}
 								onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
 							/>
-							{/* <small>{error.rate}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">Postal Code</label>
@@ -350,7 +332,6 @@ export const CreateListing = () => {
 								value={postalCode}
 								onChange={(e) => setPostalCode(e.target.value)}
 							/>
-							{/* <small>{error.postalCode}</small> */}
 						</div>
 						<div className={`form-control success`}>
 							<label htmlFor="address">Image</label>
@@ -360,7 +341,6 @@ export const CreateListing = () => {
 								onChange={onImageChange}
 								accept="image/*"
 							/>
-							{/* <small>{error.image}</small> */}
 						</div>
 					</div>
 					<div className="map">
@@ -384,7 +364,6 @@ export const CreateListing = () => {
 										<Marker position={location} icon={new Icon({ iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png" })} />
 									</MapContainer>
 								</div>
-								{/* <small className="text-red-500">{error.location}</small> */}
 							</>
 						) : null}
 					</div>
