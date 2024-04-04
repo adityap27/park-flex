@@ -45,13 +45,13 @@
 
 The first step is to clone the Group project repo in your machine using the below command. Run the below command at the destination in cmd where you want to clone the repository.
 ```
-git clone https://github.com/jay-241/ParkFlex
+git clone git@git.cs.dal.ca:ketulp/csci-5709-grp-09.git
 ```
 
 Next, Change the directory to the client side of the project using:
 
 ```
-cd .\ParkFlex\frontend
+cd .\csci-5709-grp-09\frontend
 ```
 
 Next step is, run the below command to instal all the packages and dependencies that is required to run the Assignment.
@@ -71,7 +71,7 @@ Now, To run the server side of the Assignment, open the cmd with the path of the
 Next, Change the directory to the server side of the project using:
 
 ```
-cd .\ParkFlex\api
+cd .\csci-5709-grp-09\api
 ```
 
 Next step is, run the below command to instal all the packages and dependencies that is required to run the Assignment.
