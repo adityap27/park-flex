@@ -4,6 +4,7 @@
 /* Defines the TransactionHistory component for displaying transaction history. */
 import React, { useEffect, useState } from "react";
 import { Oval } from "react-loader-spinner";
+import axios from "axios";
 
 enum TransactionType {
   TopUp = "top-up",
@@ -31,17 +32,13 @@ const TransactionHistory: React.FC = () => {
   ]);
 
   useEffect(() => {
-    fetch(
-      "https://park-flex-api.onrender.com/api/transaction/get-transactions",
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      }
-    )
-      .then((response) => response.json())
-      .then((data) => {
-        setTransactions(data);
+    axios.get("https://park-flex-api.onrender.com/api/transaction/get-transactions", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((response) => {
+        setTransactions(response.data);
         setLoading(false);
       })
       .catch((error) => {

@@ -94,18 +94,20 @@ export const AccountCard = () => {
         throw new Error(error.message);
       }
 
-      const res = await fetch("https://park-flex-api.onrender.com/api/wallet/add-money", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "https://park-flex-api.onrender.com/api/wallet/add-money",
+        {
           amount: parseFloat(amount),
           paymentMethodId: paymentMethod.id,
-        }),
-      });
-      const data = await res.json();
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.data;
 
       if (!data.success) {
         throw new Error(data.error);
@@ -128,19 +130,20 @@ export const AccountCard = () => {
     }
     if (isValidNumber(amount)) {
       try {
-        const res = await fetch(
+        const response = await axios.post(
           "https://park-flex-api.onrender.com/api/wallet/withdraw-money",
           {
-            method: "POST",
+            amount: parseFloat(amount),
+          },
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify({ amount: parseFloat(amount) }),
           }
         );
-        const data = await res.json();
-
+        
+        const data = response.data;
         if (!data.success) {
           throw new Error(data.error);
         }
