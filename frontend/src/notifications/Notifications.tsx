@@ -18,7 +18,7 @@ const Notifications: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    axios.get("http://localhost:3001/api/notifications", {
+    axios.get("/notifications", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       },
