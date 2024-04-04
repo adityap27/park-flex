@@ -1,6 +1,4 @@
-/*
-  Author: Aditya Purohit
-*/
+// Author: Aditya Purohit
 
 import { SpotReviewSummaryCard } from "./SummaryCard/SpotReviewSummaryCard";
 import { HostReviewSummaryCard } from "./SummaryCard/HostReviewSummaryCard";
