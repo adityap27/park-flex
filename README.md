@@ -18,6 +18,11 @@
 - Features:
 
     1.	Authentication - Jay Navinbhai Rana 
+        * Sign Up
+        * Log In
+        * Forget Password
+        * Logout
+        * Profile Management
     2.	Explore Listings - Ketul Patel
     3.	Manage Listing - Shubham Vijaykumar Patel
         * Create Listing
@@ -31,6 +36,10 @@
         * Add Transaction Entries for Adding Money, Withdraw Money, Booking, and Earnings.
         * Filtering Transaction Based on its types.
     6.	Booking Management - Neel Piyushkumar Patel
+        * Make a Parking Spot Reservation
+        * View an Existing Booking
+        * Modify an Existing Booking
+        * Cancel a Booking
 
 ### **How to run application:**
 
