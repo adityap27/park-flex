@@ -1,7 +1,7 @@
-/**
- * Author: Mann Patel
- * Defines the TransactionHistory component for displaying transaction history.
- */
+/* Author: Mann Patel */
+
+
+/* Defines the TransactionHistory component for displaying transaction history. */
 import React, { useEffect, useState } from "react";
 import { Oval } from "react-loader-spinner";
 
