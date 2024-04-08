@@ -1,8 +1,7 @@
-/**
- * Author: Mann Patel 
- * Defines the schema and model for transactions in the database.
- */
+/* Author: Mann Patel */
 
+
+/* Defines the schema and model for transactions in the database. */
 import mongoose from "mongoose";
 
 interface ITransaction extends mongoose.Document {

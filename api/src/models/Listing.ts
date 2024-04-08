@@ -1,3 +1,4 @@
+/* Author: Shubham Patel */
 import mongoose from "mongoose";
 
 interface IListing extends mongoose.Document {

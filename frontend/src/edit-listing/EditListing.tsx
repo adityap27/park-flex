@@ -241,7 +241,6 @@ const EditListing = () => {
                 <h1 className="text-4xl font-bold text-center mb-8">Edit Listing</h1>
                 <div className="container">
                     <div className="left-column">
-                        {/* <div className={`form-control ${error.name ? "error" : "success"}`}> */}
                         <div className={`form-control success`}>
                             <label htmlFor="name">Name</label>
                             <input
@@ -251,7 +250,6 @@ const EditListing = () => {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                             />
-                            {/* <small>{error.name}</small> */}
                         </div>
                         <div className={`form-control success`}>
                             <label htmlFor="address">Street Address</label>
@@ -262,7 +260,6 @@ const EditListing = () => {
                                 value={address}
                                 onChange={(e) => setAddress(e.target.value)}
                             />
-                            {/* <small>{error.address}</small> */}
                         </div>
                         <div className={`form-control success`}>
                             <label htmlFor="address">Country</label>
@@ -273,7 +270,6 @@ const EditListing = () => {
                                 value={country}
                                 onChange={(e) => setCountry(e.target.value)}
                             />
-                            {/* <small>{error.country}</small> */}
                         </div>
                         <div className={`form-control success`}>
                             <label htmlFor="address">City</label>
@@ -284,7 +280,6 @@ const EditListing = () => {
                                 value={city}
                                 onChange={(e) => setCity(e.target.value)}
                             />
-                            {/* <small>{error.city}</small> */}
                         </div>
                         <div className="ml-3 mt-7 mb-5">
                             <label htmlFor="parking-type">Type:</label>
@@ -319,7 +314,6 @@ const EditListing = () => {
                                 value={description}
                                 onChange={(e) => setDescription(e.target.value)}
                             />
-                            {/* <small>{error.description}</small> */}
                         </div>
                         <div className={`form-control success`}>
                             <label htmlFor="address">Daily Rate</label>
@@ -330,7 +324,6 @@ const EditListing = () => {
                                 value={rate}
                                 onChange={(e) => setRate(e.target.value.replace(/[^0-9]/g, ""))}
                             />
-                            {/* <small>{error.rate}</small> */}
                         </div>
                         <div className={`form-control success`}>
                             <label htmlFor="address">Postal Code</label>
@@ -341,7 +334,6 @@ const EditListing = () => {
                                 value={postalCode}
                                 onChange={(e) => setPostalCode(e.target.value)}
                             />
-                            {/* <small>{error.postalCode}</small> */}
                         </div>
                     </div>
                     <div className="map">
