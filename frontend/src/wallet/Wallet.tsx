@@ -1,7 +1,6 @@
-/**
- * Author: Mann Patel
- * Defines the Wallet component for managing wallet operations.
- */ 
+/* Author: Mann Patel */
+
+/* Defines the Wallet component for managing wallet operations.*/ 
 import { AccountCard } from "./AccountCard";
 import { BiMoneyWithdraw } from "react-icons/bi";
 import { MdRedeem } from "react-icons/md";

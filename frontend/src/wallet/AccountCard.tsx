@@ -1,6 +1,7 @@
-/**
- * Author: Mann Patel
- * Defines the AccountCard component for managing wallet operations.
+/* Author: Mann Patel */
+ 
+
+/* Defines the AccountCard component for managing wallet operations.
  */
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
@@ -25,6 +26,7 @@ export const AccountCard = () => {
   const stripe = useStripe();
   const stripeElements = useElements();
 
+  // Used to fetch the wallet's balance
   useEffect(() => {
     axios
       .get("https://park-flex-api.onrender.com/api/wallet/get-balance", {
@@ -44,10 +46,12 @@ export const AccountCard = () => {
       });
   }, []);
 
+  // Set the button value in the input box
   const handleAddMoneyButton = (money: string) => {
     setAmount(money);
   };
 
+  // Function Handling the Opening of the Stripe Modal
   const openStripeElement = () => {
     if (isValidNumber(amount)) {
       setIsModalOpen(true);
@@ -65,6 +69,7 @@ export const AccountCard = () => {
     return validNumberRegex.test(value) && parseFloat(value) > 0;
   };
 
+  // Function to add money to users wallet
   const handleAddMoney = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
 
@@ -89,18 +94,20 @@ export const AccountCard = () => {
         throw new Error(error.message);
       }
 
-      const res = await fetch("https://park-flex-api.onrender.com/api/wallet/add-money", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-        body: JSON.stringify({
+      const response = await axios.post(
+        "https://park-flex-api.onrender.com/api/wallet/add-money",
+        {
           amount: parseFloat(amount),
           paymentMethodId: paymentMethod.id,
-        }),
-      });
-      const data = await res.json();
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      const data = await response.data;
 
       if (!data.success) {
         throw new Error(data.error);
@@ -123,19 +130,20 @@ export const AccountCard = () => {
     }
     if (isValidNumber(amount)) {
       try {
-        const res = await fetch(
+        const response = await axios.post(
           "https://park-flex-api.onrender.com/api/wallet/withdraw-money",
           {
-            method: "POST",
+            amount: parseFloat(amount),
+          },
+          {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
-            body: JSON.stringify({ amount: parseFloat(amount) }),
           }
         );
-        const data = await res.json();
-
+        
+        const data = response.data;
         if (!data.success) {
           throw new Error(data.error);
         }
@@ -234,6 +242,7 @@ export const AccountCard = () => {
         </div>
       </div>
 
+      {/* Opens the Modal For stripe payment gateway */}
       <Modal show={isModalOpen} onHide={handleModalClose}>
         <Modal.Body>
           <FaStripe className='ml-2 mr-2' size={35} />
