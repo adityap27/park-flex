@@ -1,31 +1,31 @@
 # ParkFlex
 
+Our project aims to develop a comprehensive online marketplace for parking spots, addressing the common urban challenge of finding convenient and affordable parking. It seeks to bridge the gap between parking spot owners who have underutilized space and drivers facing difficulties in locating parking, especially in densely populated areas. By leveraging technology, the platform aspires to optimize parking space usage, reduce urban congestion, and offer a convenient solution for both spot owners and seekers.
 
-- Our project aims to develop a comprehensive online marketplace for parking spots, addressing the common urban challenge of finding convenient and affordable parking. It seeks to bridge the gap between parking spot owners who have underutilized space and drivers facing difficulties in locating parking, especially in densely populated areas. By leveraging technology, the platform aspires to optimize parking space usage, reduce urban congestion, and offer a convenient solution for both spot owners and seekers.
+### Deployed Link: https://park-flex.netlify.app
 
-# Deployed Link: https://park-flex.netlify.app
+### GitLab Repo Link: https://git.cs.dal.ca/ketulp/csci-5709-grp-09
 
-# Repo Link: https://git.cs.dal.ca/ketulp/csci-5709-grp-09
+### Backend URL: https://park-flex-api.onrender.com/api>](https://park-flex-api.onrender.com/api
 
-# Backend URL: [<https://park-flex-api.onrender.com/api>](https://park-flex-api.onrender.com/api)
+### Technologies Used
+
+- **Frontend**: React, Tailwind CSS
+- **Backend**: Express, Node.js
+- **Database**: MongoDB
+- **Deployment**: Netlify for frontend deployment, Render for backend deployment
+- **Programming Language**: Typescript
 
 
 ### Group Information
 - Members:  
 
     * Aditya Maheshbhai Purohit (B00952865) aditya.purohit@dal.ca
-	* Ketul Patel (B00960940) kt390621@dal.ca 	 
+    * Ketul Patel (B00960940) kt390621@dal.ca 	 
     * Mann Patel (B00951709) mn906219@dal.ca
     * Shubham Vijaykumar Patel (B00960942) shubham.v.patel@dal.ca
     * Jay Navinbhai Rana (B00932024) jy834177@dal.ca	
     * Neel Piyushkumar Patel (B00923803) nl914739@dal.ca
-
-### Technologies Used
-- Technologies Used:
-    * Frontend: React, Tailwind CSS
-    * Backend: Express, Node.js
-    * Database: MongoDB
-    * Deployment: Netlify for frontend deployment, Render for backend deployment 
 
 ### Features and their Tasks (9/12 Features completed  = 75% of project completed)
 - Features:
