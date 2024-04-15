@@ -6,7 +6,7 @@ Our project aims to develop a comprehensive online marketplace for parking spots
 
 ### GitLab Repo Link: https://git.cs.dal.ca/ketulp/csci-5709-grp-09
 
-### Backend URL: https://park-flex-api.onrender.com/api>](https://park-flex-api.onrender.com/api
+### Backend URL: https://park-flex-api.onrender.com/api
 
 ### Technologies Used
 
